@@ -1,6 +1,6 @@
 package notedge.idea.ide.matcher
 
-import notedge.idea.ide.file_view.JssFile
+import notedge.idea.language.file.NotedownFile
 import notedge.idea.language.psi.JssTypes
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.CustomFoldingBuilder
@@ -18,7 +18,7 @@ class JssFoldingBuilder : CustomFoldingBuilder(), DumbAware {
         document: Document,
         quick: Boolean
     ) {
-        if (root !is JssFile) return
+        if (root !is NotedownFile) return
         val visitor = JssFoldingVisitor(descriptors)
         PsiTreeUtil.processElements(root) {
             it.accept(visitor);

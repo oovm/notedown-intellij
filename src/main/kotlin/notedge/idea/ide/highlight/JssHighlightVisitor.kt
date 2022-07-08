@@ -1,6 +1,6 @@
 package notedge.idea.ide.highlight
 
-import notedge.idea.ide.file_view.JssFile
+import notedge.idea.language.file.NotedownFile
 import notedge.idea.language.psi.*
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType
@@ -115,7 +115,7 @@ class JssHighlightVisitor : JssVisitor(), HighlightVisitor {
 
     override fun clone(): HighlightVisitor = JssHighlightVisitor()
 
-    override fun suitableForFile(file: PsiFile): Boolean = file is JssFile
+    override fun suitableForFile(file: PsiFile): Boolean = file is NotedownFile
 
     override fun visit(element: PsiElement) = element.accept(this)
 }

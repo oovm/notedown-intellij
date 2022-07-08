@@ -1,6 +1,6 @@
 package notedge.idea.ide.formatter
 
-import notedge.idea.ide.file_view.JssFile
+import notedge.idea.language.file.NotedownFile
 import com.intellij.lang.SmartEnterProcessorWithFixers
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
@@ -27,7 +27,7 @@ class JssSmartEnter : SmartEnterProcessorWithFixers() {
 
     private class PlainEnterProcessor : FixEnterProcessor() {
         override fun doEnter(atCaret: PsiElement, file: PsiFile, editor: Editor, modified: Boolean): Boolean {
-            if (file !is JssFile) return false
+            if (file !is NotedownFile) return false
             plainEnter(editor)
             return true
         }

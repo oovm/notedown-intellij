@@ -1,7 +1,7 @@
 package notedge.idea.ide.todo
 
 import notedge.idea.language.psi.JssLexerAdapter
-import notedge.idea.ide.file_view.JssFile
+import notedge.idea.language.file.NotedownFile
 import notedge.idea.language.psi.JSS_COMMENT
 import com.intellij.lexer.Lexer
 import com.intellij.psi.PsiFile
@@ -11,11 +11,11 @@ import com.intellij.psi.tree.TokenSet
 
 class VomlTodoIndexPatternBuilder : IndexPatternBuilder {
     override fun getIndexingLexer(file: PsiFile): Lexer? {
-        return if (file is JssFile) JssLexerAdapter() else null
+        return if (file is NotedownFile) JssLexerAdapter() else null
     }
 
     override fun getCommentTokenSet(file: PsiFile): TokenSet? {
-        return if (file is JssFile) JSS_COMMENT else null
+        return if (file is NotedownFile) JSS_COMMENT else null
     }
 
     override fun getCommentStartDelta(tokenType: IElementType?): Int {

@@ -12,14 +12,14 @@
 			name="JSS"
 			language="JSS"
 			extensions="jss"
-			implementationClass="notedge.idea.ide.file_view.JssFileType"
+			implementationClass="notedge.idea.language.file.NotedownFileType"
 			fieldName="INSTANCE"
 		/>
 		<lang.parserDefinition
 			language="JSS"
 			implementationClass="notedge.idea.language.psi.JssParserDefinition"
 		/>
-		<projectViewNestingRulesProvider implementation="notedge.idea.ide.file_view.JssFileGroup"/>
+		<projectViewNestingRulesProvider implementation="notedge.idea.language.file.NotedownFileGroup"/>
 		<!-- Highlight -->
 		<additionalTextAttributes scheme="Default" file="colors/JssDefault.xml"/>
 		<additionalTextAttributes scheme="Darcula" file="colors/JssDarcula.xml"/>

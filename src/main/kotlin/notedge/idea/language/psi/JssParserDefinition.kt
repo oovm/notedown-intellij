@@ -1,7 +1,7 @@
 package notedge.idea.language.psi
 
 import notedge.idea.language.file.NotedownLanguage
-import notedge.idea.ide.file_view.JssFile
+import notedge.idea.language.file.NotedownFile
 import notedge.idea.language.parser.JssParser
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
@@ -28,7 +28,7 @@ class JssParserDefinition : ParserDefinition {
 
     override fun createElement(node: ASTNode): PsiElement = JssTypes.Factory.createElement(node)
 
-    override fun createFile(viewProvider: FileViewProvider): PsiFile = JssFile(viewProvider)
+    override fun createFile(viewProvider: FileViewProvider): PsiFile = NotedownFile(viewProvider)
 
     override fun spaceExistenceTypeBetweenTokens(left: ASTNode, right: ASTNode): ParserDefinition.SpaceRequirements {
         return ParserDefinition.SpaceRequirements.MAY

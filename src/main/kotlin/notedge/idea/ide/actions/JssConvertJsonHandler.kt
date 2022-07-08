@@ -1,6 +1,6 @@
 package notedge.idea.ide.actions
 
-import notedge.idea.ide.file_view.JssFileType
+import notedge.idea.language.file.NotedownFileType
 import com.intellij.codeInsight.CodeInsightActionHandler
 import com.intellij.json.psi.JsonFile
 import com.intellij.json.psi.JsonObject
@@ -20,7 +20,7 @@ class JssConvertJsonHandler : CodeInsightActionHandler {
 """
         )
         try {
-            PsiFileFactory.getInstance(file.project).createFileFromText(file.name, JssFileType.INSTANCE, buffer)
+            PsiFileFactory.getInstance(file.project).createFileFromText(file.name, NotedownFileType.INSTANCE, buffer)
         } catch (e: IncorrectOperationException) {
             // do nothing
         }

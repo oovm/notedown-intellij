@@ -13,7 +13,7 @@
     elementTypeClass = "notedge.idea.language.psi.NoteElementType"
     tokenTypeClass = "notedge.idea.language.psi.NoteTokenType"
 
-    psiImplUtilClass = "notedge.idea.language.ast.NoteASTExtension"
+    psiImplUtilClass = "notedge.idea.language.ast.NodeExtension"
 
     tokens = [
         // comment

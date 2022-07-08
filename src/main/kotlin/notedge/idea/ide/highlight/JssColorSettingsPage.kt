@@ -1,7 +1,7 @@
 package notedge.idea.ide.highlight
 
 import notedge.idea.language.file.NotedownBundle
-import notedge.idea.ide.file_view.JssIcons
+import notedge.idea.language.file.NotedownIcons
 import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
 
@@ -19,7 +19,7 @@ class JssColorSettingsPage : ColorSettingsPage {
 
     override fun getDisplayName() = NotedownBundle.message("filetype.name")
 
-    override fun getIcon() = JssIcons.FILE
+    override fun getIcon() = NotedownIcons.FILE
 
     override fun getHighlighter() = JssSyntaxHighlighter()
 

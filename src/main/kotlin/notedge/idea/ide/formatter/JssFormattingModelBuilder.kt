@@ -1,6 +1,5 @@
 package notedge.idea.ide.formatter
 
-import notedge.idea.language.ast.JssAstBlock
 import com.intellij.formatting.*
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.TextRange
@@ -12,7 +11,7 @@ class JssFormattingModelBuilder : FormattingModelBuilder {
     override fun createModel(formattingContext: FormattingContext): FormattingModel {
         val settings = formattingContext.codeStyleSettings
         val element = formattingContext.psiElement
-        val ctx = JssFormatterContext.create(settings)
+        val ctx = FormatterContext.create(settings)
         val block = createBlock(element.node, null, Indent.getNoneIndent(), null, ctx)
         return FormattingModelProvider.createFormattingModelForPsiFile(element.containingFile, block, settings)
     }
@@ -23,7 +22,7 @@ class JssFormattingModelBuilder : FormattingModelBuilder {
             alignment: Alignment?,
             indent: Indent?,
             wrap: Wrap?,
-            ctx: JssFormatterContext
-        ): ASTBlock = JssAstBlock(node, alignment, indent, wrap, ctx)
+            ctx: FormatterContext
+        ): ASTBlock = FormatBlock(node, alignment, indent, wrap, ctx)
     }
 }

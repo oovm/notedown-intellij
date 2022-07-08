@@ -1,19 +1,19 @@
-package notedge.idea.language.ast
+package notedge.idea.ide.formatter
 
-import notedge.idea.ide.formatter.JssFormatterContext
-import notedge.idea.language.psi.JssTypes
 import com.intellij.formatting.*
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.formatter.FormatterUtil
+import notedge.idea.language.ast.computeSpacing
+import notedge.idea.language.ast.isWhitespaceOrEmpty
 
-class JssAstBlock(
+class FormatBlock(
     private val node: ASTNode,
     private val alignment: Alignment?,
     private val indent: Indent?,
     private val wrap: Wrap?,
-    val ctx: JssFormatterContext
+    val ctx: FormatterContext
 ) : ASTBlock {
     override fun isLeaf(): Boolean = node.firstChildNode == null
 
@@ -33,7 +33,7 @@ class JssAstBlock(
 
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
         val indent = when (node.elementType) {
-            JssTypes.ARRAY -> Indent.getNormalIndent()
+//            JssTypes.ARRAY -> Indent.getNormalIndent()
             else -> Indent.getNoneIndent()
         }
         return ChildAttributes(indent, null)
@@ -46,4 +46,34 @@ class JssAstBlock(
     }
 
     private val mySubBlocks: List<Block> by lazy { buildChildren() }
+
+
+    private fun computeIndent(child: ASTNode): Indent? {
+        val isCornerChild = node.firstChildNode == child || node.lastChildNode == child
+        return when (node.elementType) {
+//            JssTypes.BRACKET_BLOCK -> when {
+//                isCornerChild -> Indent.getNoneIndent()
+//                else -> Indent.getNormalIndent()
+//            }
+//            JssTypes.BRACE_BLOCK -> when {
+//                isCornerChild -> Indent.getNoneIndent()
+//                else -> Indent.getNormalIndent()
+//            }
+            else -> Indent.getNoneIndent()
+        }
+    }
+
+    private fun buildChildren(): List<Block> {
+        return node.getChildren(null)
+            .filter { !it.isWhitespaceOrEmpty() }
+            .map { childNode ->
+                JssFormattingModelBuilder.createBlock(
+                    node = childNode,
+                    alignment = null,
+                    indent = computeIndent(childNode),
+                    wrap = null,
+                    ctx
+                )
+            }
+    }
 }
