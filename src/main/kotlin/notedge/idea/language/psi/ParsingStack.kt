@@ -5,7 +5,7 @@ import com.intellij.psi.tree.IElementType
 import notedge.idea._NotedownLexer
 
 class ParsingStack {
-    var stack: MutableList<ParsingStackItem> = mutableListOf()
+    var stack: MutableList<StackItem> = mutableListOf()
     var asteriskStack: MutableList<Int> = mutableListOf()
     var lookAheadBuffer: MutableList<IElementType> = mutableListOf()
 
@@ -52,7 +52,7 @@ class ParsingStack {
                     return lastLookAhead
                 }
             }
-            stack.add(ParsingStackItem.Asterisk(length))
+            // stack.add(StackItem.Asterisk(length))
 
         }
         // if (last == here.yylength())
@@ -119,7 +119,7 @@ class ParsingStack {
     }
 }
 
-private fun ParsingStack.stackHas(item: ParsingStackItem): Boolean {
+private fun ParsingStack.stackHas(item: StackItem): Boolean {
     return stack.contains(item)
 }
 
