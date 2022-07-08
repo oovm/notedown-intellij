@@ -28,9 +28,9 @@ public class NoteItalicBoldNode extends NotedownASTBase implements NoteItalicBol
   }
 
   @Override
-  @NotNull
+  @Nullable
   public NoteTextElements getTextElements() {
-    return findNotNullChildByClass(NoteTextElements.class);
+    return findChildByClass(NoteTextElements.class);
   }
 
 }

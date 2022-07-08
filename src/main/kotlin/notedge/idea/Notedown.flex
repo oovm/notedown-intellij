@@ -1,11 +1,8 @@
 package notedge.idea;
 
-import com.intellij.lexer.FlexLexer;
 import notedge.idea.language.psi.ParsingStack;
 
 import com.intellij.psi.tree.IElementType;
-import static com.intellij.psi.TokenType.BAD_CHARACTER;
-import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static notedge.idea.language.psi.NoteTypes.*;
 
 
@@ -38,7 +35,8 @@ BYTE=(0[bBoOxXfF][0-9A-Fa-f][0-9A-Fa-f_]*)
 INTEGER=(0|[1-9][0-9_]*)
 DECIMAL=([0-9]+\.[0-9]*([*][*][0-9]+)?)|(\.[0-9]+([Ee][0-9]+)?)
 SIGN=[+-]
-STAR=[*]+
+ASTERISK=[*]+
+TILDE=[~]+
 ESCAPE = \\
 HEADER_HASH=[#]+
 %%
@@ -50,7 +48,8 @@ HEADER_HASH=[#]+
 	{HEADER_HASH} {return stack.analyzeHeadHash(this);}
 
 	{ESCAPE} {return stack.analyzeEscape(this);}
-	{STAR} {return stack.analyzeStar(this);}
+	{ASTERISK} {return stack.analyzeAsterisk(this);}
+	{ASTERISK} {return stack.analyzeTilde(this);}
 	{SYMBOL} {return stack.analyzeSymbol(this);}
 //	{NEW_LINE} {return stack.analyzeNewline(yylength());}
 }

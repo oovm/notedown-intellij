@@ -5,7 +5,8 @@ import com.intellij.psi.tree.IElementType
 import notedge.idea._NotedownLexer
 
 class ParsingStack {
-    var stack: MutableList<StackItem> = mutableListOf()
+    var stack: MutableList<ParsingStackItem> = mutableListOf()
+    var asteriskStack: MutableList<Int> = mutableListOf()
     var lookAheadBuffer: MutableList<IElementType> = mutableListOf()
 
     private var ignoreWhitespaceText = false
@@ -32,7 +33,50 @@ class ParsingStack {
         return NoteTypes.ITALIC_L
     }
 
-    fun analyzeStar(here: _NotedownLexer): IElementType {
+    fun analyzeAsterisk(here: _NotedownLexer): IElementType {
+        val last = asteriskStack.lastOrNull();
+        val length = here.yylength()
+        if (last == null || last > length) {
+            when (length) {
+                1 -> {
+                    lookAheadBuffer.add(NoteTypes.ITALIC_L)
+                }
+                2 -> {
+                    lookAheadBuffer.add(NoteTypes.BOLD_L)
+                }
+                3 -> {
+                    lookAheadBuffer.add(NoteTypes.ITALIC_BOLD_L)
+                }
+                else -> {
+                    lookAheadBuffer.add(NoteTypes.PLAIN_TEXT)
+                    return lastLookAhead
+                }
+            }
+            stack.add(ParsingStackItem.Asterisk(length))
+
+        }
+        // if (last == here.yylength())
+        else {
+            when (length) {
+                1 -> {
+                    asteriskStack.removeLast()
+                    lookAheadBuffer.add(NoteTypes.ITALIC_R)
+                }
+                2 -> {
+                    asteriskStack.removeLast()
+                    lookAheadBuffer.add(NoteTypes.BOLD_R)
+                }
+                3 -> {
+                    asteriskStack.removeLast()
+                    lookAheadBuffer.add(NoteTypes.ITALIC_BOLD_R)
+                }
+                else -> TODO("unreachable")
+            }
+        }
+        return lastLookAhead
+    }
+
+    fun analyzeTilde(here: _NotedownLexer): IElementType {
         lookAheadBuffer.add(NoteTypes.ITALIC_L)
         return lastLookAhead
     }
@@ -56,10 +100,14 @@ class ParsingStack {
 
     /// reset look ahead
     fun analyzeNewline(here: _NotedownLexer): IElementType {
-        when {
-            peekLookAhead == null -> {
+        when (peekLookAhead) {
+            null, NoteTypes.NEW_LINE, NoteTypes.BREAK_PART -> {
                 lookAheadBuffer.add(NoteTypes.BREAK_PART)
+                return clearLookAhead
             }
+            else -> {}
+        }
+        when {
             lookAheadBuffer.contains(NoteTypes.HEADER_HASH) -> {
                 lookAheadBuffer.add(NoteTypes.BREAK_PART)
             }
@@ -71,7 +119,7 @@ class ParsingStack {
     }
 }
 
-private fun ParsingStack.stackHas(item: StackItem): Boolean {
+private fun ParsingStack.stackHas(item: ParsingStackItem): Boolean {
     return stack.contains(item)
 }
 

@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface NoteItalicBold extends PsiElement {
 
-  @NotNull
+  @Nullable
   NoteTextElements getTextElements();
 
 }

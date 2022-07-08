@@ -6,8 +6,7 @@ import com.intellij.lexer.FlexLexer;
 import notedge.idea.language.psi.ParsingStack;
 
 import com.intellij.psi.tree.IElementType;
-import static com.intellij.psi.TokenType.BAD_CHARACTER;
-import static com.intellij.psi.TokenType.WHITE_SPACE;
+
 import static notedge.idea.language.psi.NoteTypes.*;
 
 
@@ -608,7 +607,7 @@ public _NotedownLexer() {
             // fall through
           case 10: break;
           case 4: 
-            { return stack.analyzeStar(this);
+            { return stack.analyzeAsterisk(this);
             } 
             // fall through
           case 11: break;

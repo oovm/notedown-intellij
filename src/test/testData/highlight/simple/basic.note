@@ -6,9 +6,11 @@
 ###### subsubparagraph
 
 normal text
+
 *normal text*
 **bold text**
 ***normal text***
+
 ~normal text~
 ~~normal text~~
 ~~~normal text~~~

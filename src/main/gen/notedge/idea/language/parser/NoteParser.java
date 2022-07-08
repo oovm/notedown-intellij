@@ -48,17 +48,24 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // BOLD_L text_elements BOLD_R
+  // BOLD_L [text_elements] BOLD_R
   public static boolean bold(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "bold")) return false;
     if (!nextTokenIs(b, BOLD_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, BOLD_L);
-    r = r && text_elements(b, l + 1);
+    r = r && bold_1(b, l + 1);
     r = r && consumeToken(b, BOLD_R);
     exit_section_(b, m, BOLD, r);
     return r;
+  }
+
+  // [text_elements]
+  private static boolean bold_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "bold_1")) return false;
+    text_elements(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -218,31 +225,45 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ITALIC_L text_elements ITALIC_R
+  // ITALIC_L [text_elements] ITALIC_R
   public static boolean italic(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "italic")) return false;
     if (!nextTokenIs(b, ITALIC_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, ITALIC_L);
-    r = r && text_elements(b, l + 1);
+    r = r && italic_1(b, l + 1);
     r = r && consumeToken(b, ITALIC_R);
     exit_section_(b, m, ITALIC, r);
     return r;
   }
 
+  // [text_elements]
+  private static boolean italic_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "italic_1")) return false;
+    text_elements(b, l + 1);
+    return true;
+  }
+
   /* ********************************************************** */
-  // ITALIC_BOLD_L text_elements ITALIC_BOLD_R
+  // ITALIC_BOLD_L [text_elements] ITALIC_BOLD_R
   public static boolean italic_bold(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "italic_bold")) return false;
     if (!nextTokenIs(b, ITALIC_BOLD_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, ITALIC_BOLD_L);
-    r = r && text_elements(b, l + 1);
+    r = r && italic_bold_1(b, l + 1);
     r = r && consumeToken(b, ITALIC_BOLD_R);
     exit_section_(b, m, ITALIC_BOLD, r);
     return r;
+  }
+
+  // [text_elements]
+  private static boolean italic_bold_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "italic_bold_1")) return false;
+    text_elements(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
