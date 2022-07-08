@@ -15,6 +15,7 @@ private final ParsingStack stack = new ParsingStack();
 public _NotedownLexer() {
 	this((java.io.Reader)null);
 }
+
 %}
 
 %public
@@ -26,6 +27,7 @@ public _NotedownLexer() {
 
 EOL=\R
 WHITE_SPACE=\s+
+NEW_LINE=[\r\n]\s*
 COMMENT_DOCUMENT=("///")[^\r\n]*
 COMMENT=("//")[^\r\n]*
 COMMENT_BLOCK=[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
@@ -38,14 +40,16 @@ DECIMAL=([0-9]+\.[0-9]*([*][*][0-9]+)?)|(\.[0-9]+([Ee][0-9]+)?)
 SIGN=[+-]
 STAR=[*]+
 ESCAPE_SPECIAL = \\[*-]
+HEADER_HASH=[#]+
 %%
 
 <YYINITIAL> {
 	{ESCAPE_SPECIAL} {return ESCAPE; }
-	{STAR} {
-		return this.stack.analyzeStar(yylength());
-	}
+	{HEADER_HASH} {return stack.analyzeHead(this);}
+	{STAR} {return stack.analyzeStar(this);}
+//	{NEW_LINE} {return stack.analyzeNewline(yylength());}
 }
+
 <YYINITIAL> {
 	{WHITE_SPACE}      { return WHITE_SPACE; }
 	"\\"               { return ESCAPE; }
@@ -66,11 +70,10 @@ ESCAPE_SPECIAL = \\[*-]
 	"."                { return DOT; }
 	"*"                { return STAR; }
 	"@"                { return AT; }
-
 }
 
-<YYINITIAL> {
-	{SYMBOL}  { return SYMBOL; }
-}
+//<YYINITIAL> {
+//	{SYMBOL}  { return SYMBOL; }
+//}
 
 [^] { return TEXT; }

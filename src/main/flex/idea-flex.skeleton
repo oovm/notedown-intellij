@@ -25,38 +25,38 @@
   private java.io.Reader zzReader;
 
   /** the current state of the DFA */
-  private int zzState;
+  public int zzState;
 
   /** the current lexical state */
-  private int zzLexicalState = YYINITIAL;
+  public int zzLexicalState = YYINITIAL;
 
   /** this buffer contains the current text to be matched and is
       the source of the yytext() string */
-  private CharSequence zzBuffer = "";
+  public CharSequence zzBuffer = "";
 
   /** the textposition at the last accepting state */
-  private int zzMarkedPos;
+  public int zzMarkedPos;
 
   /** the current text position in the buffer */
-  private int zzCurrentPos;
+  public int zzCurrentPos;
 
   /** startRead marks the beginning of the yytext() string in the buffer */
-  private int zzStartRead;
+  public int zzStartRead;
 
   /** endRead marks the last character in the buffer, that has been read
       from input */
-  private int zzEndRead;
+  public int zzEndRead;
 
   /**
    * zzAtBOL == true <=> the scanner is currently at the beginning of a line
    */
-  private boolean zzAtBOL = true;
+  public boolean zzAtBOL = true;
 
   /** zzAtEOF == true <=> the scanner is at the EOF */
-  private boolean zzAtEOF;
+  public boolean zzAtEOF;
 
   /** denotes if the user-EOF-code has already been executed */
-  private boolean zzEOFDone;
+  public boolean zzEOFDone;
 
 --- user class code
 

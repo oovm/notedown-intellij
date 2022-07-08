@@ -1,0 +1,35 @@
+# section
+## subsection
+### subsubsection
+#### paragraph
+##### subparagraph
+###### subsubparagraph
+
+\subsubparagraph() {
+    subsubparagraph
+}
+
+normal text
+*normal text*
+**normal text**
+***normal text***
+_normal text_
+__normal text__
+___normal text___
+
+
+\function(arg, kw=arg): text
+
+\function(arg, kw=arg) {
+    text
+}
+
+<function arg kw=arg/>
+
+<function arg kw=arg>
+    text
+</function>
+
+```function[arg, kw=arg]
+
+```

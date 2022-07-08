@@ -12,25 +12,10 @@
 
     elementTypeHolderClass = "notedge.idea.language.psi.NoteTypes"
     elementTypeClass = "notedge.idea.language.psi.NElementType"
-    tokenTypeClass = "notedge.idea.language.psi.NoteTokenType"
+    tokenTypeClass = "notedge.idea.language.psi.NElementType"
     tokens = [
         // literal
-        ESCAPED_CHARACTER = '\'
-        ITALIC_L = 'ItalicLeft'
-        ITALIC_R = 'ItalicRight'
-        BOLD_L = 'BoldLeft'
-        BOLD_R = 'BoldRight'
-        ITALIC_BOLD_L = 'ItalicBoldLeft'
-        ITALIC_BOLD_R = 'ItalicBoldRight'
-
-        PARENTHESIS_L = '('
-        PARENTHESIS_R = ')'
-        BRACKET_L = '['
-        BRACKET_R = ']'
-        BRACE_L = '{'
-        BRACE_R = '}'
-        ANGLE_L = '<'
-        ANGLE_R = '>'
+        ESCAPE = '\\'
         ACCENT = '^'
         EQ = '='
         COLON = ':'
@@ -46,17 +31,35 @@
 Notedown ::= statement*;
 
 private statement ::=
-    function_call
+    header
+  | function
   | italic
+  | xml
+  | TEXT
   ;
 private ignore ::= SEMICOLON | COMMA;
 // ---------------------------------------------------------------------------------------------------------------------
-function_call ::= FUNCTION_ID {
+header ::= HEADER_HASH TEXT {
 
 }
+
 italic ::= ITALIC_L TEXT ITALIC_R
 identifier ::= SYMBOL
+namespace ::= identifier (DOT identifier)*
 escaped ::= ESCAPED_CHARACTER
+// ---------------------------------------------------------------------------------------------------------------------
+// \name.space
+function ::= ESCAPE namespace {
+
+}
+// ---------------------------------------------------------------------------------------------------------------------
+xml ::= xml_close | xml_start xml_end
+// <name.space arg kw=arg/>
+xml_close ::= ANGLE_L namespace ANGLE_SR
+// <name.space arg kw=arg>
+xml_start ::= ANGLE_L namespace ANGLE_R
+// </name.space>
+xml_end ::= ANGLE_SL namespace ANGLE_R
 // ---------------------------------------------------------------------------------------------------------------------
 // parenthesis ( )
 private meta parenthesis ::= PARENTHESIS_L <<param>> PARENTHESIS_R;

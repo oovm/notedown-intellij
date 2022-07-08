@@ -46,41 +46,7 @@ class NLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider() {
         indentOptions.CONTINUATION_INDENT_SIZE = indentOptions.INDENT_SIZE
     }
 
-    override fun getCodeSample(settingsType: SettingsType) =
-        """# header
-## 
-### 
-#### 
-##### 
-######  
-
-normal text
-*normal text*
-**normal text**
-***normal text***
-_normal text_
-__normal text__
-___normal text___
-
-
-\function(arg, kw=arg):
-
-\function(arg, kw=arg) {
-    text
-}
-
-<function arg kw=arg/>
-
-<function arg kw=arg>
-    text
-</function>
-
-```function(arg, kw=arg)
-
-```
-
-
-"""
+    override fun getCodeSample(settingsType: SettingsType) = javaClass.getResource("/messages/code_style.note")!!.readText()
 
     companion object {
         const val DEFAULT_RIGHT_MARGIN = 100

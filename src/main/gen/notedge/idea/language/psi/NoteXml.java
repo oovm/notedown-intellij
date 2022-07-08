@@ -5,9 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NoteTextFunction extends PsiElement {
+public interface NoteXml extends PsiElement {
 
-  @NotNull
-  NoteIdentifier getIdentifier();
+  @Nullable
+  NoteXmlClose getXmlClose();
+
+  @Nullable
+  NoteXmlEnd getXmlEnd();
+
+  @Nullable
+  NoteXmlStart getXmlStart();
 
 }

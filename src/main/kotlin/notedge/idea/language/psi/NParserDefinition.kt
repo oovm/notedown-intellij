@@ -12,6 +12,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
+import notedge.idea.language.ast.NLexerAdapter
 import notedge.idea.language.parser.NoteParser
 
 

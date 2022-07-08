@@ -15,6 +15,18 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitEscaped(@NotNull NoteEscaped o) {
+    visitPsiElement(o);
+  }
+
+  public void visitFunction(@NotNull NoteFunction o) {
+    visitPsiElement(o);
+  }
+
+  public void visitHeader(@NotNull NoteHeader o) {
+    visitPsiElement(o);
+  }
+
   public void visitIdentifier(@NotNull NoteIdentifier o) {
     visitPsiElement(o);
   }
@@ -23,7 +35,23 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitTextFunction(@NotNull NoteTextFunction o) {
+  public void visitNamespace(@NotNull NoteNamespace o) {
+    visitPsiElement(o);
+  }
+
+  public void visitXml(@NotNull NoteXml o) {
+    visitPsiElement(o);
+  }
+
+  public void visitXmlClose(@NotNull NoteXmlClose o) {
+    visitPsiElement(o);
+  }
+
+  public void visitXmlEnd(@NotNull NoteXmlEnd o) {
+    visitPsiElement(o);
+  }
+
+  public void visitXmlStart(@NotNull NoteXmlStart o) {
     visitPsiElement(o);
   }
 

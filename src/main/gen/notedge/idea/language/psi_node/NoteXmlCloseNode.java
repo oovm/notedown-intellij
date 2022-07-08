@@ -12,14 +12,14 @@ import notedge.idea.language.ast.NotedownNodeBase;
 import notedge.idea.language.psi.*;
 import notedge.idea.language.ast.NodeExtension;
 
-public class NoteTextFunctionNode extends NotedownNodeBase implements NoteTextFunction {
+public class NoteXmlCloseNode extends NotedownNodeBase implements NoteXmlClose {
 
-  public NoteTextFunctionNode(@NotNull ASTNode node) {
+  public NoteXmlCloseNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NoteVisitor visitor) {
-    visitor.visitTextFunction(this);
+    visitor.visitXmlClose(this);
   }
 
   @Override
@@ -30,8 +30,8 @@ public class NoteTextFunctionNode extends NotedownNodeBase implements NoteTextFu
 
   @Override
   @NotNull
-  public NoteIdentifier getIdentifier() {
-    return findNotNullChildByClass(NoteIdentifier.class);
+  public NoteNamespace getNamespace() {
+    return findNotNullChildByClass(NoteNamespace.class);
   }
 
 }

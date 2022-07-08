@@ -12,7 +12,6 @@ import com.intellij.psi.PsiReferenceRegistrar
 
 class JssUrlReferenceContributor : PsiReferenceContributor() {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
-        TODO("Not yet implemented")
-    }
 
+    }
 }
