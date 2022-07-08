@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NoteItalic extends PsiElement {
+public interface NoteTextElements extends PsiElement {
 
   @NotNull
-  NoteTextElements getTextElements();
+  List<NoteEscaped> getEscapedList();
 
 }

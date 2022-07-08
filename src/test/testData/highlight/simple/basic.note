@@ -11,11 +11,11 @@
 
 normal text
 *normal text*
-**normal text**
+**bold text**
 ***normal text***
-_normal text_
-__normal text__
-___normal text___
+~normal text~
+~~normal text~~
+~~~normal text~~~
 
   - 22
 

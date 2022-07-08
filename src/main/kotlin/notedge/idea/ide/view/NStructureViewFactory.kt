@@ -1,4 +1,4 @@
-package com.github.projectfluent.ide.view
+package notedge.idea.ide.view
 
 import com.intellij.ide.structureView.StructureViewBuilder
 import com.intellij.ide.structureView.StructureViewModel
@@ -7,11 +7,11 @@ import com.intellij.lang.PsiStructureViewFactory
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiFile
 
-class FluentStructureViewFactory : PsiStructureViewFactory {
+class NStructureViewFactory : PsiStructureViewFactory {
     override fun getStructureViewBuilder(psiFile: PsiFile): StructureViewBuilder {
         class Builder : TreeBasedStructureViewBuilder() {
             override fun createStructureViewModel(editor: Editor?): StructureViewModel {
-                return FluentStructureViewModel(psiFile)
+                return NStructureViewModel(psiFile)
             }
         }
         return Builder()

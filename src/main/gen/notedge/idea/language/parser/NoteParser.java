@@ -179,14 +179,14 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // HEADER_HASH text
+  // HEADER_HASH text_elements
   public static boolean header(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "header")) return false;
     if (!nextTokenIs(b, HEADER_HASH)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, HEADER_HASH);
-    r = r && text(b, l + 1);
+    r = r && text_elements(b, l + 1);
     exit_section_(b, m, HEADER, r);
     return r;
   }
@@ -204,25 +204,14 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SEMICOLON | COMMA
-  static boolean ignore(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ignore")) return false;
-    if (!nextTokenIs(b, "", COMMA, SEMICOLON)) return false;
-    boolean r;
-    r = consumeToken(b, SEMICOLON);
-    if (!r) r = consumeToken(b, COMMA);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // ITALIC_L text ITALIC_R
+  // ITALIC_L text_elements ITALIC_R
   public static boolean italic(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "italic")) return false;
     if (!nextTokenIs(b, ITALIC_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, ITALIC_L);
-    r = r && text(b, l + 1);
+    r = r && text_elements(b, l + 1);
     r = r && consumeToken(b, ITALIC_R);
     exit_section_(b, m, ITALIC, r);
     return r;
@@ -282,7 +271,8 @@ public class NoteParser implements PsiParser, LightPsiParser {
   //   | function
   //   | italic
   //   | xml
-  //   | text
+  //   | text_elements
+  //   | NEW_LINE
   static boolean statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement")) return false;
     boolean r;
@@ -290,21 +280,22 @@ public class NoteParser implements PsiParser, LightPsiParser {
     if (!r) r = function(b, l + 1);
     if (!r) r = italic(b, l + 1);
     if (!r) r = xml(b, l + 1);
-    if (!r) r = text(b, l + 1);
+    if (!r) r = text_elements(b, l + 1);
+    if (!r) r = consumeToken(b, NEW_LINE);
     return r;
   }
 
   /* ********************************************************** */
   // text_item+
-  public static boolean text(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "text")) return false;
+  public static boolean text_elements(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "text_elements")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, TEXT, "<text>");
+    Marker m = enter_section_(b, l, _NONE_, TEXT_ELEMENTS, "<text elements>");
     r = text_item(b, l + 1);
     while (r) {
       int c = current_position_(b);
       if (!text_item(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "text", c)) break;
+      if (!empty_element_parsed_guard_(b, "text_elements", c)) break;
     }
     exit_section_(b, l, m, r, false, null);
     return r;

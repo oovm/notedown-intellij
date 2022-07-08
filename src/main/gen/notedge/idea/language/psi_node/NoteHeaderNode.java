@@ -8,11 +8,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static notedge.idea.language.psi.NoteTypes.*;
+import notedge.idea.language.mixin.MixinHeader;
 import notedge.idea.language.psi.*;
 
-public class NoteHeaderNode implements NoteHeader {
+public class NoteHeaderNode extends MixinHeader implements NoteHeader {
 
-  public NoteHeaderNode(ASTNode node) {
+  public NoteHeaderNode(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -28,8 +29,8 @@ public class NoteHeaderNode implements NoteHeader {
 
   @Override
   @NotNull
-  public NoteText getText() {
-    return findNotNullChildByClass(NoteText.class);
+  public NoteTextElements getTextElements() {
+    return findNotNullChildByClass(NoteTextElements.class);
   }
 
 }

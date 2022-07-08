@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface NoteHeader extends PsiElement {
 
   @NotNull
-  NoteText getText();
+  NoteTextElements getTextElements();
 
 }

@@ -39,7 +39,7 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitText(@NotNull NoteText o) {
+  public void visitTextElements(@NotNull NoteTextElements o) {
     visitPsiElement(o);
   }
 

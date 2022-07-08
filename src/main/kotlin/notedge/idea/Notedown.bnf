@@ -35,19 +35,19 @@ private statement ::=
   | function
   | italic
   | xml
-  | text
+  | text_elements
+  | BREAK_PART
   ;
-private ignore ::= SEMICOLON | COMMA;
 // ---------------------------------------------------------------------------------------------------------------------
-header ::= HEADER_HASH text {
+header ::= HEADER_HASH text_elements {
     mixin = "notedge.idea.language.mixin.MixinHeader"
 }
 // ---------------------------------------------------------------------------------------------------------------------
-text ::= text_item+;
-private text_item ::= PLAIN_TEXT | escaped | ESCAPE;
+text_elements ::= text_item+;
+private text_item ::= PLAIN_TEXT | escaped | ESCAPE | NEW_LINE;
 escaped ::= ESCAPED_CHARACTER
 // ---------------------------------------------------------------------------------------------------------------------
-italic ::= ITALIC_L text ITALIC_R
+italic ::= ITALIC_L text_elements ITALIC_R
 // ---------------------------------------------------------------------------------------------------------------------
 xml ::= xml_close | xml_start xml_end
 // <name.space arg kw=arg/>

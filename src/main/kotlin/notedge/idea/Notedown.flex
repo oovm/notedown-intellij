@@ -1,9 +1,13 @@
 package notedge.idea;
 
+import com.intellij.lexer.FlexLexer;
 import notedge.idea.language.psi.ParsingStack;
 
 import com.intellij.psi.tree.IElementType;
+import static com.intellij.psi.TokenType.BAD_CHARACTER;
+import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static notedge.idea.language.psi.NoteTypes.*;
+
 
 %%
 
@@ -25,11 +29,8 @@ public _NotedownLexer() {
 %state CodeFragment
 
 EOL=\R
-WHITE_SPACE=\s+
+WHITE_SPACE=[^\S\r\n]+
 NEW_LINE=[\r\n]
-COMMENT_DOCUMENT=("///")[^\r\n]*
-COMMENT=("//")[^\r\n]*
-COMMENT_BLOCK=[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 URL= [A-Za-z0-9]+:"//"[\-\p{XID_Continue}./?&#]+
 SYMBOL=[\p{XID_Start}_][\p{XID_Continue}_]*
 STRING=\"([^\"\\]|\\.)*\"

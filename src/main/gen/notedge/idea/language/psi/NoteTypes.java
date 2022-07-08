@@ -16,7 +16,7 @@ public interface NoteTypes {
   IElementType IDENTIFIER = new NElementType("IDENTIFIER");
   IElementType ITALIC = new NElementType("ITALIC");
   IElementType NAMESPACE = new NElementType("NAMESPACE");
-  IElementType TEXT = new NElementType("TEXT");
+  IElementType TEXT_ELEMENTS = new NElementType("TEXT_ELEMENTS");
   IElementType XML = new NElementType("XML");
   IElementType XML_CLOSE = new NElementType("XML_CLOSE");
   IElementType XML_END = new NElementType("XML_END");
@@ -77,8 +77,8 @@ public interface NoteTypes {
       else if (type == NAMESPACE) {
         return new NoteNamespaceNode(node);
       }
-      else if (type == TEXT) {
-        return new NoteTextNode(node);
+      else if (type == TEXT_ELEMENTS) {
+        return new NoteTextElementsNode(node);
       }
       else if (type == XML) {
         return new NoteXmlNode(node);
