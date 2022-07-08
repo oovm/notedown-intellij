@@ -146,6 +146,59 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // ESCAPED_CHARACTER
+  public static boolean escaped(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "escaped")) return false;
+    if (!nextTokenIs(b, ESCAPED_CHARACTER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ESCAPED_CHARACTER);
+    exit_section_(b, m, ESCAPED, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ESCAPE namespace {
+  // }
+  public static boolean function(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "function")) return false;
+    if (!nextTokenIs(b, ESCAPE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ESCAPE);
+    r = r && namespace(b, l + 1);
+    r = r && function_2(b, l + 1);
+    exit_section_(b, m, FUNCTION, r);
+    return r;
+  }
+
+  // {
+  // }
+  private static boolean function_2(PsiBuilder b, int l) {
+    return true;
+  }
+
+  /* ********************************************************** */
+  // HEADER_HASH TEXT {
+  // }
+  public static boolean header(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "header")) return false;
+    if (!nextTokenIs(b, HEADER_HASH)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, HEADER_HASH, TEXT);
+    r = r && header_2(b, l + 1);
+    exit_section_(b, m, HEADER, r);
+    return r;
+  }
+
+  // {
+  // }
+  private static boolean header_2(PsiBuilder b, int l) {
+    return true;
+  }
+
+  /* ********************************************************** */
   // SYMBOL
   public static boolean identifier(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "identifier")) return false;
@@ -181,6 +234,41 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // identifier (DOT identifier)*
+  public static boolean namespace(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "namespace")) return false;
+    if (!nextTokenIs(b, SYMBOL)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = identifier(b, l + 1);
+    r = r && namespace_1(b, l + 1);
+    exit_section_(b, m, NAMESPACE, r);
+    return r;
+  }
+
+  // (DOT identifier)*
+  private static boolean namespace_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "namespace_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!namespace_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "namespace_1", c)) break;
+    }
+    return true;
+  }
+
+  // DOT identifier
+  private static boolean namespace_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "namespace_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DOT);
+    r = r && identifier(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // PARENTHESIS_L <<param>> PARENTHESIS_R
   static boolean parenthesis(PsiBuilder b, int l, Parser _param) {
     if (!recursion_guard_(b, l, "parenthesis")) return false;
@@ -195,27 +283,85 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // text_function
+  // header
+  //   | function
   //   | italic
+  //   | xml
+  //   | TEXT
   static boolean statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement")) return false;
-    if (!nextTokenIs(b, "", ESCAPE, ITALIC_L)) return false;
     boolean r;
-    r = text_function(b, l + 1);
+    r = header(b, l + 1);
+    if (!r) r = function(b, l + 1);
     if (!r) r = italic(b, l + 1);
+    if (!r) r = xml(b, l + 1);
+    if (!r) r = consumeToken(b, TEXT);
     return r;
   }
 
   /* ********************************************************** */
-  // ESCAPE identifier
-  public static boolean text_function(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "text_function")) return false;
-    if (!nextTokenIs(b, ESCAPE)) return false;
+  // xml_close | xml_start xml_end
+  public static boolean xml(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml")) return false;
+    if (!nextTokenIs(b, ANGLE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ESCAPE);
-    r = r && identifier(b, l + 1);
-    exit_section_(b, m, TEXT_FUNCTION, r);
+    r = xml_close(b, l + 1);
+    if (!r) r = xml_1(b, l + 1);
+    exit_section_(b, m, XML, r);
+    return r;
+  }
+
+  // xml_start xml_end
+  private static boolean xml_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = xml_start(b, l + 1);
+    r = r && xml_end(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ANGLE_L namespace ANGLE_SR
+  public static boolean xml_close(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml_close")) return false;
+    if (!nextTokenIs(b, ANGLE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ANGLE_L);
+    r = r && namespace(b, l + 1);
+    r = r && consumeToken(b, ANGLE_SR);
+    exit_section_(b, m, XML_CLOSE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ANGLE_SL namespace ANGLE_R
+  public static boolean xml_end(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml_end")) return false;
+    if (!nextTokenIs(b, ANGLE_SL)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ANGLE_SL);
+    r = r && namespace(b, l + 1);
+    r = r && consumeToken(b, ANGLE_R);
+    exit_section_(b, m, XML_END, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ANGLE_L namespace ANGLE_R
+  public static boolean xml_start(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml_start")) return false;
+    if (!nextTokenIs(b, ANGLE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ANGLE_L);
+    r = r && namespace(b, l + 1);
+    r = r && consumeToken(b, ANGLE_R);
+    exit_section_(b, m, XML_START, r);
     return r;
   }
 

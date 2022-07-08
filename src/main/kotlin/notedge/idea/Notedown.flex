@@ -25,9 +25,11 @@ public _NotedownLexer() {
 %type IElementType
 %unicode
 
+%state CodeFragment
+
 EOL=\R
 WHITE_SPACE=\s+
-NEW_LINE=[\r\n]\s*
+NEW_LINE=[\r\n]
 COMMENT_DOCUMENT=("///")[^\r\n]*
 COMMENT=("//")[^\r\n]*
 COMMENT_BLOCK=[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
@@ -39,41 +41,20 @@ INTEGER=(0|[1-9][0-9_]*)
 DECIMAL=([0-9]+\.[0-9]*([*][*][0-9]+)?)|(\.[0-9]+([Ee][0-9]+)?)
 SIGN=[+-]
 STAR=[*]+
-ESCAPE_SPECIAL = \\[*-]
+ESCAPE = \\
 HEADER_HASH=[#]+
 %%
 
 <YYINITIAL> {
-	{ESCAPE_SPECIAL} {return ESCAPE; }
-	{HEADER_HASH} {return stack.analyzeHead(this);}
+	{WHITE_SPACE} {return stack.analyzeWhitespace(this);}
+	{NEW_LINE} {return stack.analyzeNewline(this);}
+
+	{HEADER_HASH} {return stack.analyzeHeadHash(this);}
+
+	{ESCAPE} {return stack.analyzeEscape(this);}
 	{STAR} {return stack.analyzeStar(this);}
+	{SYMBOL} {return stack.analyzeSymbol(this);}
 //	{NEW_LINE} {return stack.analyzeNewline(yylength());}
 }
-
-<YYINITIAL> {
-	{WHITE_SPACE}      { return WHITE_SPACE; }
-	"\\"               { return ESCAPE; }
-	"("                { return PARENTHESIS_L; }
-	")"                { return PARENTHESIS_R; }
-	"["                { return BRACKET_L; }
-	"]"                { return BRACKET_R; }
-	"{"                { return BRACE_L; }
-	"}"                { return BRACE_R; }
-	"<"                { return ANGLE_L; }
-	">"                { return ANGLE_R; }
-	"^"                { return ACCENT; }
-	"="                { return EQ; }
-	":"                { return COLON; }
-	";"                { return SEMICOLON; }
-	","                { return COMMA; }
-	"$"                { return DOLLAR; }
-	"."                { return DOT; }
-	"*"                { return STAR; }
-	"@"                { return AT; }
-}
-
-//<YYINITIAL> {
-//	{SYMBOL}  { return SYMBOL; }
-//}
 
 [^] { return TEXT; }

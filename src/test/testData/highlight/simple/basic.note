@@ -17,6 +17,7 @@ _normal text_
 __normal text__
 ___normal text___
 
+  - 22
 
 \function(arg, kw=arg): text
 

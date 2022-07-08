@@ -5,64 +5,104 @@ import com.intellij.psi.tree.IElementType
 import notedge.idea._NotedownLexer
 import notedge.idea.language.psi.NoteTypes
 
-private enum class StackItem {
-    /// `code`
-    Code,
-
-    /// ``2`2``
-    Code2,
-    Italic,
-    Bold,
-    ItalicBold,
-    StarUnknown,
-    Underline,
-    Strike,
-    UnderlineItalic,
-    HyphenUnknown
-}
-
 class ParsingStack {
-    private var stack: MutableList<StackItem> = mutableListOf()
+    var stack: MutableList<StackItem> = mutableListOf()
+    var lookAheadBuffer: MutableList<IElementType> = mutableListOf()
 
-    private fun stackHas(item: StackItem): Boolean {
-        return stack.contains(item)
+    private var ignoreWhitespaceText = false
+    private var canEndLine = false
+
+    fun analyzeWhitespace(here: _NotedownLexer): IElementType {
+        lookAheadBuffer.add(TokenType.WHITE_SPACE)
+        return lastLookAhead
     }
 
-    fun analyzeHead(lexer: _NotedownLexer): IElementType {
-        if (lexer.isStartOfHead()) {
-            return NoteTypes.HEADER_HASH
+    fun analyzeHeadHash(here: _NotedownLexer): IElementType {
+        if (here.isStartOfHead()) {
+            lookAheadBuffer.add(NoteTypes.HEADER_HASH)
         } else {
-            return NoteTypes.TEXT
+            lookAheadBuffer.add(NoteTypes.TEXT)
         }
+        return lastLookAhead
     }
 
-    fun analyzeCode(lexer: _NotedownLexer): IElementType {
+    fun analyzeCode(here: _NotedownLexer): IElementType {
 //        if (stack.lastOrNull() == StackItem.Code) {
 //            return NoteTypes.CODE
 //        }
         return NoteTypes.ITALIC_L
     }
 
-    fun analyzeStar(lexer: _NotedownLexer): IElementType {
-        return NoteTypes.ITALIC_L
+    fun analyzeStar(here: _NotedownLexer): IElementType {
+        lookAheadBuffer.add(NoteTypes.ITALIC_L)
+        return lastLookAhead
     }
 
-    fun analyzeNewline(lexer: _NotedownLexer): IElementType {
-        return TokenType.WHITE_SPACE
+    fun analyzeEscape(here: _NotedownLexer): IElementType {
+        lookAheadBuffer.add(NoteTypes.ESCAPE)
+        return lastLookAhead
+    }
+
+    fun analyzeSymbol(here: _NotedownLexer): IElementType {
+        if (peekLookAhead == NoteTypes.ESCAPE) {
+            lookAheadBuffer.add(NoteTypes.SYMBOL)
+        } else {
+            lookAheadBuffer.add(NoteTypes.TEXT)
+        }
+        return lastLookAhead
+    }
+
+    fun analyzeNewline(here: _NotedownLexer): IElementType {
+        lookAheadBuffer.add(TokenType.WHITE_SPACE)
+
+        return lastLookAhead
     }
 }
 
-fun _NotedownLexer.readBefore(): CharSequence {
-    return this.zzBuffer.subSequence(0, zzStartRead)
+private fun ParsingStack.stackHas(item: StackItem): Boolean {
+    return stack.contains(item)
 }
 
-fun _NotedownLexer.readAfter(): CharSequence {
+private val ParsingStack.clearLookAhead: IElementType
+    get() {
+        val last = lookAheadBuffer.last();
+        lookAheadBuffer.clear();
+        return last
+    }
+
+private inline val ParsingStack.peekLookAheadNonWhitespace: IElementType?
+    get() {
+        for (i in lookAheadBuffer.size - 1 downTo 0) {
+            val tokenType = lookAheadBuffer[i]
+            if (tokenType != TokenType.WHITE_SPACE) {
+                return tokenType
+            }
+        }
+        return null
+    }
+
+private inline val ParsingStack.peekLookAhead: IElementType?
+    get() {
+        return lookAheadBuffer.lastOrNull()
+    }
+
+private inline val ParsingStack.lastLookAhead: IElementType
+    get() {
+        return lookAheadBuffer.last()
+    }
+
+private val _NotedownLexer.beforeSequence: CharSequence
+    get() {
+        return this.zzBuffer.subSequence(0, zzStartRead)
+    }
+
+private fun _NotedownLexer.readAfter(): CharSequence {
     return this.zzBuffer.subSequence(0, zzEndRead)
 }
 
 // all whitespace until exhausted or until a newline is encountered
 private fun _NotedownLexer.isStartOfHead(allowWhiteSpace: Boolean = true): Boolean {
-    val chars = this.readBefore()
+    val chars = this.beforeSequence
     for (c in chars.reversed()) {
         if (c == '\n') {
             return true
@@ -76,3 +116,8 @@ private fun _NotedownLexer.isStartOfHead(allowWhiteSpace: Boolean = true): Boole
     }
     return true
 }
+
+private val _NotedownLexer.beforeCharacter: Char?
+    get() {
+        return this.beforeSequence.firstOrNull()
+    }
