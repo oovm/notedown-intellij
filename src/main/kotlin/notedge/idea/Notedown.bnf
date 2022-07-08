@@ -1,35 +1,23 @@
 {
     parserClass = "notedge.idea.language.parser.NoteParser"
-    parserUtilClass = "notedge.idea.language.psi.NoteParserUtil"
+    parserUtilClass = "notedge.idea.language.ast.ParserExtension"
 
-    extends = "com.intellij.extapi.psi.ASTWrapperPsiElement"
+    extends = "notedge.idea.language.ast.NotedownNodeBase"
 
     psiClassPrefix = "Note"
     psiImplClassSuffix = "Node"
     psiPackage = "notedge.idea.language.psi"
     psiImplPackage = "notedge.idea.language.psi_node"
+    psiImplUtilClass = "notedge.idea.language.ast.NodeExtension"
 
     elementTypeHolderClass = "notedge.idea.language.psi.NoteTypes"
     elementTypeClass = "notedge.idea.language.psi.NoteElementType"
     tokenTypeClass = "notedge.idea.language.psi.NoteTokenType"
-
-    psiImplUtilClass = "notedge.idea.language.ast.NodeExtension"
-
     tokens = [
-        // comment
-        COMMENT_DOCUMENT = 'regexp:(///)[^\r\n]*'
-        COMMENT = 'regexp:(//)[^\r\n]*'
-        COMMENT_BLOCK = 'regexp:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]'
-
         // literal
-        URL = 'regexp: [A-Za-z0-9]+://[\-\p{XID_Continue}./?&#]+'
-        SYMBOL = 'regexp:[\p{XID_Start}_][\p{XID_Continue}_]*'
-        STRING = 'regexp:"([^"\\]|\\.)*"'
-
-        BYTE = 'regexp:(0[bBoOxXfF][0-9A-Fa-f][0-9A-Fa-f_]*)'
-        INTEGER = 'regexp:(0|[1-9][0-9_]*)'
-        DECIMAL = 'regexp:([0-9]+\.[0-9]*([*][*][0-9]+)?)|(\.[0-9]+([Ee][0-9]+)?)'
-        SIGN = 'regexp:[+-]'
+        ESCAPE = '\'
+        ITALIC_L = 'ITALIC_L'
+        ITALIC_R = 'ITALIC_L'
 
         PARENTHESIS_L = '('
         PARENTHESIS_R = ')'
@@ -48,23 +36,20 @@
         DOT = '.'
         STAR = '*'
         AT = '@'
-//      SPACE='regexp:\s+'
-//      ANY = 'regexp:.'
     ]
 }
 
-NOTE ::= statement*;
+Notedown ::= statement*;
 
 private statement ::=
-    schema_statement
-  | properties_statement
-  | def_statement
-  | COMMENT_DOCUMENT
-  | object
-  | ignore;
+    text_function
+  | italic
+  ;
 private ignore ::= SEMICOLON | COMMA;
 // ---------------------------------------------------------------------------------------------------------------------
-// schema <ID>: <TYPE> { }
+text_function ::= ESCAPE identifier
+italic ::= ITALIC_L TEXT ITALIC_R
+identifier ::= SYMBOL
 // ---------------------------------------------------------------------------------------------------------------------
 // parenthesis ( )
 private meta parenthesis ::= PARENTHESIS_L <<param>> PARENTHESIS_R;

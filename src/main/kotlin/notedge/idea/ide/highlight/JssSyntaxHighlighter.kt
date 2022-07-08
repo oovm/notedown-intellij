@@ -1,6 +1,6 @@
 package notedge.idea.ide.highlight
 
-import notedge.idea.language.psi.JssLexerAdapter
+import notedge.idea.language.psi.NLexerAdapter
 import notedge.idea.language.psi.JssTypes.*
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.colors.TextAttributesKey
@@ -10,7 +10,7 @@ import com.intellij.psi.tree.IElementType
 
 class JssSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getHighlightingLexer(): Lexer {
-        return JssLexerAdapter()
+        return NLexerAdapter()
     }
 
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {

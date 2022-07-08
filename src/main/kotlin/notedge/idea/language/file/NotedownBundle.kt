@@ -1,14 +1,13 @@
 package notedge.idea.language.file
 
-import notedge.idea.language.file.NotedownLanguage.Companion.BUNDLE
 import com.intellij.DynamicBundle
+import notedge.idea.language.file.NotedownLanguage.BUNDLE
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.PropertyKey
 import java.util.function.Supplier
 
 
 object NotedownBundle : DynamicBundle(BUNDLE) {
-
     @Suppress("SpreadOperator")
     @JvmStatic
     fun message(@PropertyKey(resourceBundle = BUNDLE) key: String, vararg params: Any): @Nls String {

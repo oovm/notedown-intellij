@@ -17,7 +17,7 @@
 		/>
 		<lang.parserDefinition
 			language="JSS"
-			implementationClass="notedge.idea.language.psi.JssParserDefinition"
+			implementationClass="notedge.idea.language.psi.NParserDefinition"
 		/>
 		<projectViewNestingRulesProvider implementation="notedge.idea.language.file.NotedownFileGroup"/>
 		<!-- Highlight -->

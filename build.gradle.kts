@@ -116,6 +116,7 @@ tasks {
 }
 dependencies {
     implementation(kotlin("stdlib-jdk11"))
+    implementation(kotlin("script-runtime"))
 }
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
