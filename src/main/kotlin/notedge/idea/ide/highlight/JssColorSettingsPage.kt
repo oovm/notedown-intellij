@@ -21,7 +21,7 @@ class JssColorSettingsPage : ColorSettingsPage {
 
     override fun getIcon() = NotedownIcons.FILE
 
-    override fun getHighlighter() = JssSyntaxHighlighter()
+    override fun getHighlighter() = NTokenHighlighter()
 
     override fun getAdditionalHighlightingTagToDescriptorMap() = annotatorTags
 

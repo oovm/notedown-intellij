@@ -1,8 +1,9 @@
 package notedge.idea;
 
 import com.intellij.lexer.FlexLexer;
-import com.intellij.psi.tree.IElementType;
+import notedge.idea.language.ast.ParsingStack;
 
+import com.intellij.psi.tree.IElementType;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static notedge.idea.language.psi.NoteTypes.*;
@@ -10,9 +11,9 @@ import static notedge.idea.language.psi.NoteTypes.*;
 %%
 
 %{
+private final ParsingStack stack = new ParsingStack();
 public _NotedownLexer() {
 	this((java.io.Reader)null);
-    this.stack = ParsingStack();
 }
 %}
 
@@ -42,14 +43,12 @@ ESCAPE_SPECIAL = \\[*-]
 <YYINITIAL> {
 	{ESCAPE_SPECIAL} {return ESCAPE; }
 	{STAR} {
-		return this.stack.analyzeStar(yy);
+		return this.stack.analyzeStar(yylength());
 	}
 }
 <YYINITIAL> {
 	{WHITE_SPACE}      { return WHITE_SPACE; }
 	"\\"               { return ESCAPE; }
-	"**"               { return ITALIC_L; }
-	"**"               { return ITALIC_R; }
 	"("                { return PARENTHESIS_L; }
 	")"                { return PARENTHESIS_R; }
 	"["                { return BRACKET_L; }

@@ -5,15 +5,15 @@ import com.intellij.application.options.GenerationCodeStylePanel
 import com.intellij.application.options.TabbedLanguageCodeStylePanel
 import com.intellij.psi.codeStyle.CodeStyleSettings
 
-class VomlCodeStyleMainPanel(currentSettings: CodeStyleSettings?, settings: CodeStyleSettings?) :
+class NCodeStyleMainPanel(currentSettings: CodeStyleSettings?, settings: CodeStyleSettings) :
     TabbedLanguageCodeStylePanel(
-        NotedownLanguage.INSTANCE,
+        NotedownLanguage,
         currentSettings,
         settings
     ) {
     override fun initTabs(settings: CodeStyleSettings) {
         addIndentOptionsTab(settings)
         addWrappingAndBracesTab(settings)
-        addTab(GenerationCodeStylePanel(settings, NotedownLanguage.INSTANCE))
+        addTab(GenerationCodeStylePanel(settings, NotedownLanguage))
     }
 }

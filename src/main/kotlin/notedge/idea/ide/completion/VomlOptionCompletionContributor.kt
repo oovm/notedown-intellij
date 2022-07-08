@@ -1,6 +1,6 @@
 package notedge.idea.ide.completion
 
-import notedge.idea.language.psi.JssTypes
+import notedge.idea.language.psi.NoteTypes
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.editor.EditorModificationUtil
@@ -11,7 +11,7 @@ class VomlOptionCompletionContributor : CompletionContributor() {
     init {
         extend(
             CompletionType.BASIC,
-            PlatformPatterns.psiElement(JssTypes.SYMBOL),
+            PlatformPatterns.psiElement(NoteTypes.SYMBOL),
             object : CompletionProvider<CompletionParameters>() {
                 override fun addCompletions(
                     parameters: CompletionParameters,

@@ -20,7 +20,7 @@ class JssConvertJsonHandler : CodeInsightActionHandler {
 """
         )
         try {
-            PsiFileFactory.getInstance(file.project).createFileFromText(file.name, NotedownFileType.INSTANCE, buffer)
+            PsiFileFactory.getInstance(file.project).createFileFromText(file.name, NotedownFileType, buffer)
         } catch (e: IncorrectOperationException) {
             // do nothing
         }

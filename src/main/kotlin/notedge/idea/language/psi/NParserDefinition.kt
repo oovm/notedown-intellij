@@ -26,7 +26,7 @@ class NParserDefinition : ParserDefinition {
 
     override fun getStringLiteralElements(): TokenSet = STRING_LITERALS
 
-    override fun createElement(node: ASTNode): PsiElement = JssTypes.Factory.createElement(node)
+    override fun createElement(node: ASTNode): PsiElement = NoteTypes.Factory.createElement(node)
 
     override fun createFile(viewProvider: FileViewProvider): PsiFile = NotedownFile(viewProvider)
 
@@ -35,8 +35,8 @@ class NParserDefinition : ParserDefinition {
     }
 
     companion object {
-        val COMMENTS = TokenSet.create(JssTypes.COMMENT, JssTypes.COMMENT_BLOCK)
-        val STRING_LITERALS = TokenSet.create(JssTypes.STRING_INLINE, JssTypes.STRING_MULTI)
-        val FILE = IFileElementType(NotedownLanguage.INSTANCE)
+        val COMMENTS = TokenSet.create()
+        val STRING_LITERALS = TokenSet.create()
+        val FILE = IFileElementType(NotedownLanguage)
     }
 }

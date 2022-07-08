@@ -8,34 +8,39 @@ import notedge.idea.language.psi_node.*;
 
 public interface NoteTypes {
 
-  IElementType BRACE_BLOCK = new NoteElementType("BRACE_BLOCK");
-  IElementType BRACKET_BLOCK = new NoteElementType("BRACKET_BLOCK");
-  IElementType IDENTIFIER = new NoteElementType("IDENTIFIER");
-  IElementType ITALIC = new NoteElementType("ITALIC");
-  IElementType TEXT_FUNCTION = new NoteElementType("TEXT_FUNCTION");
+  IElementType BRACE_BLOCK = new NElementType("BRACE_BLOCK");
+  IElementType BRACKET_BLOCK = new NElementType("BRACKET_BLOCK");
+  IElementType IDENTIFIER = new NElementType("IDENTIFIER");
+  IElementType ITALIC = new NElementType("ITALIC");
+  IElementType TEXT_FUNCTION = new NElementType("TEXT_FUNCTION");
 
-  IElementType ACCENT = new NoteTokenType("^");
-  IElementType ANGLE_L = new NoteTokenType("<");
-  IElementType ANGLE_R = new NoteTokenType(">");
-  IElementType AT = new NoteTokenType("@");
-  IElementType BRACE_L = new NoteTokenType("{");
-  IElementType BRACE_R = new NoteTokenType("}");
-  IElementType BRACKET_L = new NoteTokenType("[");
-  IElementType BRACKET_R = new NoteTokenType("]");
-  IElementType COLON = new NoteTokenType(":");
-  IElementType COMMA = new NoteTokenType(",");
-  IElementType DOLLAR = new NoteTokenType("$");
-  IElementType DOT = new NoteTokenType(".");
-  IElementType EQ = new NoteTokenType("=");
-  IElementType ESCAPE = new NoteTokenType("\\");
-  IElementType ITALIC_L = new NoteTokenType("ITALIC_L");
-  IElementType ITALIC_R = new NoteTokenType("**");
-  IElementType PARENTHESIS_L = new NoteTokenType("(");
-  IElementType PARENTHESIS_R = new NoteTokenType(")");
-  IElementType SEMICOLON = new NoteTokenType(";");
-  IElementType STAR = new NoteTokenType("*");
-  IElementType SYMBOL = new NoteTokenType("SYMBOL");
-  IElementType TEXT = new NoteTokenType("TEXT");
+  IElementType ACCENT = new NElementType("^");
+  IElementType ANGLE_L = new NElementType("<");
+  IElementType ANGLE_R = new NElementType(">");
+  IElementType AT = new NElementType("@");
+  IElementType BOLD_L = new NElementType("BoldLeft");
+  IElementType BOLD_R = new NElementType("BoldRight");
+  IElementType BRACE_L = new NElementType("{");
+  IElementType BRACE_R = new NElementType("}");
+  IElementType BRACKET_L = new NElementType("[");
+  IElementType BRACKET_R = new NElementType("]");
+  IElementType COLON = new NElementType(":");
+  IElementType COMMA = new NElementType(",");
+  IElementType DOLLAR = new NElementType("$");
+  IElementType DOT = new NElementType(".");
+  IElementType EQ = new NElementType("=");
+  IElementType ESCAPE = new NElementType("ESCAPE");
+  IElementType ESCAPED_CHARACTER = new NElementType("\\");
+  IElementType ITALIC_BOLD_L = new NElementType("ItalicBoldLeft");
+  IElementType ITALIC_BOLD_R = new NElementType("ItalicBoldRight");
+  IElementType ITALIC_L = new NElementType("ItalicLeft");
+  IElementType ITALIC_R = new NElementType("ItalicRight");
+  IElementType PARENTHESIS_L = new NElementType("(");
+  IElementType PARENTHESIS_R = new NElementType(")");
+  IElementType SEMICOLON = new NElementType(";");
+  IElementType STAR = new NElementType("*");
+  IElementType SYMBOL = new NElementType("SYMBOL");
+  IElementType TEXT = new NElementType("TEXT");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {

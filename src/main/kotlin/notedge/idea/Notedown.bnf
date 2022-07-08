@@ -11,13 +11,17 @@
     psiImplUtilClass = "notedge.idea.language.ast.NodeExtension"
 
     elementTypeHolderClass = "notedge.idea.language.psi.NoteTypes"
-    elementTypeClass = "notedge.idea.language.psi.NoteElementType"
+    elementTypeClass = "notedge.idea.language.psi.NElementType"
     tokenTypeClass = "notedge.idea.language.psi.NoteTokenType"
     tokens = [
         // literal
-        ESCAPE = '\'
-        ITALIC_L = 'ITALIC_L'
-        ITALIC_R = 'ITALIC_L'
+        ESCAPED_CHARACTER = '\'
+        ITALIC_L = 'ItalicLeft'
+        ITALIC_R = 'ItalicRight'
+        BOLD_L = 'BoldLeft'
+        BOLD_R = 'BoldRight'
+        ITALIC_BOLD_L = 'ItalicBoldLeft'
+        ITALIC_BOLD_R = 'ItalicBoldRight'
 
         PARENTHESIS_L = '('
         PARENTHESIS_R = ')'
@@ -42,14 +46,17 @@
 Notedown ::= statement*;
 
 private statement ::=
-    text_function
+    function_call
   | italic
   ;
 private ignore ::= SEMICOLON | COMMA;
 // ---------------------------------------------------------------------------------------------------------------------
-text_function ::= ESCAPE identifier
+function_call ::= FUNCTION_ID {
+
+}
 italic ::= ITALIC_L TEXT ITALIC_R
 identifier ::= SYMBOL
+escaped ::= ESCAPED_CHARACTER
 // ---------------------------------------------------------------------------------------------------------------------
 // parenthesis ( )
 private meta parenthesis ::= PARENTHESIS_L <<param>> PARENTHESIS_R;

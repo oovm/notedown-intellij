@@ -1,11 +1,11 @@
 package notedge.idea.ide.formatter
 
 import notedge.idea.language.file.NotedownLanguage
-import notedge.idea.language.psi.JssTypes
 import com.intellij.formatting.SpacingBuilder
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 import com.intellij.psi.tree.TokenSet
+import notedge.idea.language.psi.NoteTypes
 
 data class FormatterContext(
     val commonSettings: CommonCodeStyleSettings,
@@ -13,35 +13,35 @@ data class FormatterContext(
 ) {
     companion object {
         fun create(settings: CodeStyleSettings): FormatterContext {
-            val commonSettings = settings.getCommonSettings(NotedownLanguage.INSTANCE)
+            val commonSettings = settings.getCommonSettings(NotedownLanguage)
             return FormatterContext(commonSettings, createSpacingBuilder(commonSettings))
         }
 
         private val remove_space_before = TokenSet.create(
-            JssTypes.PARENTHESIS_R,
-            JssTypes.BRACKET_R,
-            JssTypes.COMMA,
-            JssTypes.SEMICOLON
+            NoteTypes.PARENTHESIS_R,
+            NoteTypes.BRACKET_R,
+            NoteTypes.COMMA,
+            NoteTypes.SEMICOLON
         )
         private val remove_space_after = TokenSet.create(
-            JssTypes.PARENTHESIS_L,
-            JssTypes.BRACKET_L,
-            JssTypes.COLON,
+            NoteTypes.PARENTHESIS_L,
+            NoteTypes.BRACKET_L,
+            NoteTypes.COLON,
         )
-        private val remove_space_newline_after = TokenSet.create(JssTypes.IDIOM_MARK, JssTypes.PROPERTIES_MARK)
+        private val remove_space_newline_after = TokenSet.create()
 
-        private val separators = TokenSet.create(JssTypes.COMMA, JssTypes.SEMICOLON)
+        private val separators = TokenSet.create(NoteTypes.COMMA, NoteTypes.SEMICOLON)
 
         private fun createSpacingBuilder(commonSettings: CommonCodeStyleSettings): SpacingBuilder {
             val custom = SpacingBuilder(commonSettings)
                 // ,
                 .after(separators).spacing(1, 1, 0, commonSettings.KEEP_LINE_BREAKS, 0)
                 // k: v
-                .after(JssTypes.COLON).spacing(1, 1, 0, false, 0)
+                .after(NoteTypes.COLON).spacing(1, 1, 0, false, 0)
                 // k = v
-                .around(JssTypes.EQ).spacing(1, 1, 0, commonSettings.KEEP_LINE_BREAKS, 0)
+                .around(NoteTypes.EQ).spacing(1, 1, 0, commonSettings.KEEP_LINE_BREAKS, 0)
                 // SpacingBuilder { }
-                .before(JssTypes.PROPERTIES_BLOCK).spacing(1, 1, 0, commonSettings.KEEP_LINE_BREAKS, 0)
+                // .before(NoteTypes.PROPERTIES_BLOCK).spacing(1, 1, 0, commonSettings.KEEP_LINE_BREAKS, 0)
 
             return custom
                 .before(remove_space_before).spaceIf(false)

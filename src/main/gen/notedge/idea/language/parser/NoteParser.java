@@ -4,7 +4,7 @@ package notedge.idea.language.parser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import static notedge.idea.language.psi.NoteTypes.*;
-import static notedge.idea.language.psi.NoteParserUtil.*;
+import static notedge.idea.language.ast.ParserExtension.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
@@ -32,17 +32,17 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   static boolean parse_root_(IElementType t, PsiBuilder b, int l) {
-    return NOTE(b, l + 1);
+    return Notedown(b, l + 1);
   }
 
   /* ********************************************************** */
   // statement*
-  static boolean NOTE(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NOTE")) return false;
+  static boolean Notedown(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Notedown")) return false;
     while (true) {
       int c = current_position_(b);
       if (!statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "NOTE", c)) break;
+      if (!empty_element_parsed_guard_(b, "Notedown", c)) break;
     }
     return true;
   }

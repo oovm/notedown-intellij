@@ -33,7 +33,7 @@ class FormatBlock(
 
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
         val indent = when (node.elementType) {
-//            JssTypes.ARRAY -> Indent.getNormalIndent()
+//            NoteTypes.ARRAY -> Indent.getNormalIndent()
             else -> Indent.getNoneIndent()
         }
         return ChildAttributes(indent, null)
@@ -51,11 +51,11 @@ class FormatBlock(
     private fun computeIndent(child: ASTNode): Indent? {
         val isCornerChild = node.firstChildNode == child || node.lastChildNode == child
         return when (node.elementType) {
-//            JssTypes.BRACKET_BLOCK -> when {
+//            NoteTypes.BRACKET_BLOCK -> when {
 //                isCornerChild -> Indent.getNoneIndent()
 //                else -> Indent.getNormalIndent()
 //            }
-//            JssTypes.BRACE_BLOCK -> when {
+//            NoteTypes.BRACE_BLOCK -> when {
 //                isCornerChild -> Indent.getNoneIndent()
 //                else -> Indent.getNormalIndent()
 //            }

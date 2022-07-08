@@ -1,13 +1,13 @@
 package notedge.idea.ide.matcher
 
-import notedge.idea.language.psi.JssTypes
-import notedge.idea.language.psi.JSS_COMMENT
+import notedge.idea.language.psi.NoteTypes
 import com.intellij.lang.BracePair
 import com.intellij.lang.PairedBraceMatcher
 import com.intellij.psi.PsiFile
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
+import notedge.idea.language.psi.NParserDefinition
 
 class BaseBraceMatcher : PairedBraceMatcher {
     override fun getPairs(): Array<BracePair> = PAIRS
@@ -20,20 +20,20 @@ class BaseBraceMatcher : PairedBraceMatcher {
 
     companion object {
         private val PAIRS = arrayOf(
-            BracePair(JssTypes.BRACE_L, JssTypes.BRACE_R, true),
-            BracePair(JssTypes.BRACKET_L, JssTypes.BRACKET_R, true),
-            BracePair(JssTypes.PARENTHESIS_L, JssTypes.PARENTHESIS_R, true),
+            BracePair(NoteTypes.BRACE_L, NoteTypes.BRACE_R, true),
+            BracePair(NoteTypes.BRACKET_L, NoteTypes.BRACKET_R, true),
+            BracePair(NoteTypes.PARENTHESIS_L, NoteTypes.PARENTHESIS_R, true),
             // BracePair(VomlTypes.EXT_PREFIX, VomlTypes.BRACKETR, false)
         )
 
         private val InsertPairBraceBefore = TokenSet.orSet(
-            JSS_COMMENT,
+            NParserDefinition.COMMENTS,
             TokenSet.create(
                 TokenType.WHITE_SPACE,
-                JssTypes.COMMA,
-                JssTypes.PARENTHESIS_R,
-                JssTypes.BRACKET_R,
-                JssTypes.BRACE_R,
+                NoteTypes.COMMA,
+                NoteTypes.PARENTHESIS_R,
+                NoteTypes.BRACKET_R,
+                NoteTypes.BRACE_R,
             )
         )
     }

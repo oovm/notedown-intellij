@@ -1,7 +1,7 @@
 package notedge.idea.ide.matcher
 
 import notedge.idea.language.file.NotedownFile
-import notedge.idea.language.psi.JssTypes
+import notedge.idea.language.psi.NoteTypes
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.CustomFoldingBuilder
 import com.intellij.lang.folding.FoldingDescriptor
@@ -11,7 +11,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 
-class JssFoldingBuilder : CustomFoldingBuilder(), DumbAware {
+class NFoldingBuilder : CustomFoldingBuilder(), DumbAware {
     override fun buildLanguageFoldRegions(
         descriptors: MutableList<FoldingDescriptor>,
         root: PsiElement,
@@ -19,7 +19,7 @@ class JssFoldingBuilder : CustomFoldingBuilder(), DumbAware {
         quick: Boolean
     ) {
         if (root !is NotedownFile) return
-        val visitor = JssFoldingVisitor(descriptors)
+        val visitor = NFoldingVisitor(descriptors)
         PsiTreeUtil.processElements(root) {
             it.accept(visitor);
             true
@@ -28,8 +28,8 @@ class JssFoldingBuilder : CustomFoldingBuilder(), DumbAware {
 
     override fun getLanguagePlaceholderText(node: ASTNode, range: TextRange) =
         when (node.elementType) {
-            JssTypes.BRACKET_BLOCK -> "[...]"
-            JssTypes.BRACE_BLOCK -> "{...}"
+            NoteTypes.BRACKET_BLOCK -> "[...]"
+            NoteTypes.BRACE_BLOCK -> "{...}"
             else -> "..."
         }
 

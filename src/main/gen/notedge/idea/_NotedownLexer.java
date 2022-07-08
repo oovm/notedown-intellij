@@ -3,8 +3,9 @@
 package notedge.idea;
 
 import com.intellij.lexer.FlexLexer;
-import com.intellij.psi.tree.IElementType;
+import notedge.idea.language.ast.ParsingStack;
 
+import com.intellij.psi.tree.IElementType;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static notedge.idea.language.psi.NoteTypes.*;
@@ -25,9 +26,6 @@ public class _NotedownLexer implements FlexLexer {
 
   /** lexical states */
   public static final int YYINITIAL = 0;
-  public static final int ContextStar = 2;
-  public static final int ContextHyphen = 4;
-  public static final int ContextString = 6;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -36,7 +34,7 @@ public class _NotedownLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1,  1,  1,  1,  1, 1
+     0, 0
   };
 
   /** 
@@ -187,12 +185,12 @@ public class _NotedownLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\2\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"+
+    "\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"+
     "\1\10\1\11\1\12\1\13\1\14\1\15\1\16\1\17"+
     "\1\20\1\21\1\22\1\23\1\24\1\25\1\6";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[24];
+    int [] result = new int[23];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -217,12 +215,12 @@ public class _NotedownLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\27\0\56\0\105\0\134\0\56\0\163\0\212"+
-    "\0\56\0\56\0\56\0\56\0\56\0\56\0\56\0\56"+
-    "\0\56\0\56\0\56\0\56\0\56\0\56\0\56\0\56";
+    "\0\0\0\27\0\56\0\105\0\27\0\134\0\163\0\27"+
+    "\0\27\0\27\0\27\0\27\0\27\0\27\0\27\0\27"+
+    "\0\27\0\27\0\27\0\27\0\27\0\27\0\27";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[24];
+    int [] result = new int[23];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -245,14 +243,14 @@ public class _NotedownLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\3\1\4\1\5\1\3\1\6\1\7\1\10\1\11"+
-    "\1\3\1\12\1\13\1\14\1\15\1\16\1\17\1\20"+
-    "\1\21\1\22\1\23\1\24\1\25\1\26\1\27\27\3"+
-    "\30\0\1\4\27\0\1\5\27\0\1\7\1\0\1\7"+
-    "\23\0\1\30\5\0\1\30\16\0";
+    "\1\2\1\3\1\4\1\2\1\5\1\6\1\7\1\10"+
+    "\1\2\1\11\1\12\1\13\1\14\1\15\1\16\1\17"+
+    "\1\20\1\21\1\22\1\23\1\24\1\25\1\26\30\0"+
+    "\1\3\27\0\1\4\27\0\1\6\1\0\1\6\23\0"+
+    "\1\27\5\0\1\27\16\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[161];
+    int [] result = new int[138];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -290,10 +288,10 @@ public class _NotedownLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\2\0\1\11\2\1\1\11\2\1\20\11";
+    "\1\0\1\11\2\1\1\11\2\1\20\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[24];
+    int [] result = new int[23];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -349,9 +347,9 @@ public class _NotedownLexer implements FlexLexer {
   private boolean zzEOFDone;
 
   /* user code: */
+private final ParsingStack stack = new ParsingStack();
 public _NotedownLexer() {
 	this((java.io.Reader)null);
-    this.stack = ParsingStack();
 }
 
 
@@ -610,7 +608,7 @@ public _NotedownLexer() {
             // fall through
           case 23: break;
           case 3: 
-            { return this.stack.analyzeStar(yy);
+            { return this.stack.analyzeStar(yylength());
             } 
             // fall through
           case 24: break;

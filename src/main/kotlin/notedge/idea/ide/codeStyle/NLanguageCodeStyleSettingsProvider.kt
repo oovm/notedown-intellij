@@ -1,26 +1,17 @@
 package notedge.idea.ide.codeStyle
 
-import notedge.idea.language.file.NotedownLanguage
-import com.intellij.application.options.CodeStyleAbstractConfigurable
 import com.intellij.application.options.SmartIndentOptionsEditor
 import com.intellij.psi.codeStyle.*
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings.IndentOptions
+import notedge.idea.language.file.NotedownLanguage
 
-class VomlLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider() {
-    override fun getLanguage() = NotedownLanguage.INSTANCE
+class NLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider() {
+    override fun getLanguage() = NotedownLanguage
 
     override fun getIndentOptionsEditor() = SmartIndentOptionsEditor()
 
-    override fun createConfigurable(
-        settings: CodeStyleSettings,
-        modelSettings: CodeStyleSettings
-    ): CodeStyleConfigurable {
-        return object : CodeStyleAbstractConfigurable(
-            settings,
-            modelSettings,
-            configurableDisplayName
-        ) {
-            override fun createPanel(settings: CodeStyleSettings?) = VomlCodeStyleMainPanel(currentSettings, settings)
-        }
+    override fun createConfigurable(settings: CodeStyleSettings, modelSettings: CodeStyleSettings, ): CodeStyleConfigurable {
+        return CodeStyleAbstractConfigurable1(settings, modelSettings)
     }
 
     override fun customizeSettings(consumer: CodeStyleSettingsCustomizable, settingsType: SettingsType) {
@@ -45,10 +36,7 @@ class VomlLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider(
         }
     }
 
-    override fun customizeDefaults(
-        commonSettings: CommonCodeStyleSettings,
-        indentOptions: CommonCodeStyleSettings.IndentOptions
-    ) {
+    override fun customizeDefaults(commonSettings: CommonCodeStyleSettings, indentOptions: IndentOptions) {
         commonSettings.RIGHT_MARGIN = DEFAULT_RIGHT_MARGIN
 
         commonSettings.LINE_COMMENT_AT_FIRST_COLUMN = false
@@ -59,60 +47,43 @@ class VomlLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider(
     }
 
     override fun getCodeSample(settingsType: SettingsType) =
-        """@inherit user;
+        """# header
+## 
+### 
+#### 
+##### 
+######  
 
-@include json "some/path/test.json" as json;
-@include "https://example.org/test.voml" {
-	external_key as external
+normal text
+*normal text*
+**normal text**
+***normal text***
+_normal text_
+__normal text__
+___normal text___
+
+
+\function(arg, kw=arg):
+
+\function(arg, kw=arg) {
+    text
 }
 
-[literals]
-boolean = [true, false]
+<function arg kw=arg/>
 
-[literals.number]
-integer  = 10cm
-decimal  = 0.1m
+<function arg kw=arg>
+    text
+</function>
 
-[literals.string]
-string   = "string"
-escape   = "\n"
+```function(arg, kw=arg)
 
-[keywords]
-// remove this key-value pair
-key = null
+```
 
-[scopes]
-	[>a1]
-	key1 = "scopes.a1.key1"
-	[^a2]
-	key2 = "scopes.a2.key2"
-		[>b1]
-		key3 = "a.a2.b1.key3"
-	[<]
-	key4 = "scopes.a2.key4"
-		[>b1]
-		key5 = "a.a2.b1.key5"
-	[<a3]
-	key = "scopes.a3.key"
 
----
-
-connection_max.a = 5cm
-v = [
-	@merge(override)
-	@merge_as_source(unset)
-	@merge_as_target(ignore)
-	a = Some(1)
-    b = None()
-]
-
-[name]
-  . a = 2
-  * a
-  * b
 """
 
     companion object {
         const val DEFAULT_RIGHT_MARGIN = 100
     }
 }
+

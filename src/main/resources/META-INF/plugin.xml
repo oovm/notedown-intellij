@@ -27,7 +27,7 @@
 		<highlightVisitor implementation="notedge.idea.ide.highlight.JssHighlightVisitor"/>
 		<lang.syntaxHighlighter
 			language="JSS"
-			implementationClass="notedge.idea.ide.highlight.JssSyntaxHighlighter"
+			implementationClass="notedge.idea.ide.highlight.NTokenHighlighter"
 		/>
 		<!-- Formatter -->
 		<lang.formatter
@@ -60,7 +60,7 @@
 		/>
 		<lang.foldingBuilder
 			language="JSS"
-			implementationClass="notedge.idea.ide.matcher.JssFoldingBuilder"
+			implementationClass="notedge.idea.ide.matcher.NFoldingBuilder"
 		/>
 		<indexPatternBuilder
 			implementation="notedge.idea.ide.todo.VomlTodoIndexPatternBuilder"
@@ -77,7 +77,7 @@
 		<annotator language="JSS" implementationClass="notedge.idea.ide.annotator.LiteralChecker"/>
 
 		<langCodeStyleSettingsProvider
-			implementation="notedge.idea.ide.codeStyle.VomlLanguageCodeStyleSettingsProvider"
+			implementation="notedge.idea.ide.codeStyle.NLanguageCodeStyleSettingsProvider"
 		/>
 
 	</extensions>
