@@ -2,12 +2,9 @@
 
 package notedge.idea;
 
-import com.intellij.lexer.FlexLexer;
-import notedge.idea.language.ast.ParsingStack;
+import notedge.idea.language.psi.ParsingStack;
 
 import com.intellij.psi.tree.IElementType;
-import static com.intellij.psi.TokenType.BAD_CHARACTER;
-import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static notedge.idea.language.psi.NoteTypes.*;
 
 
@@ -591,7 +588,7 @@ public _NotedownLexer() {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { return TEXT;
+            { return PLAIN_TEXT;
             } 
             // fall through
           case 7: break;
