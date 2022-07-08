@@ -4,7 +4,7 @@ package notedge.idea.language.parser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import static notedge.idea.language.psi.NoteTypes.*;
-import static notedge.idea.language.ast.ParserExtension.*;
+import static notedge.idea.language.psi.ParserExtension.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
@@ -179,23 +179,16 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // HEADER_HASH TEXT {
-  // }
+  // HEADER_HASH text
   public static boolean header(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "header")) return false;
     if (!nextTokenIs(b, HEADER_HASH)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, HEADER_HASH, TEXT);
-    r = r && header_2(b, l + 1);
+    r = consumeToken(b, HEADER_HASH);
+    r = r && text(b, l + 1);
     exit_section_(b, m, HEADER, r);
     return r;
-  }
-
-  // {
-  // }
-  private static boolean header_2(PsiBuilder b, int l) {
-    return true;
   }
 
   /* ********************************************************** */
@@ -222,13 +215,15 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ITALIC_L TEXT ITALIC_R
+  // ITALIC_L text ITALIC_R
   public static boolean italic(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "italic")) return false;
     if (!nextTokenIs(b, ITALIC_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, ITALIC_L, TEXT, ITALIC_R);
+    r = consumeToken(b, ITALIC_L);
+    r = r && text(b, l + 1);
+    r = r && consumeToken(b, ITALIC_R);
     exit_section_(b, m, ITALIC, r);
     return r;
   }
@@ -287,7 +282,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
   //   | function
   //   | italic
   //   | xml
-  //   | TEXT
+  //   | text
   static boolean statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement")) return false;
     boolean r;
@@ -295,7 +290,34 @@ public class NoteParser implements PsiParser, LightPsiParser {
     if (!r) r = function(b, l + 1);
     if (!r) r = italic(b, l + 1);
     if (!r) r = xml(b, l + 1);
-    if (!r) r = consumeToken(b, TEXT);
+    if (!r) r = text(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // text_item+
+  public static boolean text(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "text")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, TEXT, "<text>");
+    r = text_item(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!text_item(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "text", c)) break;
+    }
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // PLAIN_TEXT | escaped | ESCAPE
+  static boolean text_item(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "text_item")) return false;
+    boolean r;
+    r = consumeToken(b, PLAIN_TEXT);
+    if (!r) r = escaped(b, l + 1);
+    if (!r) r = consumeToken(b, ESCAPE);
     return r;
   }
 

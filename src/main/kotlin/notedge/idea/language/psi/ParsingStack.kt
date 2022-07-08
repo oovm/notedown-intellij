@@ -1,9 +1,8 @@
-package notedge.idea.language.ast
+package notedge.idea.language.psi
 
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import notedge.idea._NotedownLexer
-import notedge.idea.language.psi.NoteTypes
 
 class ParsingStack {
     var stack: MutableList<StackItem> = mutableListOf()
@@ -18,10 +17,10 @@ class ParsingStack {
     }
 
     fun analyzeHeadHash(here: _NotedownLexer): IElementType {
-        if (here.isStartOfHead()) {
+        if (peekLookAheadNonWhitespace == null) {
             lookAheadBuffer.add(NoteTypes.HEADER_HASH)
         } else {
-            lookAheadBuffer.add(NoteTypes.TEXT)
+            lookAheadBuffer.add(NoteTypes.PLAIN_TEXT)
         }
         return lastLookAhead
     }
@@ -47,15 +46,15 @@ class ParsingStack {
         if (peekLookAhead == NoteTypes.ESCAPE) {
             lookAheadBuffer.add(NoteTypes.SYMBOL)
         } else {
-            lookAheadBuffer.add(NoteTypes.TEXT)
+            lookAheadBuffer.add(NoteTypes.PLAIN_TEXT)
         }
         return lastLookAhead
     }
 
+    /// reset look ahead
     fun analyzeNewline(here: _NotedownLexer): IElementType {
-        lookAheadBuffer.add(TokenType.WHITE_SPACE)
-
-        return lastLookAhead
+        lookAheadBuffer.add(NoteTypes.NEW_LINE)
+        return clearLookAhead
     }
 }
 

@@ -1,6 +1,6 @@
 package notedge.idea.ide.highlight
 
-import notedge.idea.language.ast.NLexerAdapter
+import notedge.idea.language.psi.NLexerAdapter
 import notedge.idea.language.psi.NoteTypes.*
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.colors.TextAttributesKey

@@ -1,6 +1,6 @@
 package notedge.idea.ide.todo
 
-import notedge.idea.language.ast.NLexerAdapter
+import notedge.idea.language.psi.NLexerAdapter
 import com.intellij.lexer.Lexer
 import com.intellij.psi.impl.cache.impl.BaseFilterLexer
 import com.intellij.psi.impl.cache.impl.OccurrenceConsumer

@@ -1,4 +1,4 @@
-package notedge.idea.language.ast
+package notedge.idea.language.psi
 
 import com.intellij.lang.parser.GeneratedParserUtilBase
 import java.util.*

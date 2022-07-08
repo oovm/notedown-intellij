@@ -16,6 +16,7 @@ public interface NoteTypes {
   IElementType IDENTIFIER = new NElementType("IDENTIFIER");
   IElementType ITALIC = new NElementType("ITALIC");
   IElementType NAMESPACE = new NElementType("NAMESPACE");
+  IElementType TEXT = new NElementType("TEXT");
   IElementType XML = new NElementType("XML");
   IElementType XML_CLOSE = new NElementType("XML_CLOSE");
   IElementType XML_END = new NElementType("XML_END");
@@ -36,17 +37,18 @@ public interface NoteTypes {
   IElementType DOLLAR = new NElementType("$");
   IElementType DOT = new NElementType(".");
   IElementType EQ = new NElementType("=");
-  IElementType ESCAPE = new NElementType("\\\\");
+  IElementType ESCAPE = new NElementType("\\");
   IElementType ESCAPED_CHARACTER = new NElementType("ESCAPED_CHARACTER");
   IElementType HEADER_HASH = new NElementType("HEADER_HASH");
   IElementType ITALIC_L = new NElementType("ITALIC_L");
   IElementType ITALIC_R = new NElementType("ITALIC_R");
+  IElementType NEW_LINE = new NElementType("NewLine");
   IElementType PARENTHESIS_L = new NElementType("PARENTHESIS_L");
   IElementType PARENTHESIS_R = new NElementType("PARENTHESIS_R");
+  IElementType PLAIN_TEXT = new NElementType("PLAIN_TEXT");
   IElementType SEMICOLON = new NElementType(";");
   IElementType STAR = new NElementType("*");
   IElementType SYMBOL = new NElementType("SYMBOL");
-  IElementType TEXT = new NElementType("TEXT");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
@@ -74,6 +76,9 @@ public interface NoteTypes {
       }
       else if (type == NAMESPACE) {
         return new NoteNamespaceNode(node);
+      }
+      else if (type == TEXT) {
+        return new NoteTextNode(node);
       }
       else if (type == XML) {
         return new NoteXmlNode(node);

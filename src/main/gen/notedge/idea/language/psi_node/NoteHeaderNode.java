@@ -8,13 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static notedge.idea.language.psi.NoteTypes.*;
-import notedge.idea.language.ast.NotedownNodeBase;
 import notedge.idea.language.psi.*;
-import notedge.idea.language.ast.NodeExtension;
 
-public class NoteHeaderNode extends NotedownNodeBase implements NoteHeader {
+public class NoteHeaderNode implements NoteHeader {
 
-  public NoteHeaderNode(@NotNull ASTNode node) {
+  public NoteHeaderNode(ASTNode node) {
     super(node);
   }
 
@@ -26,6 +24,12 @@ public class NoteHeaderNode extends NotedownNodeBase implements NoteHeader {
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof NoteVisitor) accept((NoteVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public NoteText getText() {
+    return findNotNullChildByClass(NoteText.class);
   }
 
 }

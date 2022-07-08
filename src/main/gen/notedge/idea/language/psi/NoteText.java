@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NoteHeader extends PsiElement {
+public interface NoteText extends PsiElement {
 
   @NotNull
-  NoteText getText();
+  List<NoteEscaped> getEscapedList();
 
 }

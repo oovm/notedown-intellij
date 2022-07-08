@@ -1,15 +1,13 @@
 package notedge.idea.ide.highlight
 
 import notedge.idea.language.file.NotedownFile
-import notedge.idea.language.psi.*
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.codeInsight.daemon.impl.HighlightVisitor
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.util.elementType
-import com.intellij.psi.util.nextLeaf
+import notedge.idea.language.ast.NRecursiveVisitor
 
 class JssHighlightVisitor : NRecursiveVisitor(), HighlightVisitor {
     private var infoHolder: HighlightInfoHolder? = null

@@ -2,7 +2,7 @@ package notedge.idea.ide.matcher
 
 import com.intellij.lang.folding.FoldingDescriptor
 import com.intellij.psi.PsiElement
-import notedge.idea.language.psi.NRecursiveVisitor
+import notedge.idea.language.ast.NRecursiveVisitor
 
 class NFoldingVisitor(private val descriptors: MutableList<FoldingDescriptor>) : NRecursiveVisitor() {
 

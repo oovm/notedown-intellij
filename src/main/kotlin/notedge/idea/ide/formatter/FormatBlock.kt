@@ -5,8 +5,8 @@ import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.formatter.FormatterUtil
-import notedge.idea.language.ast.computeSpacing
-import notedge.idea.language.ast.isWhitespaceOrEmpty
+import notedge.idea.language.psi.computeSpacing
+import notedge.idea.language.psi.isWhitespaceOrEmpty
 
 class FormatBlock(
     private val node: ASTNode,

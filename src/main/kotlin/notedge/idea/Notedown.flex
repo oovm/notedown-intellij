@@ -1,11 +1,8 @@
 package notedge.idea;
 
-import com.intellij.lexer.FlexLexer;
-import notedge.idea.language.ast.ParsingStack;
+import notedge.idea.language.psi.ParsingStack;
 
 import com.intellij.psi.tree.IElementType;
-import static com.intellij.psi.TokenType.BAD_CHARACTER;
-import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static notedge.idea.language.psi.NoteTypes.*;
 
 %%
@@ -57,4 +54,4 @@ HEADER_HASH=[#]+
 //	{NEW_LINE} {return stack.analyzeNewline(yylength());}
 }
 
-[^] { return TEXT; }
+[^] { return PLAIN_TEXT; }

@@ -1,4 +1,4 @@
-package notedge.idea.language.ast
+package notedge.idea.language.psi
 
 enum class StackItem {
     /// `code`

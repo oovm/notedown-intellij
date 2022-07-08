@@ -1,6 +1,6 @@
 {
     parserClass = "notedge.idea.language.parser.NoteParser"
-    parserUtilClass = "notedge.idea.language.ast.ParserExtension"
+    parserUtilClass = "notedge.idea.language.psi.ParserExtension"
 
     extends = "notedge.idea.language.ast.NotedownNodeBase"
 
@@ -8,14 +8,14 @@
     psiImplClassSuffix = "Node"
     psiPackage = "notedge.idea.language.psi"
     psiImplPackage = "notedge.idea.language.psi_node"
-    psiImplUtilClass = "notedge.idea.language.ast.NodeExtension"
+    psiImplUtilClass = "notedge.idea.language.psi.NodeExtension"
 
     elementTypeHolderClass = "notedge.idea.language.psi.NoteTypes"
     elementTypeClass = "notedge.idea.language.psi.NElementType"
     tokenTypeClass = "notedge.idea.language.psi.NElementType"
     tokens = [
-        // literal
-        ESCAPE = '\\'
+        NEW_LINE = 'NewLine'
+        ESCAPE = '\'
         ACCENT = '^'
         EQ = '='
         COLON = ':'
@@ -35,23 +35,19 @@ private statement ::=
   | function
   | italic
   | xml
-  | TEXT
+  | text
   ;
 private ignore ::= SEMICOLON | COMMA;
 // ---------------------------------------------------------------------------------------------------------------------
-header ::= HEADER_HASH TEXT {
-
+header ::= HEADER_HASH text {
+    mixin = "notedge.idea.language.mixin.MixinHeader"
 }
-
-italic ::= ITALIC_L TEXT ITALIC_R
-identifier ::= SYMBOL
-namespace ::= identifier (DOT identifier)*
+// ---------------------------------------------------------------------------------------------------------------------
+text ::= text_item+;
+private text_item ::= PLAIN_TEXT | escaped | ESCAPE;
 escaped ::= ESCAPED_CHARACTER
 // ---------------------------------------------------------------------------------------------------------------------
-// \name.space
-function ::= ESCAPE namespace {
-
-}
+italic ::= ITALIC_L text ITALIC_R
 // ---------------------------------------------------------------------------------------------------------------------
 xml ::= xml_close | xml_start xml_end
 // <name.space arg kw=arg/>
@@ -60,6 +56,14 @@ xml_close ::= ANGLE_L namespace ANGLE_SR
 xml_start ::= ANGLE_L namespace ANGLE_R
 // </name.space>
 xml_end ::= ANGLE_SL namespace ANGLE_R
+// ---------------------------------------------------------------------------------------------------------------------
+// \name.space
+function ::= ESCAPE namespace {
+
+}
+// ---------------------------------------------------------------------------------------------------------------------
+identifier ::= SYMBOL
+namespace ::= identifier (DOT identifier)*
 // ---------------------------------------------------------------------------------------------------------------------
 // parenthesis ( )
 private meta parenthesis ::= PARENTHESIS_L <<param>> PARENTHESIS_R;
