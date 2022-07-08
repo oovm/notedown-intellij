@@ -8,23 +8,27 @@ import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import notedge.idea.language.ast.NRecursiveVisitor
+import notedge.idea.language.psi.NoteHeader
+import notedge.idea.language.psi_node.NoteHeaderNode
 
-class JssHighlightVisitor : NRecursiveVisitor(), HighlightVisitor {
+class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
     private var infoHolder: HighlightInfoHolder? = null
 
-//    override fun visitSchemaStatement(o: JssSchemaStatement) {
-//        //
-//        val head = o.firstChild;
-//        highlight(head, JssColor.KEYWORD)
-//        //
-//        val prop = head.nextLeaf { it.elementType == NoteTypes.SYMBOL }!!
-//        highlight(prop, JssColor.SYM_SCHEMA)
-//
-//        super.visitSchemaStatement(o)
-//    }
+    override fun visitHeader(o: NoteHeader) {
+        val node = o as NoteHeaderNode
+        when (node.headLevel) {
+            1 -> highlight(o, NotedownColor.HEADER_L1)
+            2 -> highlight(o, NotedownColor.HEADER_L2)
+            3 -> highlight(o, NotedownColor.HEADER_L3)
+            4 -> highlight(o, NotedownColor.HEADER_L4)
+            5 -> highlight(o, NotedownColor.HEADER_L5)
+            else -> highlight(o, NotedownColor.HEADER_L6)
+        }
+    }
 
 
-    private fun highlight(element: PsiElement, color: JssColor) {
+
+    private fun highlight(element: PsiElement, color: NotedownColor) {
         val builder = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION)
         builder.textAttributes(color.textAttributesKey)
         builder.range(element)
@@ -44,7 +48,7 @@ class JssHighlightVisitor : NRecursiveVisitor(), HighlightVisitor {
         return true
     }
 
-    override fun clone(): HighlightVisitor = JssHighlightVisitor()
+    override fun clone(): HighlightVisitor = NASTHighlighter()
 
     override fun suitableForFile(file: PsiFile): Boolean = file is NotedownFile
 

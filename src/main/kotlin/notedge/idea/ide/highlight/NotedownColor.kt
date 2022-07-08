@@ -1,23 +1,36 @@
 package notedge.idea.ide.highlight
 
-import notedge.idea.language.file.NotedownBundle
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.HighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.options.OptionsBundle
 import com.intellij.openapi.options.colors.AttributesDescriptor
 import com.intellij.openapi.util.NlsContexts
+import notedge.idea.language.file.NotedownBundle
 import java.util.function.Supplier
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors as Default
+import com.intellij.openapi.editor.XmlHighlighterColors as XML
 
 
-// TODO: 分类
-enum class JssColor(humanName: Supplier<@NlsContexts.AttributeDescriptor String>, default: TextAttributesKey? = null) {
+@Suppress("UnstableApiUsage")
+enum class NotedownColor(
+    humanName: Supplier<@NlsContexts.AttributeDescriptor String>,
+    default: TextAttributesKey? = null,
+) {
     // 特殊关键词
     KEYWORD(OptionsBundle.messagePointer("options.language.defaults.keyword"), Default.KEYWORD),
     IDIOM_SYMBOL(NotedownBundle.messagePointer("color.token.symbol.idiom"), Default.METADATA),
     IDIOM_MARK(NotedownBundle.messagePointer("color.token.idiom_mark"), IDIOM_SYMBOL.textAttributesKey),
     PROP_MARK(NotedownBundle.messagePointer("color.token.properties_mark"), KEYWORD.textAttributesKey),
+
+    // 标题
+    HEADER_MARK(NotedownBundle.messagePointer("color.token.header.mark"), XML.XML_ATTRIBUTE_NAME),
+    HEADER_L1(NotedownBundle.messagePointer("color.token.header.level1"), HEADER_MARK.textAttributesKey),
+    HEADER_L2(NotedownBundle.messagePointer("color.token.header.level2"), HEADER_MARK.textAttributesKey),
+    HEADER_L3(NotedownBundle.messagePointer("color.token.header.level3"), HEADER_MARK.textAttributesKey),
+    HEADER_L4(NotedownBundle.messagePointer("color.token.header.level4"), HEADER_MARK.textAttributesKey),
+    HEADER_L5(NotedownBundle.messagePointer("color.token.header.level5"), HEADER_MARK.textAttributesKey),
+    HEADER_L6(NotedownBundle.messagePointer("color.token.header.level6"), HEADER_MARK.textAttributesKey),
 
     // 字面量
     NULL(NotedownBundle.messagePointer("color.token.null"), Default.KEYWORD),
@@ -27,10 +40,7 @@ enum class JssColor(humanName: Supplier<@NlsContexts.AttributeDescriptor String>
     STRING(NotedownBundle.messagePointer("color.token.string"), Default.STRING),
     URL(NotedownBundle.messagePointer("color.token.url"), STRING.textAttributesKey),
 
-    // 标识符
     IDENTIFIER(OptionsBundle.messagePointer("options.language.defaults.identifier"), Default.IDENTIFIER),
-    SYM_ANNO(NotedownBundle.messagePointer("color.token.symbol.annotation"), Default.STATIC_METHOD),
-    SYM_PROP(NotedownBundle.messagePointer("color.token.symbol.property"), Default.STATIC_FIELD),
     SYM_SCHEMA(NotedownBundle.messagePointer("color.token.symbol.schema"), Default.PREDEFINED_SYMBOL),
 
     //

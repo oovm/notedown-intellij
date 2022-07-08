@@ -12,7 +12,7 @@ class VomlTodoIndexer : LexerBasedTodoIndexer() {
     override fun createLexer(consumer: OccurrenceConsumer): Lexer {
         return object : BaseFilterLexer(NLexerAdapter(), consumer) {
             override fun advance() {
-                if (myDelegate.tokenType in NParserDefinition.COMMENTS) {
+                if (myDelegate.tokenType in NParserDefinition.commentTokens) {
                     scanWordsInToken(UsageSearchContext.IN_COMMENTS.toInt(), false, false)
                     advanceTodoItemCountsInToken()
                 }

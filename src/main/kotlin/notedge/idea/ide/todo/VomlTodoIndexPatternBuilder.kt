@@ -15,11 +15,11 @@ class VomlTodoIndexPatternBuilder : IndexPatternBuilder {
     }
 
     override fun getCommentTokenSet(file: PsiFile): TokenSet? {
-        return if (file is NotedownFile) NParserDefinition.COMMENTS else null
+        return if (file is NotedownFile) NParserDefinition.commentTokens else null
     }
 
     override fun getCommentStartDelta(tokenType: IElementType?): Int {
-        return if (tokenType in NParserDefinition.COMMENTS) 2 else 0
+        return if (tokenType in NParserDefinition.commentTokens) 2 else 0
     }
 
     override fun getCommentEndDelta(tokenType: IElementType?): Int = 0
