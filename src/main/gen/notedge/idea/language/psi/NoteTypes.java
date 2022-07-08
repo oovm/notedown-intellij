@@ -8,6 +8,7 @@ import notedge.idea.language.psi_node.*;
 
 public interface NoteTypes {
 
+  IElementType BOLD = new NElementType("BOLD");
   IElementType BRACE_BLOCK = new NElementType("BRACE_BLOCK");
   IElementType BRACKET_BLOCK = new NElementType("BRACKET_BLOCK");
   IElementType ESCAPED = new NElementType("ESCAPED");
@@ -15,6 +16,7 @@ public interface NoteTypes {
   IElementType HEADER = new NElementType("HEADER");
   IElementType IDENTIFIER = new NElementType("IDENTIFIER");
   IElementType ITALIC = new NElementType("ITALIC");
+  IElementType ITALIC_BOLD = new NElementType("ITALIC_BOLD");
   IElementType NAMESPACE = new NElementType("NAMESPACE");
   IElementType TEXT_ELEMENTS = new NElementType("TEXT_ELEMENTS");
   IElementType XML = new NElementType("XML");
@@ -28,10 +30,13 @@ public interface NoteTypes {
   IElementType ANGLE_SL = new NElementType("ANGLE_SL");
   IElementType ANGLE_SR = new NElementType("ANGLE_SR");
   IElementType AT = new NElementType("@");
+  IElementType BOLD_L = new NElementType("BOLD_L");
+  IElementType BOLD_R = new NElementType("BOLD_R");
   IElementType BRACE_L = new NElementType("BRACE_L");
   IElementType BRACE_R = new NElementType("BRACE_R");
   IElementType BRACKET_L = new NElementType("BRACKET_L");
   IElementType BRACKET_R = new NElementType("BRACKET_R");
+  IElementType BREAK_PART = new NElementType("BREAK_PART");
   IElementType COLON = new NElementType(":");
   IElementType COMMA = new NElementType(",");
   IElementType DOLLAR = new NElementType("$");
@@ -40,6 +45,8 @@ public interface NoteTypes {
   IElementType ESCAPE = new NElementType("\\");
   IElementType ESCAPED_CHARACTER = new NElementType("ESCAPED_CHARACTER");
   IElementType HEADER_HASH = new NElementType("HEADER_HASH");
+  IElementType ITALIC_BOLD_L = new NElementType("ITALIC_BOLD_L");
+  IElementType ITALIC_BOLD_R = new NElementType("ITALIC_BOLD_R");
   IElementType ITALIC_L = new NElementType("ITALIC_L");
   IElementType ITALIC_R = new NElementType("ITALIC_R");
   IElementType NEW_LINE = new NElementType("NewLine");
@@ -53,7 +60,10 @@ public interface NoteTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == BRACE_BLOCK) {
+      if (type == BOLD) {
+        return new NoteBoldNode(node);
+      }
+      else if (type == BRACE_BLOCK) {
         return new NoteBraceBlockNode(node);
       }
       else if (type == BRACKET_BLOCK) {
@@ -73,6 +83,9 @@ public interface NoteTypes {
       }
       else if (type == ITALIC) {
         return new NoteItalicNode(node);
+      }
+      else if (type == ITALIC_BOLD) {
+        return new NoteItalicBoldNode(node);
       }
       else if (type == NAMESPACE) {
         return new NoteNamespaceNode(node);

@@ -8,6 +8,15 @@ import com.intellij.psi.PsiElement;
 public interface NoteTextElements extends PsiElement {
 
   @NotNull
+  List<NoteBold> getBoldList();
+
+  @NotNull
   List<NoteEscaped> getEscapedList();
+
+  @NotNull
+  List<NoteItalic> getItalicList();
+
+  @NotNull
+  List<NoteItalicBold> getItalicBoldList();
 
 }

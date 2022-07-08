@@ -2,7 +2,7 @@
     parserClass = "notedge.idea.language.parser.NoteParser"
     parserUtilClass = "notedge.idea.language.psi.ParserExtension"
 
-    extends = "notedge.idea.language.ast.NotedownNodeBase"
+    extends = "notedge.idea.language.ast.NotedownASTBase"
 
     psiClassPrefix = "Note"
     psiImplClassSuffix = "Node"
@@ -33,7 +33,6 @@ Notedown ::= statement*;
 private statement ::=
     header
   | function
-  | italic
   | xml
   | text_elements
   | BREAK_PART
@@ -44,10 +43,12 @@ header ::= HEADER_HASH text_elements {
 }
 // ---------------------------------------------------------------------------------------------------------------------
 text_elements ::= text_item+;
-private text_item ::= PLAIN_TEXT | escaped | ESCAPE | NEW_LINE;
+private text_item ::= PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | italic_bold;
 escaped ::= ESCAPED_CHARACTER
 // ---------------------------------------------------------------------------------------------------------------------
-italic ::= ITALIC_L text_elements ITALIC_R
+italic      ::= ITALIC_L text_elements ITALIC_R
+bold        ::= BOLD_L text_elements BOLD_R
+italic_bold ::= ITALIC_BOLD_L text_elements ITALIC_BOLD_R
 // ---------------------------------------------------------------------------------------------------------------------
 xml ::= xml_close | xml_start xml_end
 // <name.space arg kw=arg/>

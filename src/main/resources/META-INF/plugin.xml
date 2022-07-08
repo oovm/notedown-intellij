@@ -24,11 +24,10 @@
 		<additionalTextAttributes scheme="Default" file="colors/JssDefault.xml"/>
 		<additionalTextAttributes scheme="Darcula" file="colors/JssDarcula.xml"/>
 		<colorSettingsPage implementation="notedge.idea.ide.highlight.JssColorSettingsPage"/>
-		<highlightVisitor implementation="notedge.idea.ide.highlight.JssHighlightVisitor"/>
+		<highlightVisitor implementation="notedge.idea.ide.highlight.NASTHighlighter"/>
 		<lang.syntaxHighlighter
 			language="Notedown"
-			implementationClass="notedge.idea.ide.highlight.NTokenHighlighter"
-		/>
+			implementationClass="notedge.idea.ide.highlight.NTokenHighlighter"/>
 		<!-- Formatter -->
 		<lang.formatter
 			language="Notedown"

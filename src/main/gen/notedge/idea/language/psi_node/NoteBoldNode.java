@@ -11,14 +11,14 @@ import static notedge.idea.language.psi.NoteTypes.*;
 import notedge.idea.language.ast.NotedownASTBase;
 import notedge.idea.language.psi.*;
 
-public class NoteXmlEndNode extends NotedownASTBase implements NoteXmlEnd {
+public class NoteBoldNode extends NotedownASTBase implements NoteBold {
 
-  public NoteXmlEndNode(@NotNull ASTNode node) {
+  public NoteBoldNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NoteVisitor visitor) {
-    visitor.visitXmlEnd(this);
+    visitor.visitBold(this);
   }
 
   @Override
@@ -29,8 +29,8 @@ public class NoteXmlEndNode extends NotedownASTBase implements NoteXmlEnd {
 
   @Override
   @NotNull
-  public NoteNamespace getNamespace() {
-    return findNotNullChildByClass(NoteNamespace.class);
+  public NoteTextElements getTextElements() {
+    return findNotNullChildByClass(NoteTextElements.class);
   }
 
 }

@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static notedge.idea.language.psi.NoteTypes.*;
-import notedge.idea.language.ast.NotedownNodeBase;
+import notedge.idea.language.ast.NotedownASTBase;
 import notedge.idea.language.psi.*;
 
-public class NoteBraceBlockNode extends NotedownNodeBase implements NoteBraceBlock {
+public class NoteBraceBlockNode extends NotedownASTBase implements NoteBraceBlock {
 
   public NoteBraceBlockNode(@NotNull ASTNode node) {
     super(node);

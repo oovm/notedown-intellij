@@ -7,6 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public class NoteVisitor extends PsiElementVisitor {
 
+  public void visitBold(@NotNull NoteBold o) {
+    visitPsiElement(o);
+  }
+
   public void visitBraceBlock(@NotNull NoteBraceBlock o) {
     visitPsiElement(o);
   }
@@ -32,6 +36,10 @@ public class NoteVisitor extends PsiElementVisitor {
   }
 
   public void visitItalic(@NotNull NoteItalic o) {
+    visitPsiElement(o);
+  }
+
+  public void visitItalicBold(@NotNull NoteItalicBold o) {
     visitPsiElement(o);
   }
 

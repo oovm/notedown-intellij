@@ -5,10 +5,6 @@
 ##### subparagraph
 ###### subsubparagraph
 
-\subsubparagraph() {
-    subsubparagraph
-}
-
 normal text
 *normal text*
 **bold text**
@@ -17,7 +13,7 @@ normal text
 ~~normal text~~
 ~~~normal text~~~
 
-  - 22
+- 22
 
 \function(arg, kw=arg): text
 

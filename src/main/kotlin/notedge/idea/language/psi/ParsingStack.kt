@@ -43,17 +43,30 @@ class ParsingStack {
     }
 
     fun analyzeSymbol(here: _NotedownLexer): IElementType {
-        if (peekLookAhead == NoteTypes.ESCAPE) {
-            lookAheadBuffer.add(NoteTypes.SYMBOL)
-        } else {
-            lookAheadBuffer.add(NoteTypes.PLAIN_TEXT)
+        when (peekLookAhead) {
+            NoteTypes.ESCAPE -> {
+                lookAheadBuffer.add(NoteTypes.SYMBOL)
+            }
+            else -> {
+                lookAheadBuffer.add(NoteTypes.PLAIN_TEXT)
+            }
         }
         return lastLookAhead
     }
 
     /// reset look ahead
     fun analyzeNewline(here: _NotedownLexer): IElementType {
-        lookAheadBuffer.add(NoteTypes.NEW_LINE)
+        when {
+            peekLookAhead == null -> {
+                lookAheadBuffer.add(NoteTypes.BREAK_PART)
+            }
+            lookAheadBuffer.contains(NoteTypes.HEADER_HASH) -> {
+                lookAheadBuffer.add(NoteTypes.BREAK_PART)
+            }
+            else -> {
+                lookAheadBuffer.add(NoteTypes.NEW_LINE)
+            }
+        }
         return clearLookAhead
     }
 }

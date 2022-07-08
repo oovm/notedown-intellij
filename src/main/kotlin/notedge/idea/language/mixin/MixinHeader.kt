@@ -17,12 +17,12 @@ abstract class MixinHeader(node: ASTNode) : ViewNode(node), NoteHeader {
         return this.textElements
     }
     override fun getPresentation(): ItemPresentation {
-        return NItemPresentation(getIcon(0), "H${getHeadLevel()}", this.textElements.text)
+        return NItemPresentation(getIcon(0), "H${headLevel}", this.textElements.text)
     }
-    fun getHeadLevel(): Int {
-        return this.firstChild.text.takeWhile { it == '#' }.length
-    }
+
     override fun getChildrenView(): Array<NStructureViewElement> {
         return super.getChildrenView()
     }
+
+    val headLevel: Int = this.firstChild.text.takeWhile { it == '#' }.length
 }

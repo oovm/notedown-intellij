@@ -48,6 +48,20 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // BOLD_L text_elements BOLD_R
+  public static boolean bold(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "bold")) return false;
+    if (!nextTokenIs(b, BOLD_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BOLD_L);
+    r = r && text_elements(b, l + 1);
+    r = r && consumeToken(b, BOLD_R);
+    exit_section_(b, m, BOLD, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // BRACE_L (<<item>>|<<sp>>)* BRACE_R
   public static boolean brace_block(PsiBuilder b, int l, Parser _item, Parser _sp) {
     if (!recursion_guard_(b, l, "brace_block")) return false;
@@ -218,6 +232,20 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // ITALIC_BOLD_L text_elements ITALIC_BOLD_R
+  public static boolean italic_bold(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "italic_bold")) return false;
+    if (!nextTokenIs(b, ITALIC_BOLD_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ITALIC_BOLD_L);
+    r = r && text_elements(b, l + 1);
+    r = r && consumeToken(b, ITALIC_BOLD_R);
+    exit_section_(b, m, ITALIC_BOLD, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // identifier (DOT identifier)*
   public static boolean namespace(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace")) return false;
@@ -269,19 +297,17 @@ public class NoteParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // header
   //   | function
-  //   | italic
   //   | xml
   //   | text_elements
-  //   | NEW_LINE
+  //   | BREAK_PART
   static boolean statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement")) return false;
     boolean r;
     r = header(b, l + 1);
     if (!r) r = function(b, l + 1);
-    if (!r) r = italic(b, l + 1);
     if (!r) r = xml(b, l + 1);
     if (!r) r = text_elements(b, l + 1);
-    if (!r) r = consumeToken(b, NEW_LINE);
+    if (!r) r = consumeToken(b, BREAK_PART);
     return r;
   }
 
@@ -302,13 +328,17 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PLAIN_TEXT | escaped | ESCAPE
+  // PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | italic_bold
   static boolean text_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "text_item")) return false;
     boolean r;
     r = consumeToken(b, PLAIN_TEXT);
     if (!r) r = escaped(b, l + 1);
     if (!r) r = consumeToken(b, ESCAPE);
+    if (!r) r = consumeToken(b, NEW_LINE);
+    if (!r) r = italic(b, l + 1);
+    if (!r) r = bold(b, l + 1);
+    if (!r) r = italic_bold(b, l + 1);
     return r;
   }
 
