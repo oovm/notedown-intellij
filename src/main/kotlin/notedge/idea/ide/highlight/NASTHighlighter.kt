@@ -1,6 +1,5 @@
 package notedge.idea.ide.highlight
 
-import notedge.idea.language.file.NotedownFile
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.codeInsight.daemon.impl.HighlightVisitor
@@ -8,7 +7,8 @@ import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import notedge.idea.language.ast.NRecursiveVisitor
-import notedge.idea.language.psi.NoteHeader
+import notedge.idea.language.file.NotedownFile
+import notedge.idea.language.psi.*
 import notedge.idea.language.psi_node.NoteHeaderNode
 
 class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
@@ -26,6 +26,29 @@ class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
         }
     }
 
+    override fun visitItalic(o: NoteItalic) {
+        o.textElements?.let { highlight(it, NotedownColor.ITALIC_TEXT) }
+    }
+
+    override fun visitBold(o: NoteBold) {
+        o.textElements?.let { highlight(it, NotedownColor.BOLD_TEXT) }
+    }
+
+    override fun visitStrong(o: NoteStrong) {
+        o.textElements?.let { highlight(it, NotedownColor.STRONG_TEXT) }
+    }
+
+    override fun visitUnder(o: NoteUnder) {
+        o.textElements?.let { highlight(it, NotedownColor.UNDERLINE_TEXT) }
+    }
+
+    override fun visitWave(o: NoteWave) {
+        o.textElements?.let { highlight(it, NotedownColor.WAVE_TEXT) }
+    }
+
+    override fun visitStrike(o: NoteStrike) {
+        o.textElements?.let { highlight(it, NotedownColor.STRIKE_TEXT) }
+    }
 
 
     private fun highlight(element: PsiElement, color: NotedownColor) {

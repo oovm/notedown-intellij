@@ -45,23 +45,19 @@ enum class NotedownColor(
     CODE_TEXT(NotedownBundle.messagePointer("color.token.code.text"), Default.MARKUP_ATTRIBUTE),
     CODE_MARK(NotedownBundle.messagePointer("color.token.code.mark"), CODE_TEXT.textAttributesKey),
 
-    ITALIC_TEXT(NotedownBundle.messagePointer("color.token.italic.text"), Default.MARKUP_ATTRIBUTE),
-    ITALIC_MARK(NotedownBundle.messagePointer("color.token.italic.mark"), ITALIC_TEXT.textAttributesKey),
-    BOLD_TEXT(NotedownBundle.messagePointer("color.token.bold.text"), Default.MARKUP_ATTRIBUTE),
-    BOLD_MARK(NotedownBundle.messagePointer("color.token.bold.mark"), BOLD_TEXT.textAttributesKey),
-    STRONG_TEXT(NotedownBundle.messagePointer("color.token.strong.text"), Default.MARKUP_ATTRIBUTE),
-    STRONG_MARK(NotedownBundle.messagePointer("color.token.strong.mark"), STRONG_TEXT.textAttributesKey),
+    ITALIC_TEXT(NotedownBundle.messagePointer("color.token.italic.text"), Default.TEMPLATE_LANGUAGE_COLOR),
+    ITALIC_MARK(NotedownBundle.messagePointer("color.token.italic.mark"), KEYWORD.textAttributesKey),
+    BOLD_TEXT(NotedownBundle.messagePointer("color.token.bold.text"), Default.TEMPLATE_LANGUAGE_COLOR),
+    BOLD_MARK(NotedownBundle.messagePointer("color.token.bold.mark"), KEYWORD.textAttributesKey),
+    STRONG_TEXT(NotedownBundle.messagePointer("color.token.strong.text"), Default.TEMPLATE_LANGUAGE_COLOR),
+    STRONG_MARK(NotedownBundle.messagePointer("color.token.strong.mark"), KEYWORD.textAttributesKey),
 
-    UNDERLINE_TEXT(NotedownBundle.messagePointer("color.token.underline.text"), Default.MARKUP_ATTRIBUTE),
-    UNDERLINE_MARK(NotedownBundle.messagePointer("color.token.underline.mark"), UNDERLINE_TEXT.textAttributesKey),
-    WAVE_TEXT(NotedownBundle.messagePointer("color.token.wave.text"), Default.MARKUP_ATTRIBUTE),
-    WAVE_MARK(NotedownBundle.messagePointer("color.token.wave.mark"), WAVE_TEXT.textAttributesKey),
-    STRIKE_TEXT(NotedownBundle.messagePointer("color.token.strike.text"), Default.MARKUP_ATTRIBUTE),
-    STRIKE_MARK(NotedownBundle.messagePointer("color.token.strike.mark"), STRIKE_TEXT.textAttributesKey),
-
-
-
-
+    UNDERLINE_TEXT(NotedownBundle.messagePointer("color.token.underline.text"), Default.TEMPLATE_LANGUAGE_COLOR),
+    UNDERLINE_MARK(NotedownBundle.messagePointer("color.token.underline.mark"), KEYWORD.textAttributesKey),
+    WAVE_TEXT(NotedownBundle.messagePointer("color.token.wave.text"), Default.TEMPLATE_LANGUAGE_COLOR),
+    WAVE_MARK(NotedownBundle.messagePointer("color.token.wave.mark"), KEYWORD.textAttributesKey),
+    STRIKE_TEXT(NotedownBundle.messagePointer("color.token.strike.text"), Default.TEMPLATE_LANGUAGE_COLOR),
+    STRIKE_MARK(NotedownBundle.messagePointer("color.token.strike.mark"), KEYWORD.textAttributesKey),
     //
     TYPE_HINT(NotedownBundle.messagePointer("color.token.symbol.type"), Default.CLASS_NAME),
 

@@ -6,12 +6,12 @@
 ###### subsubparagraph
 
 normal text
-*normal text*
-**normal text**
-***normal text***
-_normal text_
-__normal text__
-___normal text___
+*<ITALIC_TEXT>normal text</ITALIC_TEXT>*
+**<BOLD_TEXT>normal text</BOLD_TEXT>**
+***<STRONG_TEXT>normal text</STRONG_TEXT>***
+_<UNDERLINE_TEXT>normal text</UNDERLINE_TEXT>_
+__<WAVE_TEXT>normal text</WAVE_TEXT>__
+___<STRIKE_TEXT>normal text</STRIKE_TEXT>___
 
 
 \function(arg, kw=arg):
