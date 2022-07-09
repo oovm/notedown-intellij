@@ -5,18 +5,29 @@ import com.intellij.psi.tree.IElementType
 
 @OptIn(ExperimentalStdlibApi::class)
 @Suppress("MemberVisibilityCanBePrivate")
-class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int, var context: Int) {
+class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int, var context: StackContext) {
     companion object {
         val EOL = "\\R".toRegex()
         val WHITE_SPACE = "[^\\S\\r\\n]+".toRegex()
         val NEW_LINE = "\\r\\n|\\r|\\n".toRegex()
-        val HEADER_HASH = "#+".toRegex()
+        val HEADER_HASH = "[＃#]+".toRegex()
         val ASTERISK = "[*]+".toRegex()
-        val TILDE = "_+".toRegex()
-        val ESCAPE = "\\\\".toRegex()
+        val TILDE = "[_＿]+".toRegex()
+        val ESCAPE = "[\\\\＼]".toRegex()
         val SYMBOL = "[\\p{L}\\p{N}][\\p{L}_]*".toRegex()
-        val CODE_2 = "``(?:[^`\\\\]|\\\\.)*``".toRegex()
-        val CODE_1 = "`(?:[^`\\\\]|\\\\.)*`".toRegex()
+        val CODE = "[`｀]+".toRegex()
+        val PARENTHESIS_L = "[(（]".toRegex()
+        val PARENTHESIS_R = "[)）]".toRegex()
+        val BRACKET_L = "[\\[［]".toRegex()
+        val BRACKET_R = "[]］]".toRegex()
+        val BRACE_L = "[{｛]".toRegex()
+        val BRACE_R = "[}｝]".toRegex()
+        val DOUBLE_QUOTE = "[\"＂]".toRegex()
+        val SINGLE_QUOTE = "['＇]".toRegex()
+        val ANGLE_SL = "</|＜／".toRegex()
+        val ANGLE_L = "[<＜]".toRegex()
+        val ANGLE_R = "[>＞]".toRegex()
+        val ANGLE_SR = "/>|／＞".toRegex()
     }
 
     var stack: MutableList<StackItem> = mutableListOf()
@@ -26,12 +37,11 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
             if (matchesWhitespace()) continue
             if (matchesNewline()) continue
             if (matchesHeadHash()) continue
-            if (matchesEscape()) continue
-            if (matchesSymbol()) continue
             if (matchesAsterisk()) continue
             if (matchesTilde()) continue
-            if (matchesCode2()) continue
-            if (matchesCode1()) continue
+            if (matchesCode()) continue
+            if (matchesEscape()) continue
+            if (matchesSymbol()) continue
             break
         }
         checkRest()
@@ -40,23 +50,38 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
 
     fun matchesWhitespace(): Boolean {
         val r = WHITE_SPACE.matchAt(buffer, startOffset) ?: return false
-        stack.add(StackItem(TokenType.WHITE_SPACE, r, context))
+        when (context) {
+            StackContext.TEXT -> stack.add(StackItem(TokenType.WHITE_SPACE, r, context))
+            StackContext.CODE -> stack.add(StackItem(TokenType.WHITE_SPACE, r, context))
+            StackContext.STRING -> stack.add(StackItem(NoteTypes.STRING_TEXT, r, context))
+        }
         return addOffset(r)
     }
 
     fun matchesNewline(): Boolean {
         val r = NEW_LINE.matchAt(buffer, startOffset) ?: return false
-        if (shouldBreakParagraph()) {
-            stack.add(StackItem(NoteTypes.BREAK_PART, r, context))
-        }
-        else {
-            stack.add(StackItem(NoteTypes.NEW_LINE, r, context))
+        when (context) {
+            StackContext.TEXT -> when {
+                shouldBreakParagraph() -> {
+                    stack.add(StackItem(NoteTypes.BREAK_PART, r, context))
+                }
+                else -> {
+                    stack.add(StackItem(NoteTypes.NEW_LINE, r, context))
+                }
+            }
+            StackContext.CODE -> stack.add(StackItem(NoteTypes.NEW_LINE, r, context))
+            StackContext.STRING -> stack.add(StackItem(NoteTypes.STRING_TEXT, r, context))
         }
         return addOffset(r)
     }
 
     fun matchesHeadHash(): Boolean {
         val r = HEADER_HASH.matchAt(buffer, startOffset) ?: return false
+        when (context) {
+            StackContext.TEXT -> stack.add(StackItem(TokenType.WHITE_SPACE, r, context))
+            StackContext.CODE -> stack.add(StackItem(TokenType.WHITE_SPACE, r, context))
+            StackContext.STRING -> stack.add(StackItem(NoteTypes.STRING_TEXT, r, context))
+        }
         stack.add(StackItem(NoteTypes.HEADER_HASH, r, context))
         return addOffset(r)
     }
@@ -81,20 +106,31 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         return addOffset(r)
     }
 
-    fun matchesCode2(): Boolean {
-        val r = CODE_2.matchAt(buffer, startOffset) ?: return false
-        stack.add(StackItem(NoteTypes.CODE_L, r.range.first, r.range.first + 2, context))
-        stack.add(StackItem(NoteTypes.STRING_TEXT, r.range.first + 2, r.range.last -1, context))
-        stack.add(StackItem(NoteTypes.CODE_R, r.range.last -1, r.range.last + 1, context))
-        return addOffset(r)
-    }
+    fun matchesCode(): Boolean {
+        val r = CODE.matchAt(buffer, startOffset) ?: return false
+        when (r.value.length) {
+            1 -> {
+                stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
+                return addOffset(r)
+            }
+            2 -> {
+                stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
+                return addOffset(r)
+            }
+            else -> {
+                when {
+                    isStartOfLine() -> {
+                        stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
+                        return addOffset(r)
+                    }
+                    else -> {
+                        stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
+                        return addOffset(r)
+                    }
+                }
+            }
+        }
 
-    fun matchesCode1(): Boolean {
-        val r = CODE_1.matchAt(buffer, startOffset) ?: return false
-        stack.add(StackItem(NoteTypes.CODE_L, r.range.first, r.range.first + 1, context))
-        stack.add(StackItem(NoteTypes.STRING_TEXT, r.range.first + 1, r.range.last, context))
-        stack.add(StackItem(NoteTypes.CODE_R, r.range.last, r.range.last + 1, context))
-        return addOffset(r)
     }
 
     fun matchesAsterisk(): Boolean {

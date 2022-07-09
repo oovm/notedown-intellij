@@ -7,17 +7,17 @@ class StackItem {
     var token: IElementType
     val startOffset: Int
     val endOffset: Int
-    var context: Int
+    var context: StackContext
     var paired: Boolean? = null
 
-    constructor(token: IElementType, startOffset: Int, endOffset: Int, context: Int) {
+    constructor(token: IElementType, startOffset: Int, endOffset: Int, context: StackContext) {
         this.token = token
         this.startOffset = startOffset
         this.endOffset = endOffset
         this.context = context
     }
 
-    constructor(token: IElementType, match: MatchResult, context: Int, paired: Boolean? = null) {
+    constructor(token: IElementType, match: MatchResult, context: StackContext, paired: Boolean? = null) {
         this.token = token
         this.startOffset = match.range.first
         this.endOffset =  match.range.last + 1
@@ -26,7 +26,7 @@ class StackItem {
     }
 
     fun getState(): Int {
-        return context
+        return context.intoID()
     }
 
     override fun toString(): String {
