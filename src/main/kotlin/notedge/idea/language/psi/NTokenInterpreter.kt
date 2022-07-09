@@ -8,6 +8,7 @@ import com.intellij.psi.tree.IElementType
 class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int, var context: StackContext) {
     companion object {
         val EOL = "\\R".toRegex()
+        val ROL = "[^\\r\\n]+".toRegex()
         val WHITE_SPACE = "[^\\S\\r\\n]+".toRegex()
         val NEW_LINE = "\\r\\n|\\r|\\n".toRegex()
         val HEADER_HASH = "[＃#]+".toRegex()
@@ -127,6 +128,12 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         return addOffset(r)
     }
 
+    fun appendROL(token : IElementType) {
+        val r = ROL.matchAt(buffer, startOffset) ?: return;
+        stack.add(StackItem(token, r, context))
+        addOffset(r)
+    }
+
     fun matchesCodeCommaLike(): Boolean {
         assert(context == StackContext.CODE)
         val r = CODE_OPERATOR.matchAt(buffer, startOffset) ?: return false
@@ -170,6 +177,8 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         return addOffset(r)
     }
 
+
+
     fun matchTextColon(): Boolean {
         assert(context == StackContext.TEXT)
         val r = COLON.matchAt(buffer, startOffset) ?: return false
@@ -177,7 +186,7 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
             lastNonWsIs(NoteTypes.PARENTHESIS_R) -> {
                 stack.add(StackItem(NoteTypes.COLON, r, context))
                 addOffset(r)
-                restOfLine()
+                appendROL(NoteTypes.STRING_TEXT)
             }
             else -> {
                 stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))

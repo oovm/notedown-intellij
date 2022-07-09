@@ -56,10 +56,15 @@ class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
     }
 
     override fun visitFunction(o: NoteFunction) {
-        highlight(o.namespace, NotedownColor.SYS_FUNCTION)
-        highlight(o.firstChild, NotedownColor.SYS_FUNCTION)
+        highlight(o.namespace, NotedownColor.SYM_FUNCTION)
+        highlight(o.firstChild, NotedownColor.SYM_FUNCTION)
+        o.argsText?.let { highlight(it, NotedownColor.STRING) }
     }
 
+    override fun visitArgument(o: NoteArgument) {
+        o.key?.let { highlight(it, NotedownColor.SYM_ARGUMENT) }
+        highlight(o.value.namespace, NotedownColor.SYM_VARIABLE)
+    }
 
     private fun highlight(element: PsiElement, color: NotedownColor) {
         val builder = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION)

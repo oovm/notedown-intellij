@@ -19,9 +19,9 @@ enum class NotedownColor(
 ) {
     // 特殊关键词
     KEYWORD(OptionsBundle.messagePointer("options.language.defaults.keyword"), Default.KEYWORD),
-    SYS_VARIABLE(NotedownBundle.messagePointer("color.token.symbol.function"), Default.GLOBAL_VARIABLE),
-    SYS_FUNCTION(NotedownBundle.messagePointer("color.token.symbol.function"), Default.STATIC_METHOD),
-    SYS_ARGUMENT(NotedownBundle.messagePointer("color.token.symbol.function"), Default.STATIC_METHOD),
+    SYM_VARIABLE(NotedownBundle.messagePointer("color.token.symbol.function"), Default.GLOBAL_VARIABLE),
+    SYM_FUNCTION(NotedownBundle.messagePointer("color.token.symbol.function"), Default.STATIC_METHOD),
+    SYM_ARGUMENT(NotedownBundle.messagePointer("color.token.symbol.function"), Default.PARAMETER),
 
     // 字面量
     NULL(NotedownBundle.messagePointer("color.token.null"), Default.KEYWORD),
