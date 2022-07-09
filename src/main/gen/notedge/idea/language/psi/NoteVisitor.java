@@ -39,7 +39,7 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitItalicBold(@NotNull NoteItalicBold o) {
+  public void visitMark(@NotNull NoteMark o) {
     visitPsiElement(o);
   }
 
@@ -47,7 +47,19 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitStrike(@NotNull NoteStrike o) {
+    visitPsiElement(o);
+  }
+
   public void visitTextElements(@NotNull NoteTextElements o) {
+    visitPsiElement(o);
+  }
+
+  public void visitUnder(@NotNull NoteUnder o) {
+    visitPsiElement(o);
+  }
+
+  public void visitWave(@NotNull NoteWave o) {
     visitPsiElement(o);
   }
 

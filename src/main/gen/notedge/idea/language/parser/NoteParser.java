@@ -48,7 +48,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // BOLD_L [text_elements] BOLD_R
+  // BOLD_L   [text_elements] BOLD_R
   public static boolean bold(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "bold")) return false;
     if (!nextTokenIs(b, BOLD_L)) return false;
@@ -246,22 +246,22 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ITALIC_BOLD_L [text_elements] ITALIC_BOLD_R
-  public static boolean italic_bold(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "italic_bold")) return false;
-    if (!nextTokenIs(b, ITALIC_BOLD_L)) return false;
+  // MARK_L   [text_elements] MARK_R
+  public static boolean mark(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "mark")) return false;
+    if (!nextTokenIs(b, MARK_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ITALIC_BOLD_L);
-    r = r && italic_bold_1(b, l + 1);
-    r = r && consumeToken(b, ITALIC_BOLD_R);
-    exit_section_(b, m, ITALIC_BOLD, r);
+    r = consumeToken(b, MARK_L);
+    r = r && mark_1(b, l + 1);
+    r = r && consumeToken(b, MARK_R);
+    exit_section_(b, m, MARK, r);
     return r;
   }
 
   // [text_elements]
-  private static boolean italic_bold_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "italic_bold_1")) return false;
+  private static boolean mark_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "mark_1")) return false;
     text_elements(b, l + 1);
     return true;
   }
@@ -333,6 +333,27 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // STRIKE_L [text_elements] STRIKE_R
+  public static boolean strike(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "strike")) return false;
+    if (!nextTokenIs(b, STRIKE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, STRIKE_L);
+    r = r && strike_1(b, l + 1);
+    r = r && consumeToken(b, STRIKE_R);
+    exit_section_(b, m, STRIKE, r);
+    return r;
+  }
+
+  // [text_elements]
+  private static boolean strike_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "strike_1")) return false;
+    text_elements(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
   // text_item+
   public static boolean text_elements(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "text_elements")) return false;
@@ -349,7 +370,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | italic_bold
+  // PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | mark | under | strike | wave
   static boolean text_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "text_item")) return false;
     boolean r;
@@ -359,8 +380,53 @@ public class NoteParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, NEW_LINE);
     if (!r) r = italic(b, l + 1);
     if (!r) r = bold(b, l + 1);
-    if (!r) r = italic_bold(b, l + 1);
+    if (!r) r = mark(b, l + 1);
+    if (!r) r = under(b, l + 1);
+    if (!r) r = strike(b, l + 1);
+    if (!r) r = wave(b, l + 1);
     return r;
+  }
+
+  /* ********************************************************** */
+  // UNDER_L  [text_elements] UNDER_R
+  public static boolean under(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "under")) return false;
+    if (!nextTokenIs(b, UNDER_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, UNDER_L);
+    r = r && under_1(b, l + 1);
+    r = r && consumeToken(b, UNDER_R);
+    exit_section_(b, m, UNDER, r);
+    return r;
+  }
+
+  // [text_elements]
+  private static boolean under_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "under_1")) return false;
+    text_elements(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // WAVE_L   [text_elements] WAVE_R
+  public static boolean wave(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "wave")) return false;
+    if (!nextTokenIs(b, WAVE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, WAVE_L);
+    r = r && wave_1(b, l + 1);
+    r = r && consumeToken(b, WAVE_R);
+    exit_section_(b, m, WAVE, r);
+    return r;
+  }
+
+  // [text_elements]
+  private static boolean wave_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "wave_1")) return false;
+    text_elements(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

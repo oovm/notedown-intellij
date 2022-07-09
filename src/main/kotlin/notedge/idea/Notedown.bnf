@@ -46,13 +46,13 @@ text_elements ::= text_item+;
 private text_item ::= PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | mark | under | strike | wave;
 escaped ::= ESCAPED_CHARACTER
 // ---------------------------------------------------------------------------------------------------------------------
-italic    ::= ITALIC_L [text_elements] ITALIC_R
-bold      ::= BOLD_L   [text_elements] BOLD_R
-mark      ::= MARK_L   [text_elements] MARK_R
+italic ::= ITALIC_L [text_elements] ITALIC_R // *text*
+bold   ::= BOLD_L   [text_elements] BOLD_R   // **text**
+mark   ::= MARK_L   [text_elements] MARK_R   // ***text***
 // ---------------------------------------------------------------------------------------------------------------------
-under     ::= UNDER_L  [text_elements] UNDER_R
-strike    ::= STRIKE_L [text_elements] STRIKE_R
-wave      ::= WAVE_L   [text_elements] WAVE_R
+under  ::= UNDER_L  [text_elements] UNDER_R  // _text_
+wave   ::= WAVE_L   [text_elements] WAVE_R   // __text__
+strike ::= STRIKE_L [text_elements] STRIKE_R // ___text___
 // ---------------------------------------------------------------------------------------------------------------------
 xml ::= xml_close | xml_start xml_end
 // <name.space arg kw=arg/>

@@ -16,9 +16,12 @@ public interface NoteTypes {
   IElementType HEADER = new NElementType("HEADER");
   IElementType IDENTIFIER = new NElementType("IDENTIFIER");
   IElementType ITALIC = new NElementType("ITALIC");
-  IElementType ITALIC_BOLD = new NElementType("ITALIC_BOLD");
+  IElementType MARK = new NElementType("MARK");
   IElementType NAMESPACE = new NElementType("NAMESPACE");
+  IElementType STRIKE = new NElementType("STRIKE");
   IElementType TEXT_ELEMENTS = new NElementType("TEXT_ELEMENTS");
+  IElementType UNDER = new NElementType("UNDER");
+  IElementType WAVE = new NElementType("WAVE");
   IElementType XML = new NElementType("XML");
   IElementType XML_CLOSE = new NElementType("XML_CLOSE");
   IElementType XML_END = new NElementType("XML_END");
@@ -45,17 +48,23 @@ public interface NoteTypes {
   IElementType ESCAPE = new NElementType("\\");
   IElementType ESCAPED_CHARACTER = new NElementType("ESCAPED_CHARACTER");
   IElementType HEADER_HASH = new NElementType("HEADER_HASH");
-  IElementType ITALIC_BOLD_L = new NElementType("ITALIC_BOLD_L");
-  IElementType ITALIC_BOLD_R = new NElementType("ITALIC_BOLD_R");
   IElementType ITALIC_L = new NElementType("ITALIC_L");
   IElementType ITALIC_R = new NElementType("ITALIC_R");
+  IElementType MARK_L = new NElementType("MARK_L");
+  IElementType MARK_R = new NElementType("MARK_R");
   IElementType NEW_LINE = new NElementType("NewLine");
   IElementType PARENTHESIS_L = new NElementType("PARENTHESIS_L");
   IElementType PARENTHESIS_R = new NElementType("PARENTHESIS_R");
   IElementType PLAIN_TEXT = new NElementType("PLAIN_TEXT");
   IElementType SEMICOLON = new NElementType(";");
   IElementType STAR = new NElementType("*");
+  IElementType STRIKE_L = new NElementType("STRIKE_L");
+  IElementType STRIKE_R = new NElementType("STRIKE_R");
   IElementType SYMBOL = new NElementType("SYMBOL");
+  IElementType UNDER_L = new NElementType("UNDER_L");
+  IElementType UNDER_R = new NElementType("UNDER_R");
+  IElementType WAVE_L = new NElementType("WAVE_L");
+  IElementType WAVE_R = new NElementType("WAVE_R");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
@@ -84,14 +93,23 @@ public interface NoteTypes {
       else if (type == ITALIC) {
         return new NoteItalicNode(node);
       }
-      else if (type == ITALIC_BOLD) {
-        return new NoteItalicBoldNode(node);
+      else if (type == MARK) {
+        return new NoteMarkNode(node);
       }
       else if (type == NAMESPACE) {
         return new NoteNamespaceNode(node);
       }
+      else if (type == STRIKE) {
+        return new NoteStrikeNode(node);
+      }
       else if (type == TEXT_ELEMENTS) {
         return new NoteTextElementsNode(node);
+      }
+      else if (type == UNDER) {
+        return new NoteUnderNode(node);
+      }
+      else if (type == WAVE) {
+        return new NoteWaveNode(node);
       }
       else if (type == XML) {
         return new NoteXmlNode(node);

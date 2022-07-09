@@ -17,6 +17,15 @@ public interface NoteTextElements extends PsiElement {
   List<NoteItalic> getItalicList();
 
   @NotNull
-  List<NoteItalicBold> getItalicBoldList();
+  List<NoteMark> getMarkList();
+
+  @NotNull
+  List<NoteStrike> getStrikeList();
+
+  @NotNull
+  List<NoteUnder> getUnderList();
+
+  @NotNull
+  List<NoteWave> getWaveList();
 
 }

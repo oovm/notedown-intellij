@@ -2,24 +2,23 @@ package notedge.idea.language.psi
 
 
 import com.intellij.lexer.EmptyLexer
+import com.intellij.lexer.FlexAdapter
 import com.intellij.lexer.LexerBase
 import com.intellij.lexer.LookAheadLexer
 import com.intellij.psi.tree.IElementType
 
 // class NLexerAdapter : FlexAdapter(_NotedownLexer());
-
-
-class LA: LookAheadLexer(EmptyLexer()) {
-
-}
-
 class NLexerAdapter : LexerBase() {
     private var buffer: CharSequence = ""
     private var startOffset: Int = 0
     private var endOffset: Int = 0
-    private var stack: MutableList<StackItem> = mutableListOf()
+    private var stack: Array<StackItem> = arrayOf()
     private var index: Int = 0
     override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
+        if (this.buffer == buffer && this.startOffset == startOffset && this.endOffset == endOffset) {
+            this.index = 0
+            return
+        }
         this.buffer = buffer
         this.startOffset = startOffset
         this.endOffset = endOffset

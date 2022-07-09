@@ -47,8 +47,26 @@ public class NoteTextElementsNode extends NotedownASTBase implements NoteTextEle
 
   @Override
   @NotNull
-  public List<NoteItalicBold> getItalicBoldList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteItalicBold.class);
+  public List<NoteMark> getMarkList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteMark.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NoteStrike> getStrikeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteStrike.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NoteUnder> getUnderList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteUnder.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NoteWave> getWaveList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteWave.class);
   }
 
 }
