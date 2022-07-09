@@ -29,8 +29,8 @@ class StackItem(var token: IElementType, val startOffset: Int, val endOffset: In
 
 
     fun isSoftRightMark(): Boolean? = when {
-        softRightMark.contains(this.token) -> true
         softLeftMark.contains(this.token) -> false
+        softRightMark.contains(this.token) -> true
         else -> null
     }
 
@@ -42,11 +42,11 @@ class StackItem(var token: IElementType, val startOffset: Int, val endOffset: In
     companion object {
         // 会被强制断行的元素
         val softLeftMark = setOf(
-            NoteTypes.ITALIC_L, NoteTypes.BOLD_L, NoteTypes.MARK_L,
+            NoteTypes.ITALIC_L, NoteTypes.BOLD_L, NoteTypes.STRONG_L,
             NoteTypes.UNDER_L, NoteTypes.WAVE_L, NoteTypes.STRIKE_L
         )
         val softRightMark = setOf(
-            NoteTypes.ITALIC_R, NoteTypes.BOLD_R, NoteTypes.MARK_R,
+            NoteTypes.ITALIC_R, NoteTypes.BOLD_R, NoteTypes.STRONG_R,
             NoteTypes.UNDER_R, NoteTypes.WAVE_R, NoteTypes.STRIKE_R
         )
     }

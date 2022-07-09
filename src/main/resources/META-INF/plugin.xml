@@ -23,7 +23,7 @@
 		<!-- Highlight -->
 		<additionalTextAttributes scheme="Default" file="colors/JssDefault.xml"/>
 		<additionalTextAttributes scheme="Darcula" file="colors/JssDarcula.xml"/>
-		<colorSettingsPage implementation="notedge.idea.ide.highlight.JssColorSettingsPage"/>
+		<colorSettingsPage implementation="notedge.idea.ide.highlight.NColorSettingsPage"/>
 		<highlightVisitor implementation="notedge.idea.ide.highlight.NASTHighlighter"/>
 		<lang.syntaxHighlighter
 			language="Notedown"

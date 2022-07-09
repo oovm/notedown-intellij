@@ -4,8 +4,9 @@ import notedge.idea.language.file.NotedownBundle
 import notedge.idea.language.file.NotedownIcons
 import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
+import notedge.idea.language.file.NotedownLanguage
 
-class JssColorSettingsPage : ColorSettingsPage {
+class NColorSettingsPage : ColorSettingsPage {
     private val annotatorTags = NotedownColor
         .values()
         .associateBy({ it.name }, { it.textAttributesKey })
@@ -15,9 +16,10 @@ class JssColorSettingsPage : ColorSettingsPage {
         .map { it.attributesDescriptor }
         .toTypedArray()
 
+    /// inherit, no custom colors
     override fun getColorDescriptors(): Array<ColorDescriptor> = ColorDescriptor.EMPTY_ARRAY
 
-    override fun getDisplayName() = NotedownBundle.message("filetype.name")
+    override fun getDisplayName() = NotedownLanguage.displayName
 
     override fun getIcon() = NotedownIcons.FILE
 

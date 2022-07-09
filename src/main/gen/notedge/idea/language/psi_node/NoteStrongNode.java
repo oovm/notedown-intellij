@@ -11,14 +11,14 @@ import static notedge.idea.language.psi.NoteTypes.*;
 import notedge.idea.language.ast.NotedownASTBase;
 import notedge.idea.language.psi.*;
 
-public class NoteMarkNode extends NotedownASTBase implements NoteMark {
+public class NoteStrongNode extends NotedownASTBase implements NoteStrong {
 
-  public NoteMarkNode(@NotNull ASTNode node) {
+  public NoteStrongNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NoteVisitor visitor) {
-    visitor.visitMark(this);
+    visitor.visitStrong(this);
   }
 
   @Override

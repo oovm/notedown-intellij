@@ -30,6 +30,13 @@ class NTokenHighlighter : SyntaxHighlighterBase() {
             BRACE_L, BRACE_R -> Color.BRACES
             COLON, EQ -> Color.SET
             COMMA -> Color.COMMA
+            // Style Marks
+            ITALIC_L, ITALIC_R -> Color.ITALIC_MARK
+            BOLD_L, BOLD_R -> Color.BOLD_MARK
+            STRONG_L, STRONG_R -> Color.STRONG_MARK
+            UNDER_L, UNDER_R -> Color.UNDERLINE_MARK
+            WAVE_L, WAVE_R -> Color.WAVE_MARK
+            STRIKE_L, STRIKE_R -> Color.STRIKE_MARK
             // atom
 //            INTEGER -> JssColor.INTEGER
 //            DECIMAL -> JssColor.DECIMAL

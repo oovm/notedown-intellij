@@ -27,6 +27,7 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
             if (matchesHeadHash()) continue
             if (matchesEscape()) continue
             if (matchesSymbol()) continue
+            if (matchesAsterisk()) continue
             break
         }
         checkRest()
@@ -91,9 +92,9 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         for (item in stack.asReversed()) {
             when (item.token) {
                 NoteTypes.BREAK_PART,
+                NoteTypes.ITALIC_R,
                 NoteTypes.BOLD_L, NoteTypes.BOLD_R,
                 NoteTypes.STRONG_L, NoteTypes.STRONG_R -> {
-                    // 快速返回
                     stack.add(StackItem(NoteTypes.ITALIC_L, r, context))
                     return
                 }
@@ -104,11 +105,31 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
                 else -> continue
             }
         }
-        // 兜底情况, 左边全是字符
         stack.add(StackItem(NoteTypes.ITALIC_L, r, context))
     }
 
     fun matchesBold(r: MatchResult) {
+        for (item in stack.asReversed()) {
+            when (item.token) {
+                NoteTypes.BREAK_PART,
+                NoteTypes.ITALIC_R,
+                NoteTypes.BOLD_R,
+                NoteTypes.STRONG_L, NoteTypes.STRONG_R -> {
+                    stack.add(StackItem(NoteTypes.BOLD_L, r, context))
+                    return
+                }
+                NoteTypes.BOLD_L -> {
+                    stack.add(StackItem(NoteTypes.BOLD_R, r, context))
+                    return
+                }
+                NoteTypes.ITALIC_L -> {
+                    item.token = NoteTypes.PLAIN_TEXT
+                    stack.add(StackItem(NoteTypes.ITALIC_L, r, context))
+                    return
+                }
+                else -> continue
+            }
+        }
         stack.add(StackItem(NoteTypes.BOLD_L, r, context))
     }
 
