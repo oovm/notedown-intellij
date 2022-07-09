@@ -13,16 +13,17 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         val HEADER_HASH = "[＃#]+".toRegex()
         val ASTERISK = "[*]+".toRegex()
         val TILDE = "[_＿]+".toRegex()
+        val STRING_1 = "(['｀])((?:[^\\\\`｀]|\\\\.)*)([`｀])".toRegex()
+        val STRING_2 = "([\"｀])(( ?: [^\\\\`｀]|\\\\.)*)([`｀])".toRegex()
         val CODE_1 = "([`｀])((?:[^\\\\`｀]|\\\\.)*)([`｀])".toRegex()
         val CODE_2 = "([`｀]{2})((?:[^\\\\]|\\\\.)*?)([`｀]{2})".toRegex()
-        val CODE = "[`｀]+".toRegex()
+        val CODE_3 = "[`｀]{3,}".toRegex()
         val ESCAPE = "[\\\\＼]".toRegex()
         val ESCAPE_ANY = "\\\\.|＼．".toRegex()
-        val FUNCTION_ID = "([\\\\＼])([\\p{L}\\p{N}][\\p{L}_]*)".toRegex()
         val SYMBOL = "[\\p{L}\\p{N}][\\p{L}_]*".toRegex()
         val DOT = "[.．]".toRegex()
-        val COMMA = "[,，]".toRegex()
         val COLON = "[:：]+".toRegex()
+        val CODE_OPERATOR = "[:：.．,，=＝]".toRegex()
 
         val PARENTHESIS_L = "[(（]".toRegex()
         val PARENTHESIS_R = "[)）]".toRegex()
@@ -46,18 +47,27 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
             if (matchesNewline()) continue
             when (context) {
                 StackContext.TEXT -> {
+                    // header
                     if (matchesHeadHash()) continue
-                    if (matchesAsterisk()) continue
-                    if (matchesTilde()) continue
+                    // text
+                    if (matchesEscape()) continue
+                    if (matchesSymbol()) continue
+                    if (matchNamespaceDot()) continue
+                    if (matchParenthesisL()) continue
+                    // code
+
                     if (matchesCode2()) continue
                     if (matchesCode1()) continue
-                    if (matchesEscape()) continue
-                    if (matchesFunctionID()) continue
-                    if (matchParenthesisL()) continue
+                    if (matchesCode3()) continue
+                    // style
+                    if (matchesAsterisk()) continue
+                    if (matchesTilde()) continue
                 }
                 StackContext.CODE -> {
-                    if (matchesDot()) continue
-                    if (matchesComma()) continue
+                    if (matchesSymbol()) continue
+                    if (matchesCodeCommaLike()) continue
+                    if (matchParenthesisL()) continue
+                    if (matchParenthesisR()) continue
                 }
                 StackContext.STRING -> {}
             }
@@ -116,36 +126,64 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         return addOffset(r)
     }
 
-    fun matchesDot(): Boolean {
+    fun matchesCodeCommaLike(): Boolean {
         assert(context == StackContext.CODE)
+        val r = CODE_OPERATOR.matchAt(buffer, startOffset) ?: return false
+        when (r.value) {
+            ".", "．" -> stack.add(StackItem(NoteTypes.DOT, r, context))
+            ",", "，" -> stack.add(StackItem(NoteTypes.COMMA, r, context))
+            ":", "：" -> stack.add(StackItem(NoteTypes.COLON, r, context))
+            "=", "＝" -> stack.add(StackItem(NoteTypes.EQ, r, context))
+            else -> TODO("unreachable ${r.value}")
+        }
+        return addOffset(r)
+    }
+
+    fun matchesSymbol(): Boolean {
+        val r = SYMBOL.matchAt(buffer, startOffset) ?: return false
+        when {
+            context == StackContext.CODE -> {
+                stack.add(StackItem(NoteTypes.SYMBOL, r, context))
+            }
+            lastIs(NoteTypes.ESCAPE, NoteTypes.DOT) -> {
+                stack.add(StackItem(NoteTypes.SYMBOL, r, context))
+            }
+            else -> {
+                stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
+            }
+        }
+        return addOffset(r)
+    }
+
+    fun matchNamespaceDot(): Boolean {
         val r = DOT.matchAt(buffer, startOffset) ?: return false
-        stack.add(StackItem(NoteTypes.DOT, r, context))
-        return addOffset(r)
-    }
-
-    fun matchesComma(): Boolean {
-        assert(context == StackContext.CODE)
-        val r = COMMA.matchAt(buffer, startOffset) ?: return false
-        stack.add(StackItem(NoteTypes.COMMA, r, context))
-        return addOffset(r)
-    }
-
-    fun matchesFunctionID(): Boolean {
-        val r = FUNCTION_ID.matchAt(buffer, startOffset) ?: return false
-        stack.add(StackItem(NoteTypes.ESCAPE, r.groups[1]!!, context))
-        stack.add(StackItem(NoteTypes.SYMBOL, r.groups[2]!!, context))
+        when {
+            lastIs(NoteTypes.SYMBOL) -> {
+                stack.add(StackItem(NoteTypes.DOT, r, context))
+            }
+            else -> {
+                stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
+            }
+        }
         return addOffset(r)
     }
 
     fun matchParenthesisL(): Boolean {
         val r = PARENTHESIS_L.matchAt(buffer, startOffset) ?: return false
-        if (lastIs(NoteTypes.ESCAPE)) {
-            stack.add(StackItem(NoteTypes.ESCAPE, r, context))
-        } else {
+        if (lastIs(NoteTypes.SYMBOL)) {
+            context = StackContext.CODE
             stack.add(StackItem(NoteTypes.PARENTHESIS_L, r, context))
         }
+        else {
+            stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
+        }
+        return addOffset(r)
+    }
 
-        stack.add(StackItem(NoteTypes.PARENTHESIS_L, r, context))
+    fun matchParenthesisR(): Boolean {
+        assert(context == StackContext.CODE)
+        val r = PARENTHESIS_R.matchAt(buffer, startOffset) ?: return false
+        stack.add(StackItem(NoteTypes.PARENTHESIS_R, r, context))
         return addOffset(r)
     }
 
@@ -161,8 +199,8 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         return addOffset(r)
     }
 
-    fun matchesCode(): Boolean {
-        val r = CODE.matchAt(buffer, startOffset) ?: return false
+    fun matchesCode3(): Boolean {
+        val r = CODE_3.matchAt(buffer, startOffset) ?: return false
         when (r.value.length) {
             1, 2 -> {
                 stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context, false))

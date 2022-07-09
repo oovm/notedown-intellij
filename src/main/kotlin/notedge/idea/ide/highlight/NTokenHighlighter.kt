@@ -46,10 +46,6 @@ class NTokenHighlighter : SyntaxHighlighterBase() {
 //            URL -> JssColor.URL
 //            STRING -> JssColor.STRING
             SYMBOL -> Color.IDENTIFIER
-            // 注释
-//            COMMENT -> JssColor.LINE_COMMENT
-//            COMMENT_BLOCK -> JssColor.BLOCK_COMMENT
-//            COMMENT_DOCUMENT -> JssColor.DOC_COMMENT
             // 错误
             TokenType.BAD_CHARACTER -> Color.BAD_CHARACTER
             else -> null

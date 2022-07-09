@@ -55,6 +55,10 @@ class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
         o.textElements?.let { highlight(it, NotedownColor.STRIKE_TEXT) }
     }
 
+    override fun visitFunction(o: NoteFunction) {
+        highlight(o, NotedownColor.SYS_FUNCTION)
+    }
+
 
     private fun highlight(element: PsiElement, color: NotedownColor) {
         val builder = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION)

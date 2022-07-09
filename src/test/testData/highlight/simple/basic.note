@@ -19,7 +19,8 @@ ___normal text___
 
 ``code``
 
-\function(arg, kw=arg): text
+\function.name(arg, kw=arg): text
+
 
 \function(arg, kw=arg) {
     text
