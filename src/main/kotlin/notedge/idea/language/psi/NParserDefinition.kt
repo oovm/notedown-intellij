@@ -27,7 +27,7 @@ object NParserDefinition : ParserDefinition {
 
     override fun getWhitespaceTokens() = TokenSet.create(TokenType.WHITE_SPACE, NoteTypes.NEW_LINE)
 
-    override fun getStringLiteralElements() =TokenSet.create()
+    override fun getStringLiteralElements() = TokenSet.create()
 
     override fun createElement(node: ASTNode): PsiElement = NoteTypes.Factory.createElement(node)
 

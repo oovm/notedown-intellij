@@ -1,0 +1,8 @@
+# heading
+
+not # head
+
+# head **bold**
+
+# head ** not bold
+

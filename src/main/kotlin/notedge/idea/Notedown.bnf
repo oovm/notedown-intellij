@@ -43,12 +43,12 @@ header ::= HEADER_HASH text_elements {
 }
 // ---------------------------------------------------------------------------------------------------------------------
 text_elements ::= text_item+;
-private text_item ::= PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | mark | under | strike | wave;
+private text_item ::= PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | strong | under | strike | wave;
 escaped ::= ESCAPED_CHARACTER
 // ---------------------------------------------------------------------------------------------------------------------
 italic ::= ITALIC_L [text_elements] ITALIC_R // *text*
 bold   ::= BOLD_L   [text_elements] BOLD_R   // **text**
-mark   ::= MARK_L   [text_elements] MARK_R   // ***text***
+strong ::= STRONG_L [text_elements] STRONG_R // ***text***
 // ---------------------------------------------------------------------------------------------------------------------
 under  ::= UNDER_L  [text_elements] UNDER_R  // _text_
 wave   ::= WAVE_L   [text_elements] WAVE_R   // __text__

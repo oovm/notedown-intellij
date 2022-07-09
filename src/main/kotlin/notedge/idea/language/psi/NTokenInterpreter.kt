@@ -6,14 +6,7 @@ import com.intellij.psi.tree.IElementType
 @OptIn(ExperimentalStdlibApi::class)
 @Suppress("MemberVisibilityCanBePrivate")
 class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int, var context: Int) {
-    //URL= [A-Za-z0-9]+:"//"[\-\p{XID_Continue}./?&#]+
-    //SYMBOL=[\p{XID_Start}_][\p{XID_Continue}_]*
-    //STRING=\"([^\"\\]|\\.)*\"
-    //BYTE=(0[bBoOxXfF][0-9A-Fa-f][0-9A-Fa-f_]*)
-    //INTEGER=(0|[1-9][0-9_]*)
-    //DECIMAL=([0-9]+\.[0-9]*([*][*][0-9]+)?)|(\.[0-9]+([Ee][0-9]+)?)
-    //SIGN=[+-]
-    //HEADER_HASH=[#]+
+    private class Ref(var value: StackItem)
     companion object {
         private val EOL = "\\R".toRegex()
         private val WHITE_SPACE = "[^\\S\\r\\n]+".toRegex()
@@ -41,35 +34,36 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
     }
 
     fun matchesWhitespace(): Boolean {
-        val r = WHITE_SPACE.matchAt(buffer, startOffset) ?: return false;
+        val r = WHITE_SPACE.matchAt(buffer, startOffset) ?: return false
         stack.add(StackItem(TokenType.WHITE_SPACE, r, context))
         return addOffset(r)
     }
 
     fun matchesNewline(): Boolean {
-        val r = NEW_LINE.matchAt(buffer, startOffset) ?: return false;
+        val r = NEW_LINE.matchAt(buffer, startOffset) ?: return false
         if (shouldBreakParagraph()) {
             stack.add(StackItem(NoteTypes.BREAK_PART, r, context))
-        } else {
+        }
+        else {
             stack.add(StackItem(NoteTypes.NEW_LINE, r, context))
         }
         return addOffset(r)
     }
 
     fun matchesHeadHash(): Boolean {
-        val r = HEADER_HASH.matchAt(buffer, startOffset) ?: return false;
+        val r = HEADER_HASH.matchAt(buffer, startOffset) ?: return false
         stack.add(StackItem(NoteTypes.HEADER_HASH, r, context))
         return addOffset(r)
     }
 
     fun matchesEscape(): Boolean {
-        val r = ESCAPE.matchAt(buffer, startOffset) ?: return false;
+        val r = ESCAPE.matchAt(buffer, startOffset) ?: return false
         stack.add(StackItem(NoteTypes.ESCAPE, r, context))
         return addOffset(r)
     }
 
     fun matchesSymbol(): Boolean {
-        val r = SYMBOL.matchAt(buffer, startOffset) ?: return false;
+        val r = SYMBOL.matchAt(buffer, startOffset) ?: return false
         when {
             lastIs(NoteTypes.ESCAPE) -> {
                 stack.add(StackItem(NoteTypes.SYMBOL, r, context))
@@ -83,47 +77,45 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
     }
 
     fun matchesAsterisk(): Boolean {
-        val r = ASTERISK.matchAt(buffer, startOffset) ?: return false;
-        val last = lastAsterisk();
-//        if (last == null || last > length) {
-//            when (length) {
-//                1 -> {
-//                    lookAheadBuffer.add(NoteTypes.ITALIC_L)
-//                }
-//                2 -> {
-//                    lookAheadBuffer.add(NoteTypes.BOLD_L)
-//                }
-//                3 -> {
-//                    lookAheadBuffer.add(NoteTypes.ITALIC_BOLD_L)
-//                }
-//                else -> {
-//                    lookAheadBuffer.add(NoteTypes.PLAIN_TEXT)
-//                    return lastLookAhead
-//                }
-//            }
-//            // stack.add(StackItem.Asterisk(length))
-//
-//        }
-//        // if (last == here.yylength())
-//        else {
-//            when (length) {
-//                1 -> {
-//                    asteriskStack.removeLast()
-//                    lookAheadBuffer.add(NoteTypes.ITALIC_R)
-//                }
-//                2 -> {
-//                    asteriskStack.removeLast()
-//                    lookAheadBuffer.add(NoteTypes.BOLD_R)
-//                }
-//                3 -> {
-//                    asteriskStack.removeLast()
-//                    lookAheadBuffer.add(NoteTypes.ITALIC_BOLD_R)
-//                }
-//                else -> TODO("unreachable")
-//            }
-//        }
+        val r = ASTERISK.matchAt(buffer, startOffset) ?: return false
+        when (r.value.length) {
+            1 -> matchesItalic(r)
+            2 -> matchesBold(r)
+            3 -> matchesStrong(r)
+            else -> stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
+        }
         return addOffset(r)
     }
+
+    fun matchesItalic(r: MatchResult) {
+        for (item in stack.asReversed()) {
+            when (item.token) {
+                NoteTypes.BREAK_PART,
+                NoteTypes.BOLD_L, NoteTypes.BOLD_R,
+                NoteTypes.STRONG_L, NoteTypes.STRONG_R -> {
+                    // 快速返回
+                    stack.add(StackItem(NoteTypes.ITALIC_L, r, context))
+                    return
+                }
+                NoteTypes.ITALIC_L -> {
+                    stack.add(StackItem(NoteTypes.ITALIC_R, r, context))
+                    return
+                }
+                else -> continue
+            }
+        }
+        // 兜底情况, 左边全是字符
+        stack.add(StackItem(NoteTypes.ITALIC_L, r, context))
+    }
+
+    fun matchesBold(r: MatchResult) {
+        stack.add(StackItem(NoteTypes.BOLD_L, r, context))
+    }
+
+    fun matchesStrong(r: MatchResult) {
+        stack.add(StackItem(NoteTypes.STRONG_L, r, context))
+    }
+
 
     fun checkRest() {
         if (startOffset < endOffset) {
@@ -155,18 +147,22 @@ private fun NTokenInterpreter.shouldBreakParagraph(): Boolean {
     return false
 }
 
-private fun NTokenInterpreter.lastAsterisk(): Boolean {
-//        for (item in stack.reversed()) {
-//            if (item.token == NoteTypes.ITALIC_L) {
-//                return true
-//            }
-//        }
-    TODO()
+private fun NTokenInterpreter.lastAsterisks(): MutableList<StackItem> {
+    var out = mutableListOf<StackItem>()
+    for (item in stack.asReversed()) {
+        if (item.token == NoteTypes.ITALIC_L) {
+            out.add(item)
+        }
+        else {
+            return out
+        }
+    }
+    return out
 }
 
 private fun NTokenInterpreter.eraseImbalance() {
     for (item in stack.reversed()) {
-        when (item.token.isSoftLeftMark()) {
+        when (item.isSoftLeftMark()) {
             true -> item.token = NoteTypes.PLAIN_TEXT
             false -> break
             null -> continue

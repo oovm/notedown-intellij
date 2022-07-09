@@ -246,27 +246,6 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MARK_L   [text_elements] MARK_R
-  public static boolean mark(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "mark")) return false;
-    if (!nextTokenIs(b, MARK_L)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, MARK_L);
-    r = r && mark_1(b, l + 1);
-    r = r && consumeToken(b, MARK_R);
-    exit_section_(b, m, MARK, r);
-    return r;
-  }
-
-  // [text_elements]
-  private static boolean mark_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "mark_1")) return false;
-    text_elements(b, l + 1);
-    return true;
-  }
-
-  /* ********************************************************** */
   // identifier (DOT identifier)*
   public static boolean namespace(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace")) return false;
@@ -354,6 +333,27 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // STRONG_L [text_elements] STRONG_R
+  public static boolean strong(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "strong")) return false;
+    if (!nextTokenIs(b, STRONG_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, STRONG_L);
+    r = r && strong_1(b, l + 1);
+    r = r && consumeToken(b, STRONG_R);
+    exit_section_(b, m, STRONG, r);
+    return r;
+  }
+
+  // [text_elements]
+  private static boolean strong_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "strong_1")) return false;
+    text_elements(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
   // text_item+
   public static boolean text_elements(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "text_elements")) return false;
@@ -370,7 +370,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | mark | under | strike | wave
+  // PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | strong | under | strike | wave
   static boolean text_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "text_item")) return false;
     boolean r;
@@ -380,7 +380,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, NEW_LINE);
     if (!r) r = italic(b, l + 1);
     if (!r) r = bold(b, l + 1);
-    if (!r) r = mark(b, l + 1);
+    if (!r) r = strong(b, l + 1);
     if (!r) r = under(b, l + 1);
     if (!r) r = strike(b, l + 1);
     if (!r) r = wave(b, l + 1);

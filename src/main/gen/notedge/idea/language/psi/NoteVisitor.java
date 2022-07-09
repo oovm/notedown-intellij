@@ -39,15 +39,15 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitMark(@NotNull NoteMark o) {
-    visitPsiElement(o);
-  }
-
   public void visitNamespace(@NotNull NoteNamespace o) {
     visitPsiElement(o);
   }
 
   public void visitStrike(@NotNull NoteStrike o) {
+    visitPsiElement(o);
+  }
+
+  public void visitStrong(@NotNull NoteStrong o) {
     visitPsiElement(o);
   }
 

@@ -1,10 +1,7 @@
 package notedge.idea.language.psi
 
 
-import com.intellij.lexer.EmptyLexer
-import com.intellij.lexer.FlexAdapter
 import com.intellij.lexer.LexerBase
-import com.intellij.lexer.LookAheadLexer
 import com.intellij.psi.tree.IElementType
 
 // class NLexerAdapter : FlexAdapter(_NotedownLexer());
@@ -17,13 +14,14 @@ class NLexerAdapter : LexerBase() {
     override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
         if (this.buffer == buffer && this.startOffset == startOffset && this.endOffset == endOffset) {
             this.index = 0
-            return
         }
-        this.buffer = buffer
-        this.startOffset = startOffset
-        this.endOffset = endOffset
-        this.stack = NTokenInterpreter(buffer, startOffset, endOffset, initialState).interpreter()
-        this.index = 0
+        else {
+            this.buffer = buffer
+            this.startOffset = startOffset
+            this.endOffset = endOffset
+            this.stack = NTokenInterpreter(buffer, startOffset, endOffset, initialState).interpreter()
+            this.index = 0
+        }
     }
 
     override fun getState(): Int = stack.getOrNull(index)?.getState() ?: 0

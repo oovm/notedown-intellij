@@ -20,7 +20,8 @@ class ParsingStack {
     fun analyzeHeadHash(here: _NotedownLexer): IElementType {
         if (peekLookAheadNonWhitespace == null) {
             lookAheadBuffer.add(NoteTypes.HEADER_HASH)
-        } else {
+        }
+        else {
             lookAheadBuffer.add(NoteTypes.PLAIN_TEXT)
         }
         return lastLookAhead
@@ -34,7 +35,7 @@ class ParsingStack {
     }
 
     fun analyzeAsterisk(here: _NotedownLexer): IElementType {
-        val last = asteriskStack.lastOrNull();
+        val last = asteriskStack.lastOrNull()
         val length = here.yylength()
         if (last == null || last > length) {
             when (length) {
@@ -43,9 +44,6 @@ class ParsingStack {
                 }
                 2 -> {
                     lookAheadBuffer.add(NoteTypes.BOLD_L)
-                }
-                3 -> {
-                    lookAheadBuffer.add(NoteTypes.ITALIC_BOLD_L)
                 }
                 else -> {
                     lookAheadBuffer.add(NoteTypes.PLAIN_TEXT)
@@ -65,10 +63,6 @@ class ParsingStack {
                 2 -> {
                     asteriskStack.removeLast()
                     lookAheadBuffer.add(NoteTypes.BOLD_R)
-                }
-                3 -> {
-                    asteriskStack.removeLast()
-                    lookAheadBuffer.add(NoteTypes.ITALIC_BOLD_R)
                 }
                 else -> TODO("unreachable")
             }
@@ -125,8 +119,8 @@ private fun ParsingStack.stackHas(item: StackItem): Boolean {
 
 private val ParsingStack.clearLookAhead: IElementType
     get() {
-        val last = lookAheadBuffer.last();
-        lookAheadBuffer.clear();
+        val last = lookAheadBuffer.last()
+        lookAheadBuffer.clear()
         return last
     }
 
@@ -166,11 +160,13 @@ private fun _NotedownLexer.isStartOfHead(allowWhiteSpace: Boolean = true): Boole
     for (c in chars.reversed()) {
         if (c == '\n') {
             return true
-        } else if (c == ' ' || c == '\t') {
+        }
+        else if (c == ' ' || c == '\t') {
             if (!allowWhiteSpace) {
                 return false
             }
-        } else {
+        }
+        else {
             return false
         }
     }

@@ -1,6 +1,5 @@
 package notedge.idea.language.psi
 
-import notedge.idea.language.psi.NoteTypes
 import com.intellij.extapi.psi.StubBasedPsiElementBase
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.util.TextRange
@@ -8,7 +7,6 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.PsiFileImpl
 import com.intellij.psi.stubs.StubElement
-import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.prevLeaf
 
@@ -113,7 +111,8 @@ inline fun <reified T : PsiElement> PsiElement.childrenOfType(): List<T> =
 inline fun <reified T : PsiElement> PsiElement.stubChildrenOfType(): List<T> {
     return if (this is PsiFileImpl) {
         stub?.childrenStubs?.mapNotNull { it.psi as? T } ?: return childrenOfType()
-    } else {
+    }
+    else {
         PsiTreeUtil.getStubChildrenOfTypeAsList(this, T::class.java)
     }
 }
