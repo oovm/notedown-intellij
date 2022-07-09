@@ -20,9 +20,16 @@ class StackItem {
     constructor(token: IElementType, match: MatchResult, context: StackContext, paired: Boolean? = null) {
         this.token = token
         this.startOffset = match.range.first
-        this.endOffset =  match.range.last + 1
+        this.endOffset = match.range.last + 1
         this.context = context
         this.paired = paired
+    }
+
+    constructor(token: IElementType, match: MatchGroup, context: StackContext) {
+        this.token = token
+        this.startOffset = match.range.first
+        this.endOffset = match.range.last + 1
+        this.context = context
     }
 
     fun getState(): Int {
@@ -42,6 +49,10 @@ class StackItem {
         this.paired = null;
     }
 
+    fun tokenIs(vararg token: IElementType): Boolean {
+        return token.firstOrNull { it == this.token } != null
+    }
+
     fun isSoftLeftMark(): Boolean? = when {
         softLeftMark.contains(this.token) -> true
         softRightMark.contains(this.token) -> false
@@ -56,7 +67,6 @@ class StackItem {
     }
 
     fun IElementType.isHardLeftMark(): Boolean? = when (this) {
-
         else -> null
     }
 

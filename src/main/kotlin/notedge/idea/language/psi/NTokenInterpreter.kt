@@ -13,9 +13,17 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         val HEADER_HASH = "[＃#]+".toRegex()
         val ASTERISK = "[*]+".toRegex()
         val TILDE = "[_＿]+".toRegex()
-        val ESCAPE = "[\\\\＼]".toRegex()
-        val SYMBOL = "[\\p{L}\\p{N}][\\p{L}_]*".toRegex()
+        val CODE_1 = "([`｀])((?:[^\\\\`｀]|\\\\.)*)([`｀])".toRegex()
+        val CODE_2 = "([`｀]{2})((?:[^\\\\]|\\\\.)*?)([`｀]{2})".toRegex()
         val CODE = "[`｀]+".toRegex()
+        val ESCAPE = "[\\\\＼]".toRegex()
+        val ESCAPE_ANY = "\\\\.|＼．".toRegex()
+        val FUNCTION_ID = "([\\\\＼])([\\p{L}\\p{N}][\\p{L}_]*)".toRegex()
+        val SYMBOL = "[\\p{L}\\p{N}][\\p{L}_]*".toRegex()
+        val DOT = "[.．]".toRegex()
+        val COMMA = "[,，]".toRegex()
+        val COLON = "[:：]+".toRegex()
+
         val PARENTHESIS_L = "[(（]".toRegex()
         val PARENTHESIS_R = "[)）]".toRegex()
         val BRACKET_L = "[\\[［]".toRegex()
@@ -36,12 +44,23 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         while (startOffset < endOffset) {
             if (matchesWhitespace()) continue
             if (matchesNewline()) continue
-            if (matchesHeadHash()) continue
-            if (matchesAsterisk()) continue
-            if (matchesTilde()) continue
-            if (matchesCode()) continue
-            if (matchesEscape()) continue
-            if (matchesSymbol()) continue
+            when (context) {
+                StackContext.TEXT -> {
+                    if (matchesHeadHash()) continue
+                    if (matchesAsterisk()) continue
+                    if (matchesTilde()) continue
+                    if (matchesCode2()) continue
+                    if (matchesCode1()) continue
+                    if (matchesEscape()) continue
+                    if (matchesFunctionID()) continue
+                    if (matchParenthesisL()) continue
+                }
+                StackContext.CODE -> {
+                    if (matchesDot()) continue
+                    if (matchesComma()) continue
+                }
+                StackContext.STRING -> {}
+            }
             break
         }
         checkRest()
@@ -51,7 +70,16 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
     fun matchesWhitespace(): Boolean {
         val r = WHITE_SPACE.matchAt(buffer, startOffset) ?: return false
         when (context) {
-            StackContext.TEXT -> stack.add(StackItem(TokenType.WHITE_SPACE, r, context))
+            StackContext.TEXT -> {
+                when {
+                    lastIs(NoteTypes.BREAK_PART) -> {
+                        stack.add(StackItem(NoteTypes.BREAK_PART, r, context))
+                    }
+                    else -> {
+                        stack.add(StackItem(TokenType.WHITE_SPACE, r, context))
+                    }
+                }
+            }
             StackContext.CODE -> stack.add(StackItem(TokenType.WHITE_SPACE, r, context))
             StackContext.STRING -> stack.add(StackItem(NoteTypes.STRING_TEXT, r, context))
         }
@@ -77,63 +105,86 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
 
     fun matchesHeadHash(): Boolean {
         val r = HEADER_HASH.matchAt(buffer, startOffset) ?: return false
-        when (context) {
-            StackContext.TEXT -> stack.add(StackItem(TokenType.WHITE_SPACE, r, context))
-            StackContext.CODE -> stack.add(StackItem(TokenType.WHITE_SPACE, r, context))
-            StackContext.STRING -> stack.add(StackItem(NoteTypes.STRING_TEXT, r, context))
-        }
         stack.add(StackItem(NoteTypes.HEADER_HASH, r, context))
         return addOffset(r)
     }
 
     fun matchesEscape(): Boolean {
+        assert(context == StackContext.TEXT)
         val r = ESCAPE.matchAt(buffer, startOffset) ?: return false
         stack.add(StackItem(NoteTypes.ESCAPE, r, context))
         return addOffset(r)
     }
 
-    fun matchesSymbol(): Boolean {
-        val r = SYMBOL.matchAt(buffer, startOffset) ?: return false
-        when {
-            lastIs(NoteTypes.ESCAPE) -> {
-                stack.add(StackItem(NoteTypes.SYMBOL, r, context))
-            }
+    fun matchesDot(): Boolean {
+        assert(context == StackContext.CODE)
+        val r = DOT.matchAt(buffer, startOffset) ?: return false
+        stack.add(StackItem(NoteTypes.DOT, r, context))
+        return addOffset(r)
+    }
 
-            else -> {
-                stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
-            }
+    fun matchesComma(): Boolean {
+        assert(context == StackContext.CODE)
+        val r = COMMA.matchAt(buffer, startOffset) ?: return false
+        stack.add(StackItem(NoteTypes.COMMA, r, context))
+        return addOffset(r)
+    }
+
+    fun matchesFunctionID(): Boolean {
+        val r = FUNCTION_ID.matchAt(buffer, startOffset) ?: return false
+        stack.add(StackItem(NoteTypes.ESCAPE, r.groups[1]!!, context))
+        stack.add(StackItem(NoteTypes.SYMBOL, r.groups[2]!!, context))
+        return addOffset(r)
+    }
+
+    fun matchParenthesisL(): Boolean {
+        val r = PARENTHESIS_L.matchAt(buffer, startOffset) ?: return false
+        if (lastIs(NoteTypes.ESCAPE)) {
+            stack.add(StackItem(NoteTypes.ESCAPE, r, context))
+        } else {
+            stack.add(StackItem(NoteTypes.PARENTHESIS_L, r, context))
         }
+
+        stack.add(StackItem(NoteTypes.PARENTHESIS_L, r, context))
+        return addOffset(r)
+    }
+
+    fun matchesCode1(): Boolean {
+        val r = CODE_1.matchAt(buffer, startOffset) ?: return false
+        addCodeGroup(r)
+        return addOffset(r)
+    }
+
+    fun matchesCode2(): Boolean {
+        val r = CODE_2.matchAt(buffer, startOffset) ?: return false
+        addCodeGroup(r)
         return addOffset(r)
     }
 
     fun matchesCode(): Boolean {
         val r = CODE.matchAt(buffer, startOffset) ?: return false
         when (r.value.length) {
-            1 -> {
-                stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
-                return addOffset(r)
-            }
-            2 -> {
-                stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
+            1, 2 -> {
+                stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context, false))
                 return addOffset(r)
             }
             else -> {
-                when {
+                return when {
                     isStartOfLine() -> {
                         stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
-                        return addOffset(r)
+                        addOffset(r)
                     }
                     else -> {
                         stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
-                        return addOffset(r)
+                        addOffset(r)
                     }
                 }
             }
         }
-
     }
 
     fun matchesAsterisk(): Boolean {
+        assert(context == StackContext.TEXT)
         val r = ASTERISK.matchAt(buffer, startOffset) ?: return false
         when (r.value.length) {
             1 -> matchesItalic(r)
@@ -282,8 +333,22 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
     }
 }
 
+private fun NTokenInterpreter.addCodeGroup(r: MatchResult) {
+    stack.add(StackItem(NoteTypes.CODE_L, r.groups[1]!!, context))
+    stack.add(StackItem(NoteTypes.STRING_TEXT, r.groups[2]!!, context))
+    stack.add(StackItem(NoteTypes.CODE_R, r.groups[3]!!, context))
+}
+
+private fun NTokenInterpreter.sequenceBefore(): CharSequence {
+    return buffer.subSequence(0, startOffset)
+}
+
 private fun NTokenInterpreter.sequenceAfter(): CharSequence {
     return buffer.subSequence(startOffset, endOffset)
+}
+
+private fun NTokenInterpreter.frontOfLine(): String {
+    return sequenceBefore().reversed().split(NTokenInterpreter.NEW_LINE, 1).firstOrNull()?.reversed() ?: ""
 }
 
 private fun NTokenInterpreter.restOfLine(): String {
@@ -291,22 +356,30 @@ private fun NTokenInterpreter.restOfLine(): String {
 }
 
 private fun NTokenInterpreter.shouldBreakParagraph(): Boolean {
-    for (item in stack.reversed()) {
-        return when (item.token) {
-            // [#, text, text, |]
-            NoteTypes.HEADER_HASH -> true
-            // [\n, |]
-            NoteTypes.NEW_LINE, NoteTypes.BREAK_PART -> true
-            else -> continue
+    var last = stack.count();
+    if (lastIs(NoteTypes.NEW_LINE, NoteTypes.BREAK_PART)) {
+        return true
+    }
+    while (last > 0) {
+        last--
+        val item = stack[last]
+        if (item.tokenIs(NoteTypes.HEADER_HASH)) {
+            return true
+        }
+        if (item.tokenIs(NoteTypes.NEW_LINE, NoteTypes.BREAK_PART)) {
+            return false
         }
     }
-    // [|]
     return false
 }
 
-private fun NTokenInterpreter.lastIs(token: IElementType): Boolean = when (val last = stack.lastOrNull()) {
-    null -> false
-    else -> last.token == token
+private fun NTokenInterpreter.lastIs(vararg token: IElementType): Boolean {
+    if (stack.isEmpty()) return false
+    val last = stack.last()
+    for (item in token) {
+        if (last.token == item) return true
+    }
+    return false
 }
 
 private fun NTokenInterpreter.isStartOfLine(): Boolean {

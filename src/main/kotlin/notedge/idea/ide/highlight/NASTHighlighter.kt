@@ -26,6 +26,11 @@ class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
         }
     }
 
+
+    override fun visitCodeInline(o: NoteCodeInline) {
+        o.string?.let { highlight(it, NotedownColor.CODE_TEXT) }
+    }
+
     override fun visitItalic(o: NoteItalic) {
         o.textElements?.let { highlight(it, NotedownColor.ITALIC_TEXT) }
     }

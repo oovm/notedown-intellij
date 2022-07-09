@@ -42,8 +42,10 @@ enum class NotedownColor(
 
     IDENTIFIER(OptionsBundle.messagePointer("options.language.defaults.identifier"), Default.IDENTIFIER),
     // 其他
-    CODE_TEXT(NotedownBundle.messagePointer("color.token.code.text"), Default.MARKUP_ATTRIBUTE),
-    CODE_MARK(NotedownBundle.messagePointer("color.token.code.mark"), CODE_TEXT.textAttributesKey),
+    CODE_TEXT(NotedownBundle.messagePointer("color.token.code.text"), Default.STRING),
+    CODE_MARK(NotedownBundle.messagePointer("color.token.code.mark"), STRING.textAttributesKey),
+    FRAGMENT_TEXT(NotedownBundle.messagePointer("color.token.fragment.text"), Default.TEMPLATE_LANGUAGE_COLOR),
+    FRAGMENT_MARK(NotedownBundle.messagePointer("color.token.fragment.mark"), STRING.textAttributesKey),
 
     ITALIC_TEXT(NotedownBundle.messagePointer("color.token.italic.text"), Default.TEMPLATE_LANGUAGE_COLOR),
     ITALIC_MARK(NotedownBundle.messagePointer("color.token.italic.mark"), KEYWORD.textAttributesKey),
