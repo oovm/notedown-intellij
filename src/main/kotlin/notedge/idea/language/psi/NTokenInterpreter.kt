@@ -124,7 +124,7 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
                 }
                 NoteTypes.ITALIC_L -> {
                     item.token = NoteTypes.PLAIN_TEXT
-                    stack.add(StackItem(NoteTypes.ITALIC_L, r, context))
+                    stack.add(StackItem(NoteTypes.BOLD_R, r, context))
                     return
                 }
                 else -> continue
@@ -134,7 +134,48 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
     }
 
     fun matchesStrong(r: MatchResult) {
-        stack.add(StackItem(NoteTypes.STRONG_L, r, context))
+        var doAdd = false
+        for (item in stack.asReversed()) {
+            when (item.token) {
+                NoteTypes.BREAK_PART,
+                NoteTypes.ITALIC_R,
+                NoteTypes.BOLD_R,
+                NoteTypes.STRONG_R -> {
+                    if (!doAdd) {
+                        doAdd = true;
+                        stack.add(StackItem(NoteTypes.STRONG_L, r, context))
+                    }
+                    return
+                }
+                NoteTypes.STRONG_L -> {
+                    if (!doAdd) {
+                        doAdd = true;
+                        stack.add(StackItem(NoteTypes.STRONG_R, r, context))
+                    }
+                    return
+                }
+                NoteTypes.BOLD_L -> {
+                    item.token = NoteTypes.PLAIN_TEXT
+                    if (!doAdd) {
+                        doAdd = true;
+                        stack.add(StackItem(NoteTypes.STRONG_L, r, context))
+                    }
+                    return
+                }
+                NoteTypes.ITALIC_L -> {
+                    item.token = NoteTypes.PLAIN_TEXT
+                    if (!doAdd) {
+                        doAdd = true;
+                        stack.add(StackItem(NoteTypes.STRONG_L, r, context))
+                    }
+                    continue
+                }
+                else -> continue
+            }
+        }
+        if (!doAdd) {
+            stack.add(StackItem(NoteTypes.STRONG_L, r, context))
+        }
     }
 
 
