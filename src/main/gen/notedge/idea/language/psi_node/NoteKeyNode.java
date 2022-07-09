@@ -11,14 +11,14 @@ import static notedge.idea.language.psi.NoteTypes.*;
 import notedge.idea.language.ast.NotedownASTBase;
 import notedge.idea.language.psi.*;
 
-public class NoteFunctionNode extends NotedownASTBase implements NoteFunction {
+public class NoteKeyNode extends NotedownASTBase implements NoteKey {
 
-  public NoteFunctionNode(@NotNull ASTNode node) {
+  public NoteKeyNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NoteVisitor visitor) {
-    visitor.visitFunction(this);
+    visitor.visitKey(this);
   }
 
   @Override
@@ -28,21 +28,9 @@ public class NoteFunctionNode extends NotedownASTBase implements NoteFunction {
   }
 
   @Override
-  @Nullable
-  public NoteArgsFunction getArgsFunction() {
-    return findChildByClass(NoteArgsFunction.class);
-  }
-
-  @Override
-  @Nullable
-  public NoteArgsText getArgsText() {
-    return findChildByClass(NoteArgsText.class);
-  }
-
-  @Override
   @NotNull
-  public NoteNamespace getNamespace() {
-    return findNotNullChildByClass(NoteNamespace.class);
+  public NoteIdentifier getIdentifier() {
+    return findNotNullChildByClass(NoteIdentifier.class);
   }
 
 }

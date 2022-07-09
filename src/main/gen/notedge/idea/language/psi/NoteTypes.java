@@ -8,6 +8,9 @@ import notedge.idea.language.psi_node.*;
 
 public interface NoteTypes {
 
+  IElementType ARGS_FUNCTION = new NElementType("ARGS_FUNCTION");
+  IElementType ARGS_TEXT = new NElementType("ARGS_TEXT");
+  IElementType ARGUMENT = new NElementType("ARGUMENT");
   IElementType BOLD = new NElementType("BOLD");
   IElementType BRACE_BLOCK = new NElementType("BRACE_BLOCK");
   IElementType BRACKET_BLOCK = new NElementType("BRACKET_BLOCK");
@@ -18,12 +21,14 @@ public interface NoteTypes {
   IElementType HEADER = new NElementType("HEADER");
   IElementType IDENTIFIER = new NElementType("IDENTIFIER");
   IElementType ITALIC = new NElementType("ITALIC");
+  IElementType KEY = new NElementType("KEY");
   IElementType NAMESPACE = new NElementType("NAMESPACE");
   IElementType STRIKE = new NElementType("STRIKE");
   IElementType STRING = new NElementType("STRING");
   IElementType STRONG = new NElementType("STRONG");
   IElementType TEXT_ELEMENTS = new NElementType("TEXT_ELEMENTS");
   IElementType UNDER = new NElementType("UNDER");
+  IElementType VALUE = new NElementType("VALUE");
   IElementType WAVE = new NElementType("WAVE");
   IElementType XML = new NElementType("XML");
   IElementType XML_CLOSE = new NElementType("XML_CLOSE");
@@ -78,7 +83,16 @@ public interface NoteTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == BOLD) {
+      if (type == ARGS_FUNCTION) {
+        return new NoteArgsFunctionNode(node);
+      }
+      else if (type == ARGS_TEXT) {
+        return new NoteArgsTextNode(node);
+      }
+      else if (type == ARGUMENT) {
+        return new NoteArgumentNode(node);
+      }
+      else if (type == BOLD) {
         return new NoteBoldNode(node);
       }
       else if (type == BRACE_BLOCK) {
@@ -108,6 +122,9 @@ public interface NoteTypes {
       else if (type == ITALIC) {
         return new NoteItalicNode(node);
       }
+      else if (type == KEY) {
+        return new NoteKeyNode(node);
+      }
       else if (type == NAMESPACE) {
         return new NoteNamespaceNode(node);
       }
@@ -125,6 +142,9 @@ public interface NoteTypes {
       }
       else if (type == UNDER) {
         return new NoteUnderNode(node);
+      }
+      else if (type == VALUE) {
+        return new NoteValueNode(node);
       }
       else if (type == WAVE) {
         return new NoteWaveNode(node);

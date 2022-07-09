@@ -5,13 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NoteFunction extends PsiElement {
-
-  @Nullable
-  NoteArgsFunction getArgsFunction();
-
-  @Nullable
-  NoteArgsText getArgsText();
+public interface NoteValue extends PsiElement {
 
   @NotNull
   NoteNamespace getNamespace();

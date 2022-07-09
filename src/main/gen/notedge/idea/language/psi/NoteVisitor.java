@@ -7,6 +7,18 @@ import com.intellij.psi.PsiElement;
 
 public class NoteVisitor extends PsiElementVisitor {
 
+  public void visitArgsFunction(@NotNull NoteArgsFunction o) {
+    visitPsiElement(o);
+  }
+
+  public void visitArgsText(@NotNull NoteArgsText o) {
+    visitPsiElement(o);
+  }
+
+  public void visitArgument(@NotNull NoteArgument o) {
+    visitPsiElement(o);
+  }
+
   public void visitBold(@NotNull NoteBold o) {
     visitPsiElement(o);
   }
@@ -47,6 +59,10 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitKey(@NotNull NoteKey o) {
+    visitPsiElement(o);
+  }
+
   public void visitNamespace(@NotNull NoteNamespace o) {
     visitPsiElement(o);
   }
@@ -68,6 +84,10 @@ public class NoteVisitor extends PsiElementVisitor {
   }
 
   public void visitUnder(@NotNull NoteUnder o) {
+    visitPsiElement(o);
+  }
+
+  public void visitValue(@NotNull NoteValue o) {
     visitPsiElement(o);
   }
 

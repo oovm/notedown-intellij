@@ -52,8 +52,9 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
                     // text
                     if (matchesEscape()) continue
                     if (matchesSymbol()) continue
-                    if (matchNamespaceDot()) continue
+                    if (matchTextDot()) continue
                     if (matchParenthesisL()) continue
+                    if (matchTextColon()) continue
                     // code
 
                     if (matchesCode2()) continue
@@ -155,7 +156,8 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         return addOffset(r)
     }
 
-    fun matchNamespaceDot(): Boolean {
+    fun matchTextDot(): Boolean {
+        assert(context == StackContext.TEXT)
         val r = DOT.matchAt(buffer, startOffset) ?: return false
         when {
             lastIs(NoteTypes.SYMBOL) -> {
@@ -166,6 +168,23 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
             }
         }
         return addOffset(r)
+    }
+
+    fun matchTextColon(): Boolean {
+        assert(context == StackContext.TEXT)
+        val r = COLON.matchAt(buffer, startOffset) ?: return false
+        when {
+            lastNonWsIs(NoteTypes.PARENTHESIS_R) -> {
+                stack.add(StackItem(NoteTypes.COLON, r, context))
+                addOffset(r)
+                restOfLine()
+            }
+            else -> {
+                stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
+                addOffset(r)
+            }
+        }
+        return true
     }
 
     fun matchParenthesisL(): Boolean {
@@ -182,6 +201,7 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
 
     fun matchParenthesisR(): Boolean {
         assert(context == StackContext.CODE)
+        context = StackContext.TEXT
         val r = PARENTHESIS_R.matchAt(buffer, startOffset) ?: return false
         stack.add(StackItem(NoteTypes.PARENTHESIS_R, r, context))
         return addOffset(r)
@@ -419,6 +439,18 @@ private fun NTokenInterpreter.lastIs(vararg token: IElementType): Boolean {
     }
     return false
 }
+
+private fun NTokenInterpreter.lastNonWsIs(vararg token: IElementType): Boolean {
+    for (item in stack.reversed()) {
+        return when {
+            item.tokenIs(TokenType.WHITE_SPACE, NoteTypes.NEW_LINE) -> continue
+            item.tokenIs(NoteTypes.BREAK_PART) -> false
+            else -> item.tokenIs(*token)
+        }
+    }
+    return false
+}
+
 
 private fun NTokenInterpreter.isStartOfLine(): Boolean {
     for (item in this.stack.reversed()) {

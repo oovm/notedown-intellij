@@ -56,7 +56,8 @@ class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
     }
 
     override fun visitFunction(o: NoteFunction) {
-        highlight(o, NotedownColor.SYS_FUNCTION)
+        highlight(o.namespace, NotedownColor.SYS_FUNCTION)
+        highlight(o.firstChild, NotedownColor.SYS_FUNCTION)
     }
 
 
