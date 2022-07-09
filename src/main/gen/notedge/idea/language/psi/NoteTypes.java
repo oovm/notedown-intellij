@@ -20,6 +20,7 @@ public interface NoteTypes {
   IElementType ITALIC = new NElementType("ITALIC");
   IElementType NAMESPACE = new NElementType("NAMESPACE");
   IElementType STRIKE = new NElementType("STRIKE");
+  IElementType STRING = new NElementType("STRING");
   IElementType STRONG = new NElementType("STRONG");
   IElementType TEXT_ELEMENTS = new NElementType("TEXT_ELEMENTS");
   IElementType UNDER = new NElementType("UNDER");
@@ -53,6 +54,7 @@ public interface NoteTypes {
   IElementType EQ = new NElementType("=");
   IElementType ESCAPE = new NElementType("\\");
   IElementType ESCAPED_CHARACTER = new NElementType("ESCAPED_CHARACTER");
+  IElementType ESCAPE_TEXT = new NElementType("ESCAPE_TEXT");
   IElementType HEADER_HASH = new NElementType("HEADER_HASH");
   IElementType ITALIC_L = new NElementType("ITALIC_L");
   IElementType ITALIC_R = new NElementType("ITALIC_R");
@@ -64,6 +66,7 @@ public interface NoteTypes {
   IElementType STAR = new NElementType("*");
   IElementType STRIKE_L = new NElementType("STRIKE_L");
   IElementType STRIKE_R = new NElementType("STRIKE_R");
+  IElementType STRING_TEXT = new NElementType("STRING_TEXT");
   IElementType STRONG_L = new NElementType("STRONG_L");
   IElementType STRONG_R = new NElementType("STRONG_R");
   IElementType SYMBOL = new NElementType("SYMBOL");
@@ -110,6 +113,9 @@ public interface NoteTypes {
       }
       else if (type == STRIKE) {
         return new NoteStrikeNode(node);
+      }
+      else if (type == STRING) {
+        return new NoteStringNode(node);
       }
       else if (type == STRONG) {
         return new NoteStrongNode(node);

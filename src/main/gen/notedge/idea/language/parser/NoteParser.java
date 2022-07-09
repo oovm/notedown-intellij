@@ -167,27 +167,38 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // CODE_S PLAIN_TEXT CODE_E
+  // CODE_S string CODE_E
   public static boolean code_block(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "code_block")) return false;
     if (!nextTokenIs(b, CODE_S)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, CODE_S, PLAIN_TEXT, CODE_E);
+    r = consumeToken(b, CODE_S);
+    r = r && string(b, l + 1);
+    r = r && consumeToken(b, CODE_E);
     exit_section_(b, m, CODE_BLOCK, r);
     return r;
   }
 
   /* ********************************************************** */
-  // CODE_L PLAIN_TEXT CODE_R
+  // CODE_L string? CODE_R
   public static boolean code_inline(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "code_inline")) return false;
     if (!nextTokenIs(b, CODE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, CODE_L, PLAIN_TEXT, CODE_R);
+    r = consumeToken(b, CODE_L);
+    r = r && code_inline_1(b, l + 1);
+    r = r && consumeToken(b, CODE_R);
     exit_section_(b, m, CODE_INLINE, r);
     return r;
+  }
+
+  // string?
+  private static boolean code_inline_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "code_inline_1")) return false;
+    string(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -356,6 +367,32 @@ public class NoteParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "strike_1")) return false;
     text_elements(b, l + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // (STRING_TEXT | ESCAPE_TEXT)+
+  public static boolean string(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "string")) return false;
+    if (!nextTokenIs(b, "<string>", ESCAPE_TEXT, STRING_TEXT)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, STRING, "<string>");
+    r = string_0(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!string_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "string", c)) break;
+    }
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // STRING_TEXT | ESCAPE_TEXT
+  private static boolean string_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "string_0")) return false;
+    boolean r;
+    r = consumeToken(b, STRING_TEXT);
+    if (!r) r = consumeToken(b, ESCAPE_TEXT);
+    return r;
   }
 
   /* ********************************************************** */

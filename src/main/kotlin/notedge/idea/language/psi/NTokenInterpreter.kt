@@ -15,7 +15,8 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         val TILDE = "_+".toRegex()
         val ESCAPE = "\\\\".toRegex()
         val SYMBOL = "[\\p{L}\\p{N}][\\p{L}_]*".toRegex()
-        val CODE_MARK = "`+".toRegex()
+        val CODE_2 = "``(?:[^`\\\\]|\\\\.)*``".toRegex()
+        val CODE_1 = "`(?:[^`\\\\]|\\\\.)*`".toRegex()
     }
 
     var stack: MutableList<StackItem> = mutableListOf()
@@ -29,7 +30,8 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
             if (matchesSymbol()) continue
             if (matchesAsterisk()) continue
             if (matchesTilde()) continue
-            if (matchesCode()) continue
+            if (matchesCode2()) continue
+            if (matchesCode1()) continue
             break
         }
         checkRest()
@@ -79,24 +81,19 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         return addOffset(r)
     }
 
-    fun matchesCode(): Boolean {
-        val r = ASTERISK.matchAt(buffer, startOffset) ?: return false
-        when (r.value.length) {
-            1 -> {
-                stack.add(StackItem(NoteTypes.CODE_L, r, context))
-            }
-            2 -> {
-                stack.add(StackItem(NoteTypes.CODE_L, r, context))
-            }
-            else -> {
-                if (isStartOfLine()) {
-                    stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
-                }
-                else {
-                    stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
-                }
-            }
-        }
+    fun matchesCode2(): Boolean {
+        val r = CODE_2.matchAt(buffer, startOffset) ?: return false
+        stack.add(StackItem(NoteTypes.CODE_L, r.range.first, r.range.first + 2, context))
+        stack.add(StackItem(NoteTypes.STRING_TEXT, r.range.first + 2, r.range.last -1, context))
+        stack.add(StackItem(NoteTypes.CODE_R, r.range.last -1, r.range.last + 1, context))
+        return addOffset(r)
+    }
+
+    fun matchesCode1(): Boolean {
+        val r = CODE_1.matchAt(buffer, startOffset) ?: return false
+        stack.add(StackItem(NoteTypes.CODE_L, r.range.first, r.range.first + 1, context))
+        stack.add(StackItem(NoteTypes.STRING_TEXT, r.range.first + 1, r.range.last, context))
+        stack.add(StackItem(NoteTypes.CODE_R, r.range.last, r.range.last + 1, context))
         return addOffset(r)
     }
 

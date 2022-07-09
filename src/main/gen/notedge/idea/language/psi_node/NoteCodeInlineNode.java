@@ -27,4 +27,10 @@ public class NoteCodeInlineNode extends NotedownASTBase implements NoteCodeInlin
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public NoteString getString() {
+    return findChildByClass(NoteString.class);
+  }
+
 }

@@ -55,6 +55,10 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitString(@NotNull NoteString o) {
+    visitPsiElement(o);
+  }
+
   public void visitStrong(@NotNull NoteStrong o) {
     visitPsiElement(o);
   }

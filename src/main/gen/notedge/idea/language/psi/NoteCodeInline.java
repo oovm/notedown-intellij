@@ -7,4 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface NoteCodeInline extends PsiElement {
 
+  @Nullable
+  NoteString getString();
+
 }
