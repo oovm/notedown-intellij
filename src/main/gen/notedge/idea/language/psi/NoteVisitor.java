@@ -19,6 +19,14 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitCodeBlock(@NotNull NoteCodeBlock o) {
+    visitPsiElement(o);
+  }
+
+  public void visitCodeInline(@NotNull NoteCodeInline o) {
+    visitPsiElement(o);
+  }
+
   public void visitEscaped(@NotNull NoteEscaped o) {
     visitPsiElement(o);
   }

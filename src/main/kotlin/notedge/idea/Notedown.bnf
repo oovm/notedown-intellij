@@ -35,6 +35,7 @@ private statement ::=
   | function
   | xml
   | text_elements
+  | code_block
   | BREAK_PART
   ;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -43,7 +44,7 @@ header ::= HEADER_HASH text_elements {
 }
 // ---------------------------------------------------------------------------------------------------------------------
 text_elements ::= text_item+;
-private text_item ::= PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | strong | under | strike | wave;
+private text_item ::= PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | strong | under | strike | wave | code_inline;
 escaped ::= ESCAPED_CHARACTER
 // ---------------------------------------------------------------------------------------------------------------------
 italic ::= ITALIC_L [text_elements] ITALIC_R // *text*
@@ -53,6 +54,10 @@ strong ::= STRONG_L [text_elements] STRONG_R // ***text***
 under  ::= UNDER_L  [text_elements] UNDER_R  // _text_
 wave   ::= WAVE_L   [text_elements] WAVE_R   // __text__
 strike ::= STRIKE_L [text_elements] STRIKE_R // ___text___
+// ---------------------------------------------------------------------------------------------------------------------
+code_inline ::= CODE_L PLAIN_TEXT CODE_R;
+// ---------------------------------------------------------------------------------------------------------------------
+code_block  ::= CODE_S PLAIN_TEXT CODE_E;
 // ---------------------------------------------------------------------------------------------------------------------
 xml ::= xml_close | xml_start xml_end
 // <name.space arg kw=arg/>

@@ -35,6 +35,12 @@ public class NoteTextElementsNode extends NotedownASTBase implements NoteTextEle
 
   @Override
   @NotNull
+  public List<NoteCodeInline> getCodeInlineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteCodeInline.class);
+  }
+
+  @Override
+  @NotNull
   public List<NoteEscaped> getEscapedList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteEscaped.class);
   }

@@ -11,11 +11,13 @@ normal text
 **bold text**
 ***normal text***
 
-~normal text~
-~~normal text~~
-~~~normal text~~~
+_normal text_
+__normal text__
+___normal text___
 
-- 22
+`code`
+
+``code``
 
 \function(arg, kw=arg): text
 

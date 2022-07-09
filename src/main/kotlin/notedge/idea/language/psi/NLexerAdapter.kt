@@ -20,6 +20,7 @@ class NLexerAdapter : LexerBase() {
             this.startOffset = startOffset
             this.endOffset = endOffset
             this.stack = NTokenInterpreter(buffer, startOffset, endOffset, initialState).interpreter()
+            this.eraseImbalance();
             this.index = 0
         }
     }
@@ -31,9 +32,18 @@ class NLexerAdapter : LexerBase() {
     override fun advance() {
         index++
     }
-
     override fun getBufferSequence(): CharSequence = buffer
     override fun getBufferEnd(): Int = endOffset
+
+    private fun eraseImbalance() {
+        print(stack)
+        for (item in stack) {
+            if (item.paired == false) {
+                item.setPlainText()
+            }
+        }
+        print(stack)
+    }
 }
 
 

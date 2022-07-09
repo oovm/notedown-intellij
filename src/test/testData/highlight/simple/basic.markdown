@@ -24,6 +24,9 @@ ___normal text___
     text
 }
 
+"\""
+
+
 <function arg kw=arg/>
 
 <function arg kw=arg>

@@ -167,6 +167,30 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // CODE_S PLAIN_TEXT CODE_E
+  public static boolean code_block(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "code_block")) return false;
+    if (!nextTokenIs(b, CODE_S)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, CODE_S, PLAIN_TEXT, CODE_E);
+    exit_section_(b, m, CODE_BLOCK, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // CODE_L PLAIN_TEXT CODE_R
+  public static boolean code_inline(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "code_inline")) return false;
+    if (!nextTokenIs(b, CODE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, CODE_L, PLAIN_TEXT, CODE_R);
+    exit_section_(b, m, CODE_INLINE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // ESCAPED_CHARACTER
   public static boolean escaped(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "escaped")) return false;
@@ -299,6 +323,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
   //   | function
   //   | xml
   //   | text_elements
+  //   | code_block
   //   | BREAK_PART
   static boolean statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement")) return false;
@@ -307,6 +332,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
     if (!r) r = function(b, l + 1);
     if (!r) r = xml(b, l + 1);
     if (!r) r = text_elements(b, l + 1);
+    if (!r) r = code_block(b, l + 1);
     if (!r) r = consumeToken(b, BREAK_PART);
     return r;
   }
@@ -370,7 +396,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | strong | under | strike | wave
+  // PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | strong | under | strike | wave | code_inline
   static boolean text_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "text_item")) return false;
     boolean r;
@@ -384,6 +410,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
     if (!r) r = under(b, l + 1);
     if (!r) r = strike(b, l + 1);
     if (!r) r = wave(b, l + 1);
+    if (!r) r = code_inline(b, l + 1);
     return r;
   }
 

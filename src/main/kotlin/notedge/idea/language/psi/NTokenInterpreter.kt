@@ -6,16 +6,16 @@ import com.intellij.psi.tree.IElementType
 @OptIn(ExperimentalStdlibApi::class)
 @Suppress("MemberVisibilityCanBePrivate")
 class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int, var context: Int) {
-    private class Ref(var value: StackItem)
     companion object {
-        private val EOL = "\\R".toRegex()
-        private val WHITE_SPACE = "[^\\S\\r\\n]+".toRegex()
-        private val NEW_LINE = "\\r\\n|\\r|\\n".toRegex()
-        private val HEADER_HASH = "#+".toRegex()
-        private val ASTERISK = "[*]+".toRegex()
-        private val TILDE = "_+".toRegex()
-        private val ESCAPE = "\\\\".toRegex()
-        private val SYMBOL = "(?U)[\\p{L}\\p{N}_][\\p{L}_]*".toRegex()
+        val EOL = "\\R".toRegex()
+        val WHITE_SPACE = "[^\\S\\r\\n]+".toRegex()
+        val NEW_LINE = "\\r\\n|\\r|\\n".toRegex()
+        val HEADER_HASH = "#+".toRegex()
+        val ASTERISK = "[*]+".toRegex()
+        val TILDE = "_+".toRegex()
+        val ESCAPE = "\\\\".toRegex()
+        val SYMBOL = "[\\p{L}\\p{N}][\\p{L}_]*".toRegex()
+        val CODE_MARK = "`+".toRegex()
     }
 
     var stack: MutableList<StackItem> = mutableListOf()
@@ -28,6 +28,8 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
             if (matchesEscape()) continue
             if (matchesSymbol()) continue
             if (matchesAsterisk()) continue
+            if (matchesTilde()) continue
+            if (matchesCode()) continue
             break
         }
         checkRest()
@@ -77,6 +79,27 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         return addOffset(r)
     }
 
+    fun matchesCode(): Boolean {
+        val r = ASTERISK.matchAt(buffer, startOffset) ?: return false
+        when (r.value.length) {
+            1 -> {
+                stack.add(StackItem(NoteTypes.CODE_L, r, context))
+            }
+            2 -> {
+                stack.add(StackItem(NoteTypes.CODE_L, r, context))
+            }
+            else -> {
+                if (isStartOfLine()) {
+                    stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
+                }
+                else {
+                    stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
+                }
+            }
+        }
+        return addOffset(r)
+    }
+
     fun matchesAsterisk(): Boolean {
         val r = ASTERISK.matchAt(buffer, startOffset) ?: return false
         when (r.value.length) {
@@ -92,90 +115,125 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         for (item in stack.asReversed()) {
             when (item.token) {
                 NoteTypes.BREAK_PART,
-                NoteTypes.ITALIC_R,
-                NoteTypes.BOLD_L, NoteTypes.BOLD_R,
-                NoteTypes.STRONG_L, NoteTypes.STRONG_R -> {
-                    stack.add(StackItem(NoteTypes.ITALIC_L, r, context))
+                NoteTypes.ITALIC_R -> {
+                    stack.add(StackItem(NoteTypes.ITALIC_L, r, context, false))
                     return
                 }
                 NoteTypes.ITALIC_L -> {
-                    stack.add(StackItem(NoteTypes.ITALIC_R, r, context))
+                    item.setPaired()
+                    stack.add(StackItem(NoteTypes.ITALIC_R, r, context, true))
                     return
                 }
                 else -> continue
             }
         }
-        stack.add(StackItem(NoteTypes.ITALIC_L, r, context))
+        stack.add(StackItem(NoteTypes.ITALIC_L, r, context, false))
     }
 
     fun matchesBold(r: MatchResult) {
         for (item in stack.asReversed()) {
             when (item.token) {
                 NoteTypes.BREAK_PART,
-                NoteTypes.ITALIC_R,
-                NoteTypes.BOLD_R,
-                NoteTypes.STRONG_L, NoteTypes.STRONG_R -> {
-                    stack.add(StackItem(NoteTypes.BOLD_L, r, context))
+                NoteTypes.BOLD_R -> {
+                    stack.add(StackItem(NoteTypes.BOLD_L, r, context, false))
                     return
                 }
                 NoteTypes.BOLD_L -> {
-                    stack.add(StackItem(NoteTypes.BOLD_R, r, context))
-                    return
-                }
-                NoteTypes.ITALIC_L -> {
-                    item.token = NoteTypes.PLAIN_TEXT
-                    stack.add(StackItem(NoteTypes.BOLD_R, r, context))
+                    item.setPaired()
+                    stack.add(StackItem(NoteTypes.BOLD_R, r, context, true))
                     return
                 }
                 else -> continue
             }
         }
-        stack.add(StackItem(NoteTypes.BOLD_L, r, context))
+        stack.add(StackItem(NoteTypes.BOLD_L, r, context, false))
     }
 
     fun matchesStrong(r: MatchResult) {
-        var doAdd = false
         for (item in stack.asReversed()) {
             when (item.token) {
                 NoteTypes.BREAK_PART,
-                NoteTypes.ITALIC_R,
-                NoteTypes.BOLD_R,
                 NoteTypes.STRONG_R -> {
-                    if (!doAdd) {
-                        doAdd = true;
-                        stack.add(StackItem(NoteTypes.STRONG_L, r, context))
-                    }
+                    stack.add(StackItem(NoteTypes.STRONG_L, r, context, false))
                     return
                 }
                 NoteTypes.STRONG_L -> {
-                    if (!doAdd) {
-                        doAdd = true;
-                        stack.add(StackItem(NoteTypes.STRONG_R, r, context))
-                    }
+                    item.setPaired()
+                    stack.add(StackItem(NoteTypes.STRONG_R, r, context, true))
                     return
-                }
-                NoteTypes.BOLD_L -> {
-                    item.token = NoteTypes.PLAIN_TEXT
-                    if (!doAdd) {
-                        doAdd = true;
-                        stack.add(StackItem(NoteTypes.STRONG_L, r, context))
-                    }
-                    return
-                }
-                NoteTypes.ITALIC_L -> {
-                    item.token = NoteTypes.PLAIN_TEXT
-                    if (!doAdd) {
-                        doAdd = true;
-                        stack.add(StackItem(NoteTypes.STRONG_L, r, context))
-                    }
-                    continue
                 }
                 else -> continue
             }
         }
-        if (!doAdd) {
-            stack.add(StackItem(NoteTypes.STRONG_L, r, context))
+        stack.add(StackItem(NoteTypes.STRONG_L, r, context))
+    }
+
+    fun matchesTilde(): Boolean {
+        val r = TILDE.matchAt(buffer, startOffset) ?: return false
+        when (r.value.length) {
+            1 -> matchUnderline(r)
+            2 -> matchWave(r)
+            3 -> matchStrike(r)
+            else -> stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
         }
+        return addOffset(r)
+    }
+
+    fun matchUnderline(r: MatchResult) {
+        for (item in stack.asReversed()) {
+            when (item.token) {
+                NoteTypes.BREAK_PART,
+                NoteTypes.UNDER_R -> {
+                    stack.add(StackItem(NoteTypes.UNDER_L, r, context, false))
+                    return
+                }
+                NoteTypes.UNDER_L -> {
+                    item.setPaired()
+                    stack.add(StackItem(NoteTypes.UNDER_R, r, context, true))
+                    return
+                }
+                else -> continue
+            }
+        }
+        stack.add(StackItem(NoteTypes.UNDER_L, r, context, false))
+    }
+
+    fun matchWave(r: MatchResult) {
+        for (item in stack.asReversed()) {
+            when (item.token) {
+                NoteTypes.BREAK_PART,
+                NoteTypes.WAVE_R -> {
+                    stack.add(StackItem(NoteTypes.WAVE_L, r, context, false))
+                    return
+                }
+                NoteTypes.WAVE_L -> {
+                    item.setPaired()
+                    stack.add(StackItem(NoteTypes.WAVE_R, r, context, true))
+                    return
+                }
+                else -> continue
+            }
+        }
+        stack.add(StackItem(NoteTypes.WAVE_L, r, context, false))
+    }
+
+    fun matchStrike(r: MatchResult) {
+        for (item in stack.asReversed()) {
+            when (item.token) {
+                NoteTypes.BREAK_PART,
+                NoteTypes.STRIKE_R -> {
+                    stack.add(StackItem(NoteTypes.STRIKE_L, r, context, false))
+                    return
+                }
+                NoteTypes.STRIKE_L -> {
+                    item.setPaired()
+                    stack.add(StackItem(NoteTypes.STRIKE_R, r, context, true))
+                    return
+                }
+                else -> continue
+            }
+        }
+        stack.add(StackItem(NoteTypes.STRIKE_L, r, context, false))
     }
 
 
@@ -195,6 +253,10 @@ private fun NTokenInterpreter.sequenceAfter(): CharSequence {
     return buffer.subSequence(startOffset, endOffset)
 }
 
+private fun NTokenInterpreter.restOfLine(): String {
+    return sequenceAfter().split(NTokenInterpreter.NEW_LINE, 1).firstOrNull() ?: ""
+}
+
 private fun NTokenInterpreter.shouldBreakParagraph(): Boolean {
     for (item in stack.reversed()) {
         return when (item.token) {
@@ -209,31 +271,18 @@ private fun NTokenInterpreter.shouldBreakParagraph(): Boolean {
     return false
 }
 
-private fun NTokenInterpreter.lastAsterisks(): MutableList<StackItem> {
-    var out = mutableListOf<StackItem>()
-    for (item in stack.asReversed()) {
-        if (item.token == NoteTypes.ITALIC_L) {
-            out.add(item)
-        }
-        else {
-            return out
-        }
-    }
-    return out
-}
-
-private fun NTokenInterpreter.eraseImbalance() {
-    for (item in stack.reversed()) {
-        when (item.isSoftLeftMark()) {
-            true -> item.token = NoteTypes.PLAIN_TEXT
-            false -> break
-            null -> continue
-        }
-    }
-}
-
-
 private fun NTokenInterpreter.lastIs(token: IElementType): Boolean = when (val last = stack.lastOrNull()) {
     null -> false
     else -> last.token == token
+}
+
+private fun NTokenInterpreter.isStartOfLine(): Boolean {
+    for (item in this.stack.reversed()) {
+        return when (item.token) {
+            NoteTypes.NEW_LINE, NoteTypes.BREAK_PART -> true
+            TokenType.WHITE_SPACE -> continue
+            else -> false
+        }
+    }
+    return true
 }

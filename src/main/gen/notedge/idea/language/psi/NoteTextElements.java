@@ -11,6 +11,9 @@ public interface NoteTextElements extends PsiElement {
   List<NoteBold> getBoldList();
 
   @NotNull
+  List<NoteCodeInline> getCodeInlineList();
+
+  @NotNull
   List<NoteEscaped> getEscapedList();
 
   @NotNull

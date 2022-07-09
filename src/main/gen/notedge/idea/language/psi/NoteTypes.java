@@ -11,6 +11,8 @@ public interface NoteTypes {
   IElementType BOLD = new NElementType("BOLD");
   IElementType BRACE_BLOCK = new NElementType("BRACE_BLOCK");
   IElementType BRACKET_BLOCK = new NElementType("BRACKET_BLOCK");
+  IElementType CODE_BLOCK = new NElementType("CODE_BLOCK");
+  IElementType CODE_INLINE = new NElementType("CODE_INLINE");
   IElementType ESCAPED = new NElementType("ESCAPED");
   IElementType FUNCTION = new NElementType("FUNCTION");
   IElementType HEADER = new NElementType("HEADER");
@@ -40,6 +42,10 @@ public interface NoteTypes {
   IElementType BRACKET_L = new NElementType("BRACKET_L");
   IElementType BRACKET_R = new NElementType("BRACKET_R");
   IElementType BREAK_PART = new NElementType("BREAK_PART");
+  IElementType CODE_E = new NElementType("CODE_E");
+  IElementType CODE_L = new NElementType("CODE_L");
+  IElementType CODE_R = new NElementType("CODE_R");
+  IElementType CODE_S = new NElementType("CODE_S");
   IElementType COLON = new NElementType(":");
   IElementType COMMA = new NElementType(",");
   IElementType DOLLAR = new NElementType("$");
@@ -77,6 +83,12 @@ public interface NoteTypes {
       }
       else if (type == BRACKET_BLOCK) {
         return new NoteBracketBlockNode(node);
+      }
+      else if (type == CODE_BLOCK) {
+        return new NoteCodeBlockNode(node);
+      }
+      else if (type == CODE_INLINE) {
+        return new NoteCodeInlineNode(node);
       }
       else if (type == ESCAPED) {
         return new NoteEscapedNode(node);
