@@ -51,9 +51,9 @@ code
 ### XML
 
 <function arg kw=arg>
-text
-<function arg kw=arg/>
-text
+    text
+    <function arg kw=arg/>
+    text
 </function>
 
 ### Block

@@ -27,11 +27,11 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitBraceBlock(@NotNull NoteBraceBlock o) {
+  public void visitBrace(@NotNull NoteBrace o) {
     visitPsiElement(o);
   }
 
-  public void visitBracketBlock(@NotNull NoteBracketBlock o) {
+  public void visitBracket(@NotNull NoteBracket o) {
     visitPsiElement(o);
   }
 

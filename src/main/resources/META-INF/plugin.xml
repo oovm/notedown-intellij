@@ -55,11 +55,11 @@
 
 		<lang.braceMatcher
 			language="Notedown"
-			implementationClass="notedge.idea.ide.matcher.JssBraceMatcher"
+			implementationClass="notedge.idea.ide.matcher.BraceMatcher"
 		/>
 		<lang.quoteHandler
 			language="Notedown"
-			implementationClass="notedge.idea.ide.matcher.JssQuoteHandler"
+			implementationClass="notedge.idea.ide.matcher.QuoteHandler"
 		/>
 		<lang.foldingBuilder
 			language="Notedown"
@@ -77,7 +77,7 @@
 			implementationClass="notedge.idea.ide.completion.VomlOptionCompletionContributor"
 		/>
 
-		<annotator language="Notedown" implementationClass="notedge.idea.ide.annotator.LiteralChecker"/>
+		<annotator language="Notedown" implementationClass="notedge.idea.ide.annotator.SnippetAnnotator"/>
 
 		<langCodeStyleSettingsProvider
 			implementation="notedge.idea.ide.codeStyle.NLanguageCodeStyleSettingsProvider"

@@ -29,8 +29,8 @@ public class NoteListNode extends NotedownASTBase implements NoteList {
 
   @Override
   @NotNull
-  public NoteBracketBlock getBracketBlock() {
-    return findNotNullChildByClass(NoteBracketBlock.class);
+  public NoteBracket getBracket() {
+    return findNotNullChildByClass(NoteBracket.class);
   }
 
 }

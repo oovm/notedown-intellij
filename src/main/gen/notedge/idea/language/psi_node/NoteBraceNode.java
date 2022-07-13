@@ -11,14 +11,14 @@ import static notedge.idea.language.psi.NoteTypes.*;
 import notedge.idea.language.ast.NotedownASTBase;
 import notedge.idea.language.psi.*;
 
-public class NoteBraceBlockNode extends NotedownASTBase implements NoteBraceBlock {
+public class NoteBraceNode extends NotedownASTBase implements NoteBrace {
 
-  public NoteBraceBlockNode(@NotNull ASTNode node) {
+  public NoteBraceNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NoteVisitor visitor) {
-    visitor.visitBraceBlock(this);
+    visitor.visitBrace(this);
   }
 
   @Override

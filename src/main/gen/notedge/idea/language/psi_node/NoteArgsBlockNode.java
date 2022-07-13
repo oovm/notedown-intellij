@@ -29,8 +29,8 @@ public class NoteArgsBlockNode extends NotedownASTBase implements NoteArgsBlock 
 
   @Override
   @NotNull
-  public NoteBraceBlock getBraceBlock() {
-    return findNotNullChildByClass(NoteBraceBlock.class);
+  public NoteBrace getBrace() {
+    return findNotNullChildByClass(NoteBrace.class);
   }
 
 }

@@ -52,11 +52,11 @@ class FormatBlock(
     private fun computeIndent(child: ASTNode): Indent? {
         val isCornerChild = node.firstChildNode == child || node.lastChildNode == child
         return when (node.elementType) {
-            NoteTypes.BRACKET_BLOCK -> when {
+            NoteTypes.PARENTHESIS, NoteTypes.BRACKET -> when {
                 isCornerChild -> Indent.getNoneIndent()
                 else -> Indent.getNormalIndent()
             }
-            NoteTypes.PARENTHESIS -> when {
+            NoteTypes.XML_FUNCTION -> when {
                 isCornerChild -> Indent.getNoneIndent()
                 else -> Indent.getNormalIndent()
             }

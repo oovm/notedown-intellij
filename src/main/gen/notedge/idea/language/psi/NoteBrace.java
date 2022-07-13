@@ -5,9 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NoteCodeBlock extends PsiElement {
-
-  @NotNull
-  NoteString getString();
+public interface NoteBrace extends PsiElement {
 
 }

@@ -13,8 +13,8 @@ public interface NoteTypes {
   IElementType ARGS_TEXT = new NElementType("ARGS_TEXT");
   IElementType ARGUMENT = new NElementType("ARGUMENT");
   IElementType BOLD = new NElementType("BOLD");
-  IElementType BRACE_BLOCK = new NElementType("BRACE_BLOCK");
-  IElementType BRACKET_BLOCK = new NElementType("BRACKET_BLOCK");
+  IElementType BRACE = new NElementType("BRACE");
+  IElementType BRACKET = new NElementType("BRACKET");
   IElementType ESCAPED = new NElementType("ESCAPED");
   IElementType FUNCTION = new NElementType("FUNCTION");
   IElementType HEADER = new NElementType("HEADER");
@@ -101,11 +101,11 @@ public interface NoteTypes {
       else if (type == BOLD) {
         return new NoteBoldNode(node);
       }
-      else if (type == BRACE_BLOCK) {
-        return new NoteBraceBlockNode(node);
+      else if (type == BRACE) {
+        return new NoteBraceNode(node);
       }
-      else if (type == BRACKET_BLOCK) {
-        return new NoteBracketBlockNode(node);
+      else if (type == BRACKET) {
+        return new NoteBracketNode(node);
       }
       else if (type == ESCAPED) {
         return new NoteEscapedNode(node);

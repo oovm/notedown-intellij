@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface NoteArgsBlock extends PsiElement {
 
   @NotNull
-  NoteBraceBlock getBraceBlock();
+  NoteBrace getBrace();
 
 }

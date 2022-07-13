@@ -9,7 +9,7 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import notedge.idea.language.psi.NParserDefinition
 
-class BaseBraceMatcher : PairedBraceMatcher {
+class BraceMatcherBase : PairedBraceMatcher {
     override fun getPairs(): Array<BracePair> = PAIRS
 
     override fun isPairedBracesAllowedBeforeType(lbraceType: IElementType, next: IElementType?): Boolean {
