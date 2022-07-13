@@ -28,6 +28,36 @@ public class NoteXmlNode extends NotedownASTBase implements NoteXml {
   }
 
   @Override
+  @NotNull
+  public List<NoteCodeBlock> getCodeBlockList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteCodeBlock.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NoteFunction> getFunctionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteFunction.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NoteHeader> getHeaderList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteHeader.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NoteTextElements> getTextElementsList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteTextElements.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NoteXml> getXmlList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteXml.class);
+  }
+
+  @Override
   @Nullable
   public NoteXmlClose getXmlClose() {
     return findChildByClass(NoteXmlClose.class);

@@ -29,6 +29,12 @@ public class NoteXmlEndNode extends NotedownASTBase implements NoteXmlEnd {
 
   @Override
   @NotNull
+  public List<NoteArgument> getArgumentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteArgument.class);
+  }
+
+  @Override
+  @NotNull
   public NoteNamespace getNamespace() {
     return findNotNullChildByClass(NoteNamespace.class);
   }

@@ -63,19 +63,16 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
                     if (matchesSymbol()) continue
                     if (matchTextDot()) continue
                     if (matchParenthesisL()) continue
-                    if (matchAngleL()) continue
                     if (matchAngleSL()) continue
+                    if (matchAngleL()) continue
 //                    if (matchBraceL()) continue
                     if (matchTextColon()) continue
                     // code
                     if (matchesCodeN()) continue
-//                    if (matchesCode2()) continue
-//                    if (matchesCode1()) continue
-//                    if (matchesCode3()) continue
                     // style
                     if (matchesAsterisk()) continue
                     if (matchesTilde()) continue
-                    // if (finalCatchText()) continue
+                    if (finalCatchText()) continue
                 }
                 StackContext.CODE -> {
                     if (matchesSymbol()) continue
@@ -83,7 +80,9 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
                     if (matchParenthesisL()) continue
                     if (matchParenthesisR()) continue
                     if (matchAngleL()) continue
+                    if (matchAngleR()) continue
                     if (matchAngleSL()) continue
+                    if (matchAngleSR()) continue
                 }
                 StackContext.STRING -> {}
             }
@@ -266,12 +265,20 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         return addOffset(r)
     }
 
+    private fun matchAngleSR(): Boolean {
+        assert(context == StackContext.CODE)
+        val r = ANGLE_SR.matchAt(buffer, startOffset) ?: return false
+        stack.add(StackItem(NoteTypes.ANGLE_SR, r, context))
+        context = StackContext.TEXT
+        return addOffset(r)
+    }
+
     private fun matchesCodeN(): Boolean {
         val code1 = "([`｀])((?:[^\\\\`｀]|\\\\.)*)(\\1)".toRegex()
         val code3 = "([`｀]{3,})(.*?)(\\1)".toRegex()
-        var r = code3.matchAt(buffer, startOffset);
+        var r = code3.matchAt(buffer, startOffset)
         if (r == null) {
-            r = code1.matchAt(buffer, startOffset);
+            r = code1.matchAt(buffer, startOffset)
         }
         if (r == null) return false
         addCodeGroup(r)
@@ -416,7 +423,7 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
     }
 
     private fun finalCatchText(): Boolean {
-        val final = "[^\\\\＼$＄\\S\\r\\n_＿]+".toRegex()
+        val final = "[^\\\\＼$＄\\r\\n_＿]+".toRegex()
         val r = final.matchAt(buffer, startOffset) ?: return false
         stack.add(StackItem(NoteTypes.PLAIN_TEXT, r, context))
         return addOffset(r)
@@ -435,14 +442,14 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
     }
 }
 
-fun NTokenInterpreter.appendWSROL(token: IElementType) {
+private fun NTokenInterpreter.appendWSROL(token: IElementType) {
     val r = WS_ROL.matchAt(buffer, startOffset) ?: return
     r.groups[1]?.let { stack.add(StackItem(WHITE_SPACE, it, context)) }
     r.groups[2]?.let { stack.add(StackItem(token, it, context)) }
     addOffset(r)
 }
 
-fun NTokenInterpreter.appendROL(token: IElementType) {
+private fun NTokenInterpreter.appendROL(token: IElementType) {
     val r = ROL.matchAt(buffer, startOffset) ?: return
     stack.add(StackItem(token, r, context))
     addOffset(r)

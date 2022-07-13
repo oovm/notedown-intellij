@@ -7,6 +7,21 @@ import com.intellij.psi.PsiElement;
 
 public interface NoteXml extends PsiElement {
 
+  @NotNull
+  List<NoteCodeBlock> getCodeBlockList();
+
+  @NotNull
+  List<NoteFunction> getFunctionList();
+
+  @NotNull
+  List<NoteHeader> getHeaderList();
+
+  @NotNull
+  List<NoteTextElements> getTextElementsList();
+
+  @NotNull
+  List<NoteXml> getXmlList();
+
   @Nullable
   NoteXmlClose getXmlClose();
 

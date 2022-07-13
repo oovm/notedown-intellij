@@ -701,7 +701,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // xml_close | xml_start xml_end
+  // xml_close | xml_start statement* xml_end
   public static boolean xml(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "xml")) return false;
     if (!nextTokenIs(b, ANGLE_L)) return false;
@@ -713,19 +713,31 @@ public class NoteParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // xml_start xml_end
+  // xml_start statement* xml_end
   private static boolean xml_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "xml_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = xml_start(b, l + 1);
+    r = r && xml_1_1(b, l + 1);
     r = r && xml_end(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
+  // statement*
+  private static boolean xml_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml_1_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!statement(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "xml_1_1", c)) break;
+    }
+    return true;
+  }
+
   /* ********************************************************** */
-  // ANGLE_L  namespace ANGLE_SR
+  // ANGLE_L  namespace argument* ANGLE_SR
   public static boolean xml_close(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "xml_close")) return false;
     if (!nextTokenIs(b, ANGLE_L)) return false;
@@ -733,13 +745,25 @@ public class NoteParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, ANGLE_L);
     r = r && namespace(b, l + 1);
+    r = r && xml_close_2(b, l + 1);
     r = r && consumeToken(b, ANGLE_SR);
     exit_section_(b, m, XML_CLOSE, r);
     return r;
   }
 
+  // argument*
+  private static boolean xml_close_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml_close_2")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!argument(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "xml_close_2", c)) break;
+    }
+    return true;
+  }
+
   /* ********************************************************** */
-  // ANGLE_SL namespace ANGLE_R
+  // ANGLE_SL namespace argument* ANGLE_R
   public static boolean xml_end(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "xml_end")) return false;
     if (!nextTokenIs(b, ANGLE_SL)) return false;
@@ -747,13 +771,25 @@ public class NoteParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, ANGLE_SL);
     r = r && namespace(b, l + 1);
+    r = r && xml_end_2(b, l + 1);
     r = r && consumeToken(b, ANGLE_R);
     exit_section_(b, m, XML_END, r);
     return r;
   }
 
+  // argument*
+  private static boolean xml_end_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml_end_2")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!argument(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "xml_end_2", c)) break;
+    }
+    return true;
+  }
+
   /* ********************************************************** */
-  // ANGLE_L  namespace ANGLE_R
+  // ANGLE_L  namespace argument* ANGLE_R
   public static boolean xml_start(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "xml_start")) return false;
     if (!nextTokenIs(b, ANGLE_L)) return false;
@@ -761,9 +797,21 @@ public class NoteParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, ANGLE_L);
     r = r && namespace(b, l + 1);
+    r = r && xml_start_2(b, l + 1);
     r = r && consumeToken(b, ANGLE_R);
     exit_section_(b, m, XML_START, r);
     return r;
+  }
+
+  // argument*
+  private static boolean xml_start_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml_start_2")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!argument(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "xml_start_2", c)) break;
+    }
+    return true;
   }
 
   static final Parser COMMA_parser_ = (b, l) -> consumeToken(b, COMMA);

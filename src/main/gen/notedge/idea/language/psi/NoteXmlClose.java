@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface NoteXmlClose extends PsiElement {
 
   @NotNull
+  List<NoteArgument> getArgumentList();
+
+  @NotNull
   NoteNamespace getNamespace();
 
 }

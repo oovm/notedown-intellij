@@ -17,6 +17,10 @@ _normal text_
 __normal text__
 ___normal text___
 
+~normal text~
+~~normal text~~
+~~~normal text~~~
+
 # code
 
 `code\``

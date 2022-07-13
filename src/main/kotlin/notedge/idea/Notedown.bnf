@@ -65,10 +65,10 @@ code_block  ::= CODE_S string CODE_E;
 // ---------------------------------------------------------------------------------------------------------------------
 string ::= (STRING_TEXT | ESCAPE_TEXT)+;
 // ---------------------------------------------------------------------------------------------------------------------
-xml ::= xml_close | xml_start xml_end
-xml_close ::= ANGLE_L  namespace ANGLE_SR  // <name.space arg kw=arg/>
-xml_start ::= ANGLE_L  namespace ANGLE_R   // <name.space arg kw=arg>
-xml_end   ::= ANGLE_SL namespace ANGLE_R   // </name.space>
+xml ::= xml_close | xml_start statement* xml_end
+xml_close ::= ANGLE_L  namespace argument* ANGLE_SR  // <name.space arg kw=arg/>
+xml_start ::= ANGLE_L  namespace argument* ANGLE_R   // <name.space arg kw=arg>
+xml_end   ::= ANGLE_SL namespace argument* ANGLE_R   // </name.space>
 // ---------------------------------------------------------------------------------------------------------------------
 // \name.space
 function ::= ESCAPE namespace [args_function] [args_text|args_block] {
