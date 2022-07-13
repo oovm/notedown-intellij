@@ -11,14 +11,14 @@ import static notedge.idea.language.psi.NoteTypes.*;
 import notedge.idea.language.ast.NotedownASTBase;
 import notedge.idea.language.psi.*;
 
-public class NoteXmlNode extends NotedownASTBase implements NoteXml {
+public class NoteXmlFunctionNode extends NotedownASTBase implements NoteXmlFunction {
 
-  public NoteXmlNode(@NotNull ASTNode node) {
+  public NoteXmlFunctionNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NoteVisitor visitor) {
-    visitor.visitXml(this);
+    visitor.visitXmlFunction(this);
   }
 
   @Override
@@ -35,12 +35,6 @@ public class NoteXmlNode extends NotedownASTBase implements NoteXml {
 
   @Override
   @NotNull
-  public List<NoteFunction> getFunctionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteFunction.class);
-  }
-
-  @Override
-  @NotNull
   public List<NoteHeader> getHeaderList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteHeader.class);
   }
@@ -53,26 +47,14 @@ public class NoteXmlNode extends NotedownASTBase implements NoteXml {
 
   @Override
   @NotNull
-  public List<NoteXml> getXmlList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteXml.class);
-  }
-
-  @Override
-  @Nullable
-  public NoteXmlClose getXmlClose() {
-    return findChildByClass(NoteXmlClose.class);
-  }
-
-  @Override
-  @Nullable
   public NoteXmlEnd getXmlEnd() {
-    return findChildByClass(NoteXmlEnd.class);
+    return findNotNullChildByClass(NoteXmlEnd.class);
   }
 
   @Override
-  @Nullable
+  @NotNull
   public NoteXmlStart getXmlStart() {
-    return findChildByClass(NoteXmlStart.class);
+    return findNotNullChildByClass(NoteXmlStart.class);
   }
 
 }

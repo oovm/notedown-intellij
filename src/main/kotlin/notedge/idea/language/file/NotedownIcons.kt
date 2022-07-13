@@ -6,4 +6,5 @@ import com.intellij.openapi.util.IconLoader
 object NotedownIcons {
     val FILE = IconLoader.getIcon("/icons/jssIcon.svg", NotedownIcons::class.java)
     val HEADER = AllIcons.General.MoreTabs
+    val TEXT = IconLoader.getIcon("/icons/textArea.svg", NotedownIcons::class.java)
 }

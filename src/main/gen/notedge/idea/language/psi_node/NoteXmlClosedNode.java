@@ -11,14 +11,14 @@ import static notedge.idea.language.psi.NoteTypes.*;
 import notedge.idea.language.ast.NotedownASTBase;
 import notedge.idea.language.psi.*;
 
-public class NoteXmlCloseNode extends NotedownASTBase implements NoteXmlClose {
+public class NoteXmlClosedNode extends NotedownASTBase implements NoteXmlClosed {
 
-  public NoteXmlCloseNode(@NotNull ASTNode node) {
+  public NoteXmlClosedNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NoteVisitor visitor) {
-    visitor.visitXmlClose(this);
+    visitor.visitXmlClosed(this);
   }
 
   @Override

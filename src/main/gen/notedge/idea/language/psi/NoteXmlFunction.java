@@ -5,13 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NoteXml extends PsiElement {
+public interface NoteXmlFunction extends PsiElement {
 
   @NotNull
   List<NoteCodeBlock> getCodeBlockList();
-
-  @NotNull
-  List<NoteFunction> getFunctionList();
 
   @NotNull
   List<NoteHeader> getHeaderList();
@@ -20,15 +17,9 @@ public interface NoteXml extends PsiElement {
   List<NoteTextElements> getTextElementsList();
 
   @NotNull
-  List<NoteXml> getXmlList();
-
-  @Nullable
-  NoteXmlClose getXmlClose();
-
-  @Nullable
   NoteXmlEnd getXmlEnd();
 
-  @Nullable
+  @NotNull
   NoteXmlStart getXmlStart();
 
 }

@@ -60,6 +60,18 @@ class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
         highlight(o.firstChild, NotedownColor.SYM_FUNCTION)
     }
 
+    override fun visitXmlClosed(o: NoteXmlClosed) {
+        highlight(o.namespace, NotedownColor.SYM_CLASS)
+    }
+
+    override fun visitXmlStart(o: NoteXmlStart) {
+        highlight(o.namespace, NotedownColor.SYM_CLASS)
+    }
+
+    override fun visitXmlEnd(o: NoteXmlEnd) {
+        highlight(o.namespace, NotedownColor.SYM_CLASS)
+    }
+
     override fun visitArgument(o: NoteArgument) {
         o.key?.let { highlight(it, NotedownColor.SYM_ARGUMENT) }
         highlight(o.value.namespace, NotedownColor.SYM_VARIABLE)

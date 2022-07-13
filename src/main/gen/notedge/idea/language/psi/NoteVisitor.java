@@ -107,15 +107,15 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitXml(@NotNull NoteXml o) {
-    visitPsiElement(o);
-  }
-
-  public void visitXmlClose(@NotNull NoteXmlClose o) {
+  public void visitXmlClosed(@NotNull NoteXmlClosed o) {
     visitPsiElement(o);
   }
 
   public void visitXmlEnd(@NotNull NoteXmlEnd o) {
+    visitPsiElement(o);
+  }
+
+  public void visitXmlFunction(@NotNull NoteXmlFunction o) {
     visitPsiElement(o);
   }
 

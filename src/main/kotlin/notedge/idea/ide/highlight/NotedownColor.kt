@@ -19,8 +19,9 @@ enum class NotedownColor(
 ) {
     // 特殊关键词
     KEYWORD(OptionsBundle.messagePointer("options.language.defaults.keyword"), Default.KEYWORD),
-    SYM_VARIABLE(NotedownBundle.messagePointer("color.token.symbol.function"), Default.GLOBAL_VARIABLE),
+    SYM_VARIABLE(NotedownBundle.messagePointer("color.token.symbol.function"), Default.CONSTANT),
     SYM_FUNCTION(NotedownBundle.messagePointer("color.token.symbol.function"), Default.STATIC_METHOD),
+    SYM_CLASS(NotedownBundle.messagePointer("color.token.symbol.class"), Default.CLASS_NAME),
     SYM_ARGUMENT(NotedownBundle.messagePointer("color.token.symbol.function"), Default.PARAMETER),
 
     // 字面量
@@ -67,6 +68,7 @@ enum class NotedownColor(
     COMMA(OptionsBundle.messagePointer("options.language.defaults.comma"), Default.COMMA),
     SET(NotedownBundle.messagePointer("color.token.set"), Default.OPERATION_SIGN),
     SEMICOLON(OptionsBundle.messagePointer("options.language.defaults.semicolon"), Default.SEMICOLON),
+    ESCAPE(NotedownBundle.messagePointer("color.token.escape"), Default.METADATA),
 
     // 注释
     LINE_COMMENT(OptionsBundle.messagePointer("options.language.defaults.line.comment"), Default.LINE_COMMENT),

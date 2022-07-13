@@ -33,9 +33,9 @@ public interface NoteTypes {
   IElementType UNDER = new NElementType("UNDER");
   IElementType VALUE = new NElementType("VALUE");
   IElementType WAVE = new NElementType("WAVE");
-  IElementType XML = new NElementType("XML");
-  IElementType XML_CLOSE = new NElementType("XML_CLOSE");
+  IElementType XML_CLOSED = new NElementType("XML_CLOSED");
   IElementType XML_END = new NElementType("XML_END");
+  IElementType XML_FUNCTION = new NElementType("XML_FUNCTION");
   IElementType XML_START = new NElementType("XML_START");
 
   IElementType ACCENT = new NElementType("^");
@@ -163,14 +163,14 @@ public interface NoteTypes {
       else if (type == WAVE) {
         return new NoteWaveNode(node);
       }
-      else if (type == XML) {
-        return new NoteXmlNode(node);
-      }
-      else if (type == XML_CLOSE) {
-        return new NoteXmlCloseNode(node);
+      else if (type == XML_CLOSED) {
+        return new NoteXmlClosedNode(node);
       }
       else if (type == XML_END) {
         return new NoteXmlEndNode(node);
+      }
+      else if (type == XML_FUNCTION) {
+        return new NoteXmlFunctionNode(node);
       }
       else if (type == XML_START) {
         return new NoteXmlStartNode(node);

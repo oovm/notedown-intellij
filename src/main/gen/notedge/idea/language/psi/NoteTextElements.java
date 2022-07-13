@@ -14,6 +14,9 @@ public interface NoteTextElements extends PsiElement {
   List<NoteEscaped> getEscapedList();
 
   @NotNull
+  List<NoteFunction> getFunctionList();
+
+  @NotNull
   List<NoteItalic> getItalicList();
 
   @NotNull
@@ -33,5 +36,11 @@ public interface NoteTextElements extends PsiElement {
 
   @NotNull
   List<NoteWave> getWaveList();
+
+  @NotNull
+  List<NoteXmlClosed> getXmlClosedList();
+
+  @NotNull
+  List<NoteXmlFunction> getXmlFunctionList();
 
 }

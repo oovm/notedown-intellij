@@ -40,6 +40,8 @@ class NTokenHighlighter : SyntaxHighlighterBase() {
             UNDER_L, UNDER_R -> Color.UNDERLINE_MARK
             WAVE_L, WAVE_R -> Color.WAVE_MARK
             STRIKE_L, STRIKE_R -> Color.STRIKE_MARK
+            ANGLE_L, ANGLE_R, ANGLE_SL, ANGLE_SR -> Color.ESCAPE
+
             // atom
 //            INTEGER -> JssColor.INTEGER
 //            DECIMAL -> JssColor.DECIMAL
