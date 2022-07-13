@@ -15,7 +15,7 @@ object HeaderFilter : Filter {
     override fun getPresentation(): ActionPresentation = object : ActionPresentation {
         override fun getText(): String = NotedownBundle.message(name)
         override fun getDescription(): String = ""
-        override fun getIcon(): Icon = NotedownIcons.HEADER
+        override fun getIcon(): Icon = NotedownIcons.HEADER1
     }
     override fun isVisible(treeNode: TreeElement?): Boolean {
         if (treeNode !is NStructureViewElement) return false

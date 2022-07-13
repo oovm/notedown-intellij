@@ -41,19 +41,19 @@ code
 
 \title: note
 
-\function.name(arg, kw = arg): text
+\module.name(arg, kw = arg): text
 
 \function(
-arg,
-kw = arg,
+    arg,
+    kw = arg,
 )
 
 ### XML
 
 <function arg kw = arg>
-text
-<function arg kw = arg/>
-text
+    text
+    <function arg kw = arg/>
+    text
 </function>
 
 ### Block

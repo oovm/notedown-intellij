@@ -15,10 +15,13 @@ abstract class ViewNode(node: ASTNode) : NotedownASTBase(node),
     abstract override fun getIcon(flags: Int): Icon;
     abstract override fun getNavigationElement(): PsiElement;
     override fun getName(): String = navigationElement.text
-    open fun getDetailText(): String? = null
+    override fun getUserDataString(): String = ""
     override fun getTextOffset(): Int = navigationElement.textRange.startOffset
     override fun getPresentation(): ItemPresentation {
-        return NItemPresentation(getIcon(0), name, getDetailText())
+        return when (userDataString) {
+            "" -> NItemPresentation(getIcon(0), name, null)
+            else -> NItemPresentation(getIcon(0), name, userDataString)
+        }
     }
     open fun getChildrenView(): Array<NStructureViewElement> = arrayOf()
 

@@ -21,7 +21,7 @@ abstract class MixinTextElements(node: ASTNode) : ViewNode(node), NoteTextElemen
     }
     override fun getPresentation(): ItemPresentation {
         if (children.count()!=1) {
-            return NItemPresentation(getIcon(0), "Paragraph")
+            return NItemPresentation(getIcon(0), null, this.text)
         }
         val child = children[0]
         if (child is NoteFunctionNode) {
