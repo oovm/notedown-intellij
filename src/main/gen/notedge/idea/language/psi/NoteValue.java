@@ -7,7 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface NoteValue extends PsiElement {
 
-  @NotNull
+  @Nullable
+  NoteList getList();
+
+  @Nullable
   NoteNamespace getNamespace();
 
 }

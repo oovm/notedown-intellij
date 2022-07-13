@@ -29,12 +29,6 @@ public class NoteXmlFunctionNode extends NotedownASTBase implements NoteXmlFunct
 
   @Override
   @NotNull
-  public List<NoteCodeBlock> getCodeBlockList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteCodeBlock.class);
-  }
-
-  @Override
-  @NotNull
   public List<NoteHeader> getHeaderList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteHeader.class);
   }

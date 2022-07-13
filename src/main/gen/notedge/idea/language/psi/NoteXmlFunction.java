@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface NoteXmlFunction extends PsiElement {
 
   @NotNull
-  List<NoteCodeBlock> getCodeBlockList();
-
-  @NotNull
   List<NoteHeader> getHeaderList();
 
   @NotNull

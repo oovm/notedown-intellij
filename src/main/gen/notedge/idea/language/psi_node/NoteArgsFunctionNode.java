@@ -29,8 +29,8 @@ public class NoteArgsFunctionNode extends NotedownASTBase implements NoteArgsFun
 
   @Override
   @NotNull
-  public List<NoteArgument> getArgumentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteArgument.class);
+  public NoteParenthesis getParenthesis() {
+    return findNotNullChildByClass(NoteParenthesis.class);
   }
 
 }

@@ -15,7 +15,6 @@ public interface NoteTypes {
   IElementType BOLD = new NElementType("BOLD");
   IElementType BRACE_BLOCK = new NElementType("BRACE_BLOCK");
   IElementType BRACKET_BLOCK = new NElementType("BRACKET_BLOCK");
-  IElementType CODE_BLOCK = new NElementType("CODE_BLOCK");
   IElementType ESCAPED = new NElementType("ESCAPED");
   IElementType FUNCTION = new NElementType("FUNCTION");
   IElementType HEADER = new NElementType("HEADER");
@@ -25,6 +24,7 @@ public interface NoteTypes {
   IElementType LIST = new NElementType("LIST");
   IElementType MATH = new NElementType("MATH");
   IElementType NAMESPACE = new NElementType("NAMESPACE");
+  IElementType PARENTHESIS = new NElementType("PARENTHESIS");
   IElementType SNIPPET = new NElementType("SNIPPET");
   IElementType STRIKE = new NElementType("STRIKE");
   IElementType STRING = new NElementType("STRING");
@@ -51,10 +51,8 @@ public interface NoteTypes {
   IElementType BRACKET_L = new NElementType("BRACKET_L");
   IElementType BRACKET_R = new NElementType("BRACKET_R");
   IElementType BREAK_PART = new NElementType("BREAK_PART");
-  IElementType CODE_E = new NElementType("CODE_E");
   IElementType CODE_L = new NElementType("CODE_L");
   IElementType CODE_R = new NElementType("CODE_R");
-  IElementType CODE_S = new NElementType("CODE_S");
   IElementType COLON = new NElementType(":");
   IElementType COMMA = new NElementType(",");
   IElementType DOLLAR = new NElementType("$");
@@ -109,9 +107,6 @@ public interface NoteTypes {
       else if (type == BRACKET_BLOCK) {
         return new NoteBracketBlockNode(node);
       }
-      else if (type == CODE_BLOCK) {
-        return new NoteCodeBlockNode(node);
-      }
       else if (type == ESCAPED) {
         return new NoteEscapedNode(node);
       }
@@ -138,6 +133,9 @@ public interface NoteTypes {
       }
       else if (type == NAMESPACE) {
         return new NoteNamespaceNode(node);
+      }
+      else if (type == PARENTHESIS) {
+        return new NoteParenthesisNode(node);
       }
       else if (type == SNIPPET) {
         return new NoteSnippetNode(node);

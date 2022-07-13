@@ -95,12 +95,12 @@ public class NoteParser implements PsiParser, LightPsiParser {
   // [key (EQ|COLON)] value
   public static boolean argument(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "argument")) return false;
-    if (!nextTokenIs(b, SYMBOL)) return false;
+    if (!nextTokenIs(b, "<argument>", BRACKET_L, SYMBOL)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, ARGUMENT, "<argument>");
     r = argument_0(b, l + 1);
     r = r && value(b, l + 1);
-    exit_section_(b, m, ARGUMENT, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -237,20 +237,6 @@ public class NoteParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "bracket_block_1_0_2")) return false;
     _sp.parse(b, l);
     return true;
-  }
-
-  /* ********************************************************** */
-  // CODE_S string CODE_E
-  public static boolean code_block(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "code_block")) return false;
-    if (!nextTokenIs(b, CODE_S)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, CODE_S);
-    r = r && string(b, l + 1);
-    r = r && consumeToken(b, CODE_E);
-    exit_section_(b, m, CODE_BLOCK, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -431,7 +417,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] PARENTHESIS_R
-  static boolean parenthesis(PsiBuilder b, int l, Parser _item, Parser _sp) {
+  public static boolean parenthesis(PsiBuilder b, int l, Parser _item, Parser _sp) {
     if (!recursion_guard_(b, l, "parenthesis")) return false;
     if (!nextTokenIs(b, PARENTHESIS_L)) return false;
     boolean r;
@@ -439,7 +425,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, PARENTHESIS_L);
     r = r && parenthesis_1(b, l + 1, _item, _sp);
     r = r && consumeToken(b, PARENTHESIS_R);
-    exit_section_(b, m, null, r);
+    exit_section_(b, m, PARENTHESIS, r);
     return r;
   }
 
@@ -515,14 +501,12 @@ public class NoteParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // header
   //   | text_elements
-  //   | code_block
   //   | BREAK_PART
   static boolean statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement")) return false;
     boolean r;
     r = header(b, l + 1);
     if (!r) r = text_elements(b, l + 1);
-    if (!r) r = code_block(b, l + 1);
     if (!r) r = consumeToken(b, BREAK_PART);
     return r;
   }
@@ -661,14 +645,15 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // namespace
+  // namespace | list
   public static boolean value(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "value")) return false;
-    if (!nextTokenIs(b, SYMBOL)) return false;
+    if (!nextTokenIs(b, "<value>", BRACKET_L, SYMBOL)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, VALUE, "<value>");
     r = namespace(b, l + 1);
-    exit_section_(b, m, VALUE, r);
+    if (!r) r = list(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 

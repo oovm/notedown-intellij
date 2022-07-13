@@ -33,7 +33,6 @@ Notedown ::= statement*;
 private statement ::=
     header
   | text_elements
-  | code_block
   | BREAK_PART
   ;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -65,9 +64,7 @@ snippet ::= CODE_L string? CODE_R {
 }
 math    ::= MATH_L string? MATH_R // $math$
 // ---------------------------------------------------------------------------------------------------------------------
-code_block  ::= CODE_S string CODE_E;
-// ---------------------------------------------------------------------------------------------------------------------
-string ::= (STRING_TEXT | ESCAPE_TEXT)+;
+string  ::= (STRING_TEXT | ESCAPE_TEXT)+;
 // ---------------------------------------------------------------------------------------------------------------------
 xml_function ::= xml_start statement* xml_end
 xml_closed   ::= ANGLE_L  namespace argument* ANGLE_SR  // <name.space arg kw=arg/>
@@ -83,7 +80,7 @@ args_text ::= COLON STRING_TEXT?
 args_block ::= <<brace_block STRING_TEXT>>
 argument ::= [key (EQ|COLON)] value
 key ::= identifier
-value ::= namespace
+value ::= namespace | list
 // ---------------------------------------------------------------------------------------------------------------------
 list ::= <<bracket_block value COMMA>>
 // ---------------------------------------------------------------------------------------------------------------------
@@ -91,7 +88,7 @@ identifier ::= SYMBOL
 namespace ::= identifier (DOT identifier)*
 // ---------------------------------------------------------------------------------------------------------------------
 // parenthesis ( )
-private meta parenthesis ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] PARENTHESIS_R;
+meta parenthesis ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] PARENTHESIS_R;
 // bracket [ ]
 meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
 // brace { }

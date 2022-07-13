@@ -28,9 +28,15 @@ public class NoteValueNode extends NotedownASTBase implements NoteValue {
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public NoteList getList() {
+    return findChildByClass(NoteList.class);
+  }
+
+  @Override
+  @Nullable
   public NoteNamespace getNamespace() {
-    return findNotNullChildByClass(NoteNamespace.class);
+    return findChildByClass(NoteNamespace.class);
   }
 
 }

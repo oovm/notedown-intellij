@@ -74,7 +74,7 @@ class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
 
     override fun visitArgument(o: NoteArgument) {
         o.key?.let { highlight(it, NotedownColor.SYM_ARGUMENT) }
-        highlight(o.value.namespace, NotedownColor.SYM_VARIABLE)
+        o.value.namespace?.let { highlight(it, NotedownColor.SYM_VARIABLE) }
     }
 
     private fun highlight(element: PsiElement, color: NotedownColor) {
