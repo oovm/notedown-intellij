@@ -1,12 +1,12 @@
 package notedge.idea.ide.highlight
 
-import notedge.idea.language.psi.NLexerAdapter
-import notedge.idea.language.psi.NoteTypes.*
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
+import notedge.idea.language.psi.NLexerAdapter
+import notedge.idea.language.psi.NoteTypes.*
 import notedge.idea.ide.highlight.NotedownColor as Color
 
 class NTokenHighlighter : SyntaxHighlighterBase() {
@@ -44,7 +44,8 @@ class NTokenHighlighter : SyntaxHighlighterBase() {
 //            INTEGER -> JssColor.INTEGER
 //            DECIMAL -> JssColor.DECIMAL
 //            URL -> JssColor.URL
-//            STRING -> JssColor.STRING
+            STRING_TEXT -> Color.STRING
+            // ESCAPED_CHARACTER -> Color
             SYMBOL -> Color.IDENTIFIER
             // 错误
             TokenType.BAD_CHARACTER -> Color.BAD_CHARACTER

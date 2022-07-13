@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import notedge.idea.ide.view.NItemPresentation
 import notedge.idea.ide.view.NStructureViewElement
-import notedge.idea.language.psi.startOffset
+
 import javax.swing.Icon
 
 abstract class ViewNode(node: ASTNode) : NotedownASTBase(node),

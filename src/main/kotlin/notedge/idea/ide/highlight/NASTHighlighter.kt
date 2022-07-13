@@ -6,6 +6,7 @@ import com.intellij.codeInsight.daemon.impl.HighlightVisitor
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.util.elementType
 import notedge.idea.language.ast.NRecursiveVisitor
 import notedge.idea.language.file.NotedownFile
 import notedge.idea.language.psi.*
@@ -26,8 +27,7 @@ class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
         }
     }
 
-
-    override fun visitCodeInline(o: NoteCodeInline) {
+    override fun visitSnippet(o: NoteSnippet) {
         o.string?.let { highlight(it, NotedownColor.CODE_TEXT) }
     }
 
@@ -58,7 +58,6 @@ class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
     override fun visitFunction(o: NoteFunction) {
         highlight(o.namespace, NotedownColor.SYM_FUNCTION)
         highlight(o.firstChild, NotedownColor.SYM_FUNCTION)
-        o.argsText?.let { highlight(it, NotedownColor.STRING) }
     }
 
     override fun visitArgument(o: NoteArgument) {

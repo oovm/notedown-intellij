@@ -1,6 +1,6 @@
 package notedge.idea.ide.formatter
 
-import notedge.idea.language.psi.endOffset
+
 import notedge.idea.language.psi.getNextNonCommentSibling
 import notedge.idea.language.psi.getPrevNonCommentSibling
 import notedge.idea.language.psi.getPrevNonWhitespaceSibling
