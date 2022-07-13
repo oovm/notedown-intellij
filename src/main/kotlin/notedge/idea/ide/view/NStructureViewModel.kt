@@ -10,14 +10,16 @@ import com.intellij.ide.util.treeView.smartTree.Sorter
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import notedge.idea.ide.view.filter.CodeFilter
+import notedge.idea.ide.view.filter.HeaderFilter
 import notedge.idea.ide.view.grouper.HeaderGrouper
+import notedge.idea.ide.view.sorter.KindSorter
 
 class NStructureViewModel(psiFile: PsiFile?) :
     StructureViewModelBase(psiFile!!, NStructureViewElement(psiFile)),
     ElementInfoProvider {
-    override fun getSorters(): Array<Sorter> = arrayOf(Sorter.ALPHA_SORTER)
+    override fun getSorters(): Array<Sorter> = arrayOf(Sorter.ALPHA_SORTER, KindSorter)
 
-    override fun getFilters(): Array<Filter> = arrayOf(CodeFilter)
+    override fun getFilters(): Array<Filter> = arrayOf(HeaderFilter, CodeFilter)
 
     override fun getGroupers(): Array<Grouper> = arrayOf(HeaderGrouper)
 
