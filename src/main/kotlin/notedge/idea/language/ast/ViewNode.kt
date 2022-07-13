@@ -16,7 +16,7 @@ abstract class ViewNode(node: ASTNode) : NotedownASTBase(node),
     abstract override fun getNavigationElement(): PsiElement;
     override fun getName(): String = navigationElement.text
     open fun getDetailText(): String? = null
-    override fun getTextOffset(): Int = navigationElement.startOffset
+    override fun getTextOffset(): Int = navigationElement.textRange.startOffset
     override fun getPresentation(): ItemPresentation {
         return NItemPresentation(getIcon(0), name, getDetailText())
     }

@@ -28,7 +28,7 @@ class JssCommaFixer : SmartEnterProcessorWithFixers.Fixer<JssSmartEnter>() {
 
             val siblingOnLeft = errorElement.getPrevNonCommentSibling()
             if (siblingOnLeft != null && commaIsExpected) {
-                editor.document.insertString(siblingOnLeft.endOffset, ",")
+                editor.document.insertString(siblingOnLeft.textRange.endOffset, ",")
             }
         }
     }
