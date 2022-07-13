@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface NoteCodeInline extends PsiElement {
+public interface NoteArgsBlock extends PsiElement {
 
-  @Nullable
-  NoteString getString();
+  @NotNull
+  NoteBraceBlock getBraceBlock();
 
 }

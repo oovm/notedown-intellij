@@ -7,6 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public class NoteVisitor extends PsiElementVisitor {
 
+  public void visitArgsBlock(@NotNull NoteArgsBlock o) {
+    visitPsiElement(o);
+  }
+
   public void visitArgsFunction(@NotNull NoteArgsFunction o) {
     visitPsiElement(o);
   }
@@ -35,10 +39,6 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitCodeInline(@NotNull NoteCodeInline o) {
-    visitPsiElement(o);
-  }
-
   public void visitEscaped(@NotNull NoteEscaped o) {
     visitPsiElement(o);
   }
@@ -63,7 +63,19 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitList(@NotNull NoteList o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMath(@NotNull NoteMath o) {
+    visitPsiElement(o);
+  }
+
   public void visitNamespace(@NotNull NoteNamespace o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSnippet(@NotNull NoteSnippet o) {
     visitPsiElement(o);
   }
 

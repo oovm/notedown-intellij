@@ -11,13 +11,16 @@ public interface NoteTextElements extends PsiElement {
   List<NoteBold> getBoldList();
 
   @NotNull
-  List<NoteCodeInline> getCodeInlineList();
-
-  @NotNull
   List<NoteEscaped> getEscapedList();
 
   @NotNull
   List<NoteItalic> getItalicList();
+
+  @NotNull
+  List<NoteMath> getMathList();
+
+  @NotNull
+  List<NoteSnippet> getSnippetList();
 
   @NotNull
   List<NoteStrike> getStrikeList();

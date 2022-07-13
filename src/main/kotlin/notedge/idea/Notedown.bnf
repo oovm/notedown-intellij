@@ -44,7 +44,10 @@ header ::= HEADER_HASH text_elements {
 }
 // ---------------------------------------------------------------------------------------------------------------------
 text_elements ::= text_item+;
-private text_item ::= PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | strong | under | strike | wave | code_inline;
+private text_item ::= PLAIN_TEXT | escaped | ESCAPE | NEW_LINE
+  | italic | bold | strong
+  | under | strike | wave
+  | snippet | math
 escaped ::= ESCAPED_CHARACTER
 // ---------------------------------------------------------------------------------------------------------------------
 italic ::= ITALIC_L [text_elements] ITALIC_R // *text*
@@ -55,10 +58,12 @@ under  ::= UNDER_L  [text_elements] UNDER_R  // _text_
 wave   ::= WAVE_L   [text_elements] WAVE_R   // __text__
 strike ::= STRIKE_L [text_elements] STRIKE_R // ___text___
 // ---------------------------------------------------------------------------------------------------------------------
-code_inline ::= CODE_L string? CODE_R;
-string ::= (STRING_TEXT | ESCAPE_TEXT)+;
+snippet ::= CODE_L string? CODE_R;
+math    ::= MATH_L string? MATH_R // $math$
 // ---------------------------------------------------------------------------------------------------------------------
 code_block  ::= CODE_S string CODE_E;
+// ---------------------------------------------------------------------------------------------------------------------
+string ::= (STRING_TEXT | ESCAPE_TEXT)+;
 // ---------------------------------------------------------------------------------------------------------------------
 xml ::= xml_close | xml_start xml_end
 xml_close ::= ANGLE_L  namespace ANGLE_SR  // <name.space arg kw=arg/>

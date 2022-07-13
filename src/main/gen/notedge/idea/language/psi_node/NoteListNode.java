@@ -11,14 +11,14 @@ import static notedge.idea.language.psi.NoteTypes.*;
 import notedge.idea.language.ast.NotedownASTBase;
 import notedge.idea.language.psi.*;
 
-public class NoteCodeInlineNode extends NotedownASTBase implements NoteCodeInline {
+public class NoteListNode extends NotedownASTBase implements NoteList {
 
-  public NoteCodeInlineNode(@NotNull ASTNode node) {
+  public NoteListNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NoteVisitor visitor) {
-    visitor.visitCodeInline(this);
+    visitor.visitList(this);
   }
 
   @Override
@@ -28,9 +28,9 @@ public class NoteCodeInlineNode extends NotedownASTBase implements NoteCodeInlin
   }
 
   @Override
-  @Nullable
-  public NoteString getString() {
-    return findChildByClass(NoteString.class);
+  @NotNull
+  public NoteBracketBlock getBracketBlock() {
+    return findNotNullChildByClass(NoteBracketBlock.class);
   }
 
 }

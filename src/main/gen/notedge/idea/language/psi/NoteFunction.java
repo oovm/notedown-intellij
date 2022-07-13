@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface NoteFunction extends PsiElement {
 
   @Nullable
+  NoteArgsBlock getArgsBlock();
+
+  @Nullable
   NoteArgsFunction getArgsFunction();
 
   @Nullable

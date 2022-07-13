@@ -1,11 +1,11 @@
 package notedge.idea.language.file
 
 import com.intellij.DynamicBundle
-import notedge.idea.language.file.NotedownLanguage.BUNDLE
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.PropertyKey
 import java.util.function.Supplier
 
+private const val BUNDLE = "messages.NotedownBundle"
 
 object NotedownBundle : DynamicBundle(BUNDLE) {
     @Suppress("SpreadOperator")

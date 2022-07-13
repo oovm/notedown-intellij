@@ -48,6 +48,18 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // <<brace_block STRING_TEXT>>
+  public static boolean args_block(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "args_block")) return false;
+    if (!nextTokenIs(b, BRACE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = brace_block(b, l + 1, STRING_TEXT_parser_);
+    exit_section_(b, m, ARGS_BLOCK, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // <<parenthesis argument COMMA>>
   public static boolean args_function(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "args_function")) return false;
@@ -141,39 +153,28 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // BRACE_L (<<item>>|<<sp>>)* BRACE_R
-  public static boolean brace_block(PsiBuilder b, int l, Parser _item, Parser _sp) {
+  // BRACE_L <<item>>* BRACE_R
+  public static boolean brace_block(PsiBuilder b, int l, Parser _item) {
     if (!recursion_guard_(b, l, "brace_block")) return false;
     if (!nextTokenIs(b, BRACE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, BRACE_L);
-    r = r && brace_block_1(b, l + 1, _item, _sp);
+    r = r && brace_block_1(b, l + 1, _item);
     r = r && consumeToken(b, BRACE_R);
     exit_section_(b, m, BRACE_BLOCK, r);
     return r;
   }
 
-  // (<<item>>|<<sp>>)*
-  private static boolean brace_block_1(PsiBuilder b, int l, Parser _item, Parser _sp) {
+  // <<item>>*
+  private static boolean brace_block_1(PsiBuilder b, int l, Parser _item) {
     if (!recursion_guard_(b, l, "brace_block_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!brace_block_1_0(b, l + 1, _item, _sp)) break;
+      if (!_item.parse(b, l)) break;
       if (!empty_element_parsed_guard_(b, "brace_block_1", c)) break;
     }
     return true;
-  }
-
-  // <<item>>|<<sp>>
-  private static boolean brace_block_1_0(PsiBuilder b, int l, Parser _item, Parser _sp) {
-    if (!recursion_guard_(b, l, "brace_block_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = _item.parse(b, l);
-    if (!r) r = _sp.parse(b, l);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -253,27 +254,6 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // CODE_L string? CODE_R
-  public static boolean code_inline(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "code_inline")) return false;
-    if (!nextTokenIs(b, CODE_L)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, CODE_L);
-    r = r && code_inline_1(b, l + 1);
-    r = r && consumeToken(b, CODE_R);
-    exit_section_(b, m, CODE_INLINE, r);
-    return r;
-  }
-
-  // string?
-  private static boolean code_inline_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "code_inline_1")) return false;
-    string(b, l + 1);
-    return true;
-  }
-
-  /* ********************************************************** */
   // ESCAPED_CHARACTER
   public static boolean escaped(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "escaped")) return false;
@@ -286,7 +266,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ESCAPE namespace [args_function] [args_text] {
+  // ESCAPE namespace [args_function] [args_text|args_block] {
   // }
   public static boolean function(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "function")) return false;
@@ -309,11 +289,20 @@ public class NoteParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // [args_text]
+  // [args_text|args_block]
   private static boolean function_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "function_3")) return false;
-    args_text(b, l + 1);
+    function_3_0(b, l + 1);
     return true;
+  }
+
+  // args_text|args_block
+  private static boolean function_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "function_3_0")) return false;
+    boolean r;
+    r = args_text(b, l + 1);
+    if (!r) r = args_block(b, l + 1);
+    return r;
   }
 
   // {
@@ -378,6 +367,39 @@ public class NoteParser implements PsiParser, LightPsiParser {
     r = identifier(b, l + 1);
     exit_section_(b, m, KEY, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // <<bracket_block value COMMA>>
+  public static boolean list(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "list")) return false;
+    if (!nextTokenIs(b, BRACKET_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = bracket_block(b, l + 1, NoteParser::value, COMMA_parser_);
+    exit_section_(b, m, LIST, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // MATH_L string? MATH_R
+  public static boolean math(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "math")) return false;
+    if (!nextTokenIs(b, MATH_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, MATH_L);
+    r = r && math_1(b, l + 1);
+    r = r && consumeToken(b, MATH_R);
+    exit_section_(b, m, MATH, r);
+    return r;
+  }
+
+  // string?
+  private static boolean math_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "math_1")) return false;
+    string(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -474,6 +496,27 @@ public class NoteParser implements PsiParser, LightPsiParser {
   private static boolean parenthesis_1_0_2(PsiBuilder b, int l, Parser _sp) {
     if (!recursion_guard_(b, l, "parenthesis_1_0_2")) return false;
     _sp.parse(b, l);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // CODE_L string? CODE_R
+  public static boolean snippet(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "snippet")) return false;
+    if (!nextTokenIs(b, CODE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, CODE_L);
+    r = r && snippet_1(b, l + 1);
+    r = r && consumeToken(b, CODE_R);
+    exit_section_(b, m, SNIPPET, r);
+    return r;
+  }
+
+  // string?
+  private static boolean snippet_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "snippet_1")) return false;
+    string(b, l + 1);
     return true;
   }
 
@@ -581,7 +624,10 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PLAIN_TEXT | escaped | ESCAPE | NEW_LINE | italic | bold | strong | under | strike | wave | code_inline
+  // PLAIN_TEXT | escaped | ESCAPE | NEW_LINE
+  //   | italic | bold | strong
+  //   | under | strike | wave
+  //   | snippet | math
   static boolean text_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "text_item")) return false;
     boolean r;
@@ -595,7 +641,8 @@ public class NoteParser implements PsiParser, LightPsiParser {
     if (!r) r = under(b, l + 1);
     if (!r) r = strike(b, l + 1);
     if (!r) r = wave(b, l + 1);
-    if (!r) r = code_inline(b, l + 1);
+    if (!r) r = snippet(b, l + 1);
+    if (!r) r = math(b, l + 1);
     return r;
   }
 
@@ -720,4 +767,5 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   static final Parser COMMA_parser_ = (b, l) -> consumeToken(b, COMMA);
+  static final Parser STRING_TEXT_parser_ = (b, l) -> consumeToken(b, STRING_TEXT);
 }

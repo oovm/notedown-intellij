@@ -8,6 +8,7 @@ import notedge.idea.language.psi_node.*;
 
 public interface NoteTypes {
 
+  IElementType ARGS_BLOCK = new NElementType("ARGS_BLOCK");
   IElementType ARGS_FUNCTION = new NElementType("ARGS_FUNCTION");
   IElementType ARGS_TEXT = new NElementType("ARGS_TEXT");
   IElementType ARGUMENT = new NElementType("ARGUMENT");
@@ -15,14 +16,16 @@ public interface NoteTypes {
   IElementType BRACE_BLOCK = new NElementType("BRACE_BLOCK");
   IElementType BRACKET_BLOCK = new NElementType("BRACKET_BLOCK");
   IElementType CODE_BLOCK = new NElementType("CODE_BLOCK");
-  IElementType CODE_INLINE = new NElementType("CODE_INLINE");
   IElementType ESCAPED = new NElementType("ESCAPED");
   IElementType FUNCTION = new NElementType("FUNCTION");
   IElementType HEADER = new NElementType("HEADER");
   IElementType IDENTIFIER = new NElementType("IDENTIFIER");
   IElementType ITALIC = new NElementType("ITALIC");
   IElementType KEY = new NElementType("KEY");
+  IElementType LIST = new NElementType("LIST");
+  IElementType MATH = new NElementType("MATH");
   IElementType NAMESPACE = new NElementType("NAMESPACE");
+  IElementType SNIPPET = new NElementType("SNIPPET");
   IElementType STRIKE = new NElementType("STRIKE");
   IElementType STRING = new NElementType("STRING");
   IElementType STRONG = new NElementType("STRONG");
@@ -63,6 +66,8 @@ public interface NoteTypes {
   IElementType HEADER_HASH = new NElementType("HEADER_HASH");
   IElementType ITALIC_L = new NElementType("ITALIC_L");
   IElementType ITALIC_R = new NElementType("ITALIC_R");
+  IElementType MATH_L = new NElementType("MATH_L");
+  IElementType MATH_R = new NElementType("MATH_R");
   IElementType NEW_LINE = new NElementType("NewLine");
   IElementType PARENTHESIS_L = new NElementType("PARENTHESIS_L");
   IElementType PARENTHESIS_R = new NElementType("PARENTHESIS_R");
@@ -83,7 +88,10 @@ public interface NoteTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == ARGS_FUNCTION) {
+      if (type == ARGS_BLOCK) {
+        return new NoteArgsBlockNode(node);
+      }
+      else if (type == ARGS_FUNCTION) {
         return new NoteArgsFunctionNode(node);
       }
       else if (type == ARGS_TEXT) {
@@ -104,9 +112,6 @@ public interface NoteTypes {
       else if (type == CODE_BLOCK) {
         return new NoteCodeBlockNode(node);
       }
-      else if (type == CODE_INLINE) {
-        return new NoteCodeInlineNode(node);
-      }
       else if (type == ESCAPED) {
         return new NoteEscapedNode(node);
       }
@@ -125,8 +130,17 @@ public interface NoteTypes {
       else if (type == KEY) {
         return new NoteKeyNode(node);
       }
+      else if (type == LIST) {
+        return new NoteListNode(node);
+      }
+      else if (type == MATH) {
+        return new NoteMathNode(node);
+      }
       else if (type == NAMESPACE) {
         return new NoteNamespaceNode(node);
+      }
+      else if (type == SNIPPET) {
+        return new NoteSnippetNode(node);
       }
       else if (type == STRIKE) {
         return new NoteStrikeNode(node);
