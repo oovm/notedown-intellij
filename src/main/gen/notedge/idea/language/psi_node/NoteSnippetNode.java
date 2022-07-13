@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static notedge.idea.language.psi.NoteTypes.*;
-import notedge.idea.language.ast.NotedownASTBase;
+import notedge.idea.language.mixin.MixinSnippet;
 import notedge.idea.language.psi.*;
 
-public class NoteSnippetNode extends NotedownASTBase implements NoteSnippet {
+public class NoteSnippetNode extends MixinSnippet implements NoteSnippet {
 
   public NoteSnippetNode(@NotNull ASTNode node) {
     super(node);

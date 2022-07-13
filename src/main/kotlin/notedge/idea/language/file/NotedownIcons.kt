@@ -14,4 +14,5 @@ object NotedownIcons {
     val LIST = AllIcons.General.MoreTabs
     val TEXT = IconLoader.getIcon("/icons/textArea.svg", NotedownIcons::class.java)
     val FUNCTION = AllIcons.Nodes.Function
+    val CODE = AllIcons.Json.Object
 }

@@ -60,7 +60,9 @@ under  ::= UNDER_L  [text_elements] UNDER_R  // _text_
 wave   ::= WAVE_L   [text_elements] WAVE_R   // __text__
 strike ::= STRIKE_L [text_elements] STRIKE_R // ___text___
 // ---------------------------------------------------------------------------------------------------------------------
-snippet ::= CODE_L string? CODE_R;
+snippet ::= CODE_L string? CODE_R {
+    mixin = "notedge.idea.language.mixin.MixinSnippet"
+}
 math    ::= MATH_L string? MATH_R // $math$
 // ---------------------------------------------------------------------------------------------------------------------
 code_block  ::= CODE_S string CODE_E;
