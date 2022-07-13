@@ -43,14 +43,17 @@ code
 
 \function.name(arg, kw = arg): text
 
-\function(arg, kw = arg)
+\function(
+arg,
+kw = arg,
+)
 
 ### XML
 
-<function arg kw=arg/>
-
-<function arg kw=arg>
-    text
+<function arg kw = arg>
+text
+<function arg kw = arg/>
+text
 </function>
 
 ### Block

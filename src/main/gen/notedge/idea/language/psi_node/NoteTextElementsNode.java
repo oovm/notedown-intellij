@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static notedge.idea.language.psi.NoteTypes.*;
-import notedge.idea.language.ast.NotedownASTBase;
+import notedge.idea.language.mixin.MixinTextElements;
 import notedge.idea.language.psi.*;
 
-public class NoteTextElementsNode extends NotedownASTBase implements NoteTextElements {
+public class NoteTextElementsNode extends MixinTextElements implements NoteTextElements {
 
   public NoteTextElementsNode(@NotNull ASTNode node) {
     super(node);
@@ -37,6 +37,12 @@ public class NoteTextElementsNode extends NotedownASTBase implements NoteTextEle
   @NotNull
   public List<NoteEscaped> getEscapedList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteEscaped.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NoteFunction> getFunctionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteFunction.class);
   }
 
   @Override
@@ -79,6 +85,18 @@ public class NoteTextElementsNode extends NotedownASTBase implements NoteTextEle
   @NotNull
   public List<NoteWave> getWaveList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteWave.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NoteXmlClosed> getXmlClosedList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteXmlClosed.class);
+  }
+
+  @Override
+  @NotNull
+  public List<NoteXmlFunction> getXmlFunctionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteXmlFunction.class);
   }
 
 }

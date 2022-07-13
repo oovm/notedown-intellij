@@ -74,7 +74,7 @@ xml_end      ::= ANGLE_SL namespace argument* ANGLE_R   // </name.space>
 // ---------------------------------------------------------------------------------------------------------------------
 // \name.space
 function ::= ESCAPE namespace [args_function] [args_text|args_block] {
-
+    mixin = "notedge.idea.language.mixin.MixinFunction"
 }
 args_function ::= <<parenthesis argument COMMA>>
 args_text ::= COLON STRING_TEXT?

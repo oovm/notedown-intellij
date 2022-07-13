@@ -266,8 +266,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ESCAPE namespace [args_function] [args_text|args_block] {
-  // }
+  // ESCAPE namespace [args_function] [args_text|args_block]
   public static boolean function(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "function")) return false;
     if (!nextTokenIs(b, ESCAPE)) return false;
@@ -277,7 +276,6 @@ public class NoteParser implements PsiParser, LightPsiParser {
     r = r && namespace(b, l + 1);
     r = r && function_2(b, l + 1);
     r = r && function_3(b, l + 1);
-    r = r && function_4(b, l + 1);
     exit_section_(b, m, FUNCTION, r);
     return r;
   }
@@ -303,12 +301,6 @@ public class NoteParser implements PsiParser, LightPsiParser {
     r = args_text(b, l + 1);
     if (!r) r = args_block(b, l + 1);
     return r;
-  }
-
-  // {
-  // }
-  private static boolean function_4(PsiBuilder b, int l) {
-    return true;
   }
 
   /* ********************************************************** */
@@ -522,8 +514,6 @@ public class NoteParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // header
-  //   | function
-  //   | xml
   //   | text_elements
   //   | code_block
   //   | BREAK_PART
@@ -531,8 +521,6 @@ public class NoteParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "statement")) return false;
     boolean r;
     r = header(b, l + 1);
-    if (!r) r = function(b, l + 1);
-    if (!r) r = xml(b, l + 1);
     if (!r) r = text_elements(b, l + 1);
     if (!r) r = code_block(b, l + 1);
     if (!r) r = consumeToken(b, BREAK_PART);
@@ -624,7 +612,9 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PLAIN_TEXT | escaped | ESCAPE | NEW_LINE
+  // PLAIN_TEXT
+  //   | function | xml_closed | xml_function
+  //   | escaped | ESCAPE | NEW_LINE
   //   | italic | bold | strong
   //   | under | strike | wave
   //   | snippet | math
@@ -632,6 +622,9 @@ public class NoteParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "text_item")) return false;
     boolean r;
     r = consumeToken(b, PLAIN_TEXT);
+    if (!r) r = function(b, l + 1);
+    if (!r) r = xml_closed(b, l + 1);
+    if (!r) r = xml_function(b, l + 1);
     if (!r) r = escaped(b, l + 1);
     if (!r) r = consumeToken(b, ESCAPE);
     if (!r) r = consumeToken(b, NEW_LINE);
@@ -701,63 +694,27 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // xml_close | xml_start statement* xml_end
-  public static boolean xml(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "xml")) return false;
-    if (!nextTokenIs(b, ANGLE_L)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = xml_close(b, l + 1);
-    if (!r) r = xml_1(b, l + 1);
-    exit_section_(b, m, XML, r);
-    return r;
-  }
-
-  // xml_start statement* xml_end
-  private static boolean xml_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "xml_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = xml_start(b, l + 1);
-    r = r && xml_1_1(b, l + 1);
-    r = r && xml_end(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // statement*
-  private static boolean xml_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "xml_1_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "xml_1_1", c)) break;
-    }
-    return true;
-  }
-
-  /* ********************************************************** */
   // ANGLE_L  namespace argument* ANGLE_SR
-  public static boolean xml_close(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "xml_close")) return false;
+  public static boolean xml_closed(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml_closed")) return false;
     if (!nextTokenIs(b, ANGLE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, ANGLE_L);
     r = r && namespace(b, l + 1);
-    r = r && xml_close_2(b, l + 1);
+    r = r && xml_closed_2(b, l + 1);
     r = r && consumeToken(b, ANGLE_SR);
-    exit_section_(b, m, XML_CLOSE, r);
+    exit_section_(b, m, XML_CLOSED, r);
     return r;
   }
 
   // argument*
-  private static boolean xml_close_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "xml_close_2")) return false;
+  private static boolean xml_closed_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml_closed_2")) return false;
     while (true) {
       int c = current_position_(b);
       if (!argument(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "xml_close_2", c)) break;
+      if (!empty_element_parsed_guard_(b, "xml_closed_2", c)) break;
     }
     return true;
   }
@@ -784,6 +741,31 @@ public class NoteParser implements PsiParser, LightPsiParser {
       int c = current_position_(b);
       if (!argument(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "xml_end_2", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // xml_start statement* xml_end
+  public static boolean xml_function(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml_function")) return false;
+    if (!nextTokenIs(b, ANGLE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = xml_start(b, l + 1);
+    r = r && xml_function_1(b, l + 1);
+    r = r && xml_end(b, l + 1);
+    exit_section_(b, m, XML_FUNCTION, r);
+    return r;
+  }
+
+  // statement*
+  private static boolean xml_function_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "xml_function_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!statement(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "xml_function_1", c)) break;
     }
     return true;
   }
