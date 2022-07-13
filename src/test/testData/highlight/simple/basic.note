@@ -19,6 +19,8 @@ ___normal text___
 
 ``code``
 
+\title: note
+
 \function.name(arg, kw=arg): text
 
 

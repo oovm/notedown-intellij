@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package notedge.idea.language.psi
 
 import com.intellij.psi.TokenType
@@ -24,7 +26,6 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
         val SYMBOL = "[\\p{L}\\p{N}][\\p{L}_]*".toRegex()
         val DOT = "[.．]".toRegex()
         val COLON = "[:：]+".toRegex()
-        val CODE_OPERATOR = "[:：.．,，=＝]".toRegex()
 
         val PARENTHESIS_L = "[(（]".toRegex()
         val PARENTHESIS_R = "[)）]".toRegex()
@@ -67,7 +68,7 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
                 }
                 StackContext.CODE -> {
                     if (matchesSymbol()) continue
-                    if (matchesCodeCommaLike()) continue
+                    if (matchesCodeDelimiters()) continue
                     if (matchParenthesisL()) continue
                     if (matchParenthesisR()) continue
                 }
@@ -129,14 +130,15 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
     }
 
     fun appendROL(token : IElementType) {
-        val r = ROL.matchAt(buffer, startOffset) ?: return;
+        val r = ROL.matchAt(buffer, startOffset) ?: return
         stack.add(StackItem(token, r, context))
         addOffset(r)
     }
 
-    fun matchesCodeCommaLike(): Boolean {
+    fun matchesCodeDelimiters(): Boolean {
         assert(context == StackContext.CODE)
-        val r = CODE_OPERATOR.matchAt(buffer, startOffset) ?: return false
+        val delimiters = "[:：.．,，=＝]".toRegex()
+        val r = delimiters.matchAt(buffer, startOffset) ?: return false
         when (r.value) {
             ".", "．" -> stack.add(StackItem(NoteTypes.DOT, r, context))
             ",", "，" -> stack.add(StackItem(NoteTypes.COMMA, r, context))
@@ -423,7 +425,7 @@ private fun NTokenInterpreter.restOfLine(): String {
 }
 
 private fun NTokenInterpreter.shouldBreakParagraph(): Boolean {
-    var last = stack.count();
+    var last = stack.count()
     if (lastIs(NoteTypes.NEW_LINE, NoteTypes.BREAK_PART)) {
         return true
     }
