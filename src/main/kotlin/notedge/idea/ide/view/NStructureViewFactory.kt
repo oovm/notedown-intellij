@@ -9,12 +9,11 @@ import com.intellij.psi.PsiFile
 
 class NStructureViewFactory : PsiStructureViewFactory {
     override fun getStructureViewBuilder(psiFile: PsiFile): StructureViewBuilder {
-        class Builder : TreeBasedStructureViewBuilder() {
+        return object : TreeBasedStructureViewBuilder() {
             override fun createStructureViewModel(editor: Editor?): StructureViewModel {
                 return NStructureViewModel(psiFile)
             }
         }
-        return Builder()
     }
 }
 

@@ -28,6 +28,10 @@
 		<lang.syntaxHighlighter
 			language="Notedown"
 			implementationClass="notedge.idea.ide.highlight.NTokenHighlighter"/>
+		<!-- View -->
+		<lang.psiStructureViewFactory
+			language="Notedown"
+			implementationClass="notedge.idea.ide.view.NStructureViewFactory"/>/>
 		<!-- Formatter -->
 		<lang.formatter
 			language="Notedown"

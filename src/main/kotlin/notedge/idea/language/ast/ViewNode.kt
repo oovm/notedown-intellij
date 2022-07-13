@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.NavigatablePsiElement
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
 import notedge.idea.ide.view.NItemPresentation
 import notedge.idea.ide.view.NStructureViewElement
 import notedge.idea.language.psi.startOffset
@@ -20,4 +21,10 @@ abstract class ViewNode(node: ASTNode) : NotedownASTBase(node),
         return NItemPresentation(getIcon(0), name, getDetailText())
     }
     open fun getChildrenView(): Array<NStructureViewElement> = arrayOf()
+
+    fun getChildOfType(vararg classes: Class<out NavigatablePsiElement>): Array<NStructureViewElement> {
+        return PsiTreeUtil.getChildrenOfAnyType(this, *classes)
+            .map { NStructureViewElement(it) }
+            .toTypedArray()
+    }
 }

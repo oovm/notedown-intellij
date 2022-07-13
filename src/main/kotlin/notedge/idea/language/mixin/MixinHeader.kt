@@ -25,4 +25,8 @@ abstract class MixinHeader(node: ASTNode) : ViewNode(node), NoteHeader {
     }
 
     val headLevel: Int = this.firstChild.text.takeWhile { it == '#' }.length
+
+    fun nextLevelHeaders() {
+
+    }
 }
