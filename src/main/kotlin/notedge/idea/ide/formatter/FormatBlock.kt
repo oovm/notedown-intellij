@@ -5,6 +5,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.formatter.FormatterUtil
+import notedge.idea.language.psi.NoteTypes
 import notedge.idea.language.psi.computeSpacing
 import notedge.idea.language.psi.isWhitespaceOrEmpty
 
@@ -13,7 +14,7 @@ class FormatBlock(
     private val alignment: Alignment?,
     private val indent: Indent?,
     private val wrap: Wrap?,
-    val ctx: FormatterContext
+    private val ctx: FormatterContext
 ) : ASTBlock {
     override fun isLeaf(): Boolean = node.firstChildNode == null
 
@@ -51,14 +52,14 @@ class FormatBlock(
     private fun computeIndent(child: ASTNode): Indent? {
         val isCornerChild = node.firstChildNode == child || node.lastChildNode == child
         return when (node.elementType) {
-//            NoteTypes.BRACKET_BLOCK -> when {
-//                isCornerChild -> Indent.getNoneIndent()
-//                else -> Indent.getNormalIndent()
-//            }
-//            NoteTypes.BRACE_BLOCK -> when {
-//                isCornerChild -> Indent.getNoneIndent()
-//                else -> Indent.getNormalIndent()
-//            }
+            NoteTypes.BRACKET_BLOCK -> when {
+                isCornerChild -> Indent.getNoneIndent()
+                else -> Indent.getNormalIndent()
+            }
+            NoteTypes.PARENTHESIS -> when {
+                isCornerChild -> Indent.getNoneIndent()
+                else -> Indent.getNormalIndent()
+            }
             else -> Indent.getNoneIndent()
         }
     }

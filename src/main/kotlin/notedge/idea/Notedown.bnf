@@ -77,12 +77,12 @@ function ::= ESCAPE namespace [args_function] [args_text|args_block] {
 }
 args_function ::= <<parenthesis argument COMMA>>
 args_text ::= COLON STRING_TEXT?
-args_block ::= <<brace_block STRING_TEXT>>
+args_block ::= <<brace STRING_TEXT>>
 argument ::= [key (EQ|COLON)] value
 key ::= identifier
 value ::= namespace | list
 // ---------------------------------------------------------------------------------------------------------------------
-list ::= <<bracket_block value COMMA>>
+list ::= <<bracket value COMMA>>
 // ---------------------------------------------------------------------------------------------------------------------
 identifier ::= SYMBOL
 namespace ::= identifier (DOT identifier)*
@@ -90,7 +90,7 @@ namespace ::= identifier (DOT identifier)*
 // parenthesis ( )
 meta parenthesis ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] PARENTHESIS_R;
 // bracket [ ]
-meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
+meta bracket ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
 // brace { }
-meta brace_block ::= BRACE_L <<item>>* BRACE_R;
+meta brace ::= BRACE_L <<item>>* BRACE_R;
 

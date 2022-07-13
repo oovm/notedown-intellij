@@ -1,16 +1,13 @@
 package notedge.idea.ide.formatter
 
-import notedge.idea.language.file.NotedownLanguage
 import com.intellij.formatting.SpacingBuilder
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 import com.intellij.psi.tree.TokenSet
+import notedge.idea.language.file.NotedownLanguage
 import notedge.idea.language.psi.NoteTypes
 
-data class FormatterContext(
-    val commonSettings: CommonCodeStyleSettings,
-    val spacingBuilder: SpacingBuilder
-) {
+data class FormatterContext(val commonSettings: CommonCodeStyleSettings, val spacingBuilder: SpacingBuilder) {
     companion object {
         fun create(settings: CodeStyleSettings): FormatterContext {
             val commonSettings = settings.getCommonSettings(NotedownLanguage)
@@ -38,10 +35,10 @@ data class FormatterContext(
                 .after(separators).spacing(1, 1, 0, commonSettings.KEEP_LINE_BREAKS, 0)
                 // k: v
                 .after(NoteTypes.COLON).spacing(1, 1, 0, false, 0)
-                // k = v
-                .around(NoteTypes.EQ).spacing(1, 1, 0, commonSettings.KEEP_LINE_BREAKS, 0)
-                // SpacingBuilder { }
-                // .before(NoteTypes.PROPERTIES_BLOCK).spacing(1, 1, 0, commonSettings.KEEP_LINE_BREAKS, 0)
+                // k=v
+                .around(NoteTypes.EQ).spacing(0, 0, 0, commonSettings.KEEP_LINE_BREAKS, 0)
+            // SpacingBuilder { }
+            // .before(NoteTypes.PROPERTIES_BLOCK).spacing(1, 1, 0, commonSettings.KEEP_LINE_BREAKS, 0)
 
             return custom
                 .before(remove_space_before).spaceIf(false)
