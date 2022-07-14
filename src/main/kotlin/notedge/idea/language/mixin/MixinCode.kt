@@ -11,7 +11,10 @@ import javax.swing.Icon
 
 
 abstract class MixinCode(node: ASTNode) : ViewNode(node), NoteSnippet {
-    override fun getIcon(flags: Int): Icon = NotedownIcons.CODE
+    override fun getIcon(flags: Int): Icon = when (isCodeBlock()) {
+        true -> NotedownIcons.CODE_BLOCK
+        false -> NotedownIcons.CODE
+    }
     override fun getNavigationElement(): PsiElement {
         return this
     }

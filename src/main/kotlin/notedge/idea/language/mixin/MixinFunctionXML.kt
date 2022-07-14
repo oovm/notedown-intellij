@@ -10,12 +10,13 @@ import notedge.idea.language.ast.ViewNode
 import notedge.idea.language.file.NotedownIcons
 import notedge.idea.language.psi.NoteFunction
 import notedge.idea.language.psi.NoteHeader
+import notedge.idea.language.psi.NoteXmlFunction
 import javax.swing.Icon
 
 
-abstract class MixinFunction(node: ASTNode) : ViewNode(node), NoteFunction {
-    override fun getIcon(flags: Int): Icon = NotedownIcons.FUNCTION
+abstract class MixinFunctionXML(node: ASTNode) : ViewNode(node), NoteXmlFunction {
+    override fun getIcon(flags: Int): Icon = NotedownIcons.COMPONENT
     override fun getNavigationElement(): PsiElement {
-        return this.namespace
+        return this.xmlStart.namespace
     }
 }

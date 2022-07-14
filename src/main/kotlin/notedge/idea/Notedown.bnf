@@ -70,7 +70,10 @@ math ::= MATH_L string? MATH_R {
 // ---------------------------------------------------------------------------------------------------------------------
 string  ::= (STRING_TEXT | ESCAPE_TEXT)+;
 // ---------------------------------------------------------------------------------------------------------------------
-xml_function ::= xml_start statement* xml_end
+xml_function ::= xml_start statement* xml_end {
+    // `code`
+    mixin = "notedge.idea.language.mixin.MixinCode"
+}
 xml_closed   ::= ANGLE_L  namespace argument* ANGLE_SR  // <name.space arg kw=arg/>
 xml_start    ::= ANGLE_L  namespace argument* ANGLE_R   // <name.space arg kw=arg>
 xml_end      ::= ANGLE_SL namespace argument* ANGLE_R   // </name.space>

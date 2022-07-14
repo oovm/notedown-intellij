@@ -11,9 +11,13 @@ object NotedownIcons {
     val HEADER4 = IconLoader.getIcon("/icons/insightHotkey4.svg", NotedownIcons::class.java)
     val HEADER5 = IconLoader.getIcon("/icons/insightHotkey5.svg", NotedownIcons::class.java)
     val HEADER6 = IconLoader.getIcon("/icons/insightHotkey6.svg", NotedownIcons::class.java)
-    val LIST = AllIcons.General.MoreTabs
     val TEXT = IconLoader.getIcon("/icons/textArea.svg", NotedownIcons::class.java)
     val FUNCTION = AllIcons.Nodes.Function
-    val CODE = AllIcons.Json.Object
+    val COMPONENT = AllIcons.Nodes.Class
+    val CODE = AllIcons.Actions.GroupByModule
+    val CODE_BLOCK = AllIcons.Actions.GroupByModuleGroup
+
     val MATH = AllIcons.Actions.RegexSelected
+    val ORDERED_LIST = AllIcons.Debugger.Db_array
+    val RANDOM_LIST = AllIcons.General.MoreTabs
 }

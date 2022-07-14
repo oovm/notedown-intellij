@@ -23,14 +23,19 @@ ___normal text___
 
 # code
 
+
 `code`
+
 
 `code\$\`\s\k`
 
-```code```
+
+```code inline```
+
 
 ```
-code
+code block
+\$\`\s\k
 ```
 
 # math
@@ -60,6 +65,6 @@ code
 
 ### Block
 
-```function(arg, kw=arg)
+```\function(arg, kw=arg)
 
 ```
