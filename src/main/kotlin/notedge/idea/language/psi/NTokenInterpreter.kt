@@ -275,7 +275,7 @@ class NTokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endO
 
     private fun matchesCodeN(): Boolean {
         val code1 = "([`｀])((?:[^\\\\`｀]|\\\\.)*)(\\1)".toRegex()
-        val code3 = "([`｀]{3,})(.*?)(\\1)".toRegex()
+        val code3 = "([`｀]{3,})([^｀]*?)(\\1)".toRegex()
         var r = code3.matchAt(buffer, startOffset)
         if (r == null) {
             r = code1.matchAt(buffer, startOffset)
