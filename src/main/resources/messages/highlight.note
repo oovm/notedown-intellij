@@ -1,9 +1,9 @@
-# section
-## subsection
-### subsubsection
-#### paragraph
-##### subparagraph
-###### subsubparagraph
+# <HEADER_L1>section</HEADER_L1>
+## <HEADER_L2>subsection</HEADER_L2>
+### <HEADER_L3>subsubsection</HEADER_L3>
+#### <HEADER_L4>paragraph</HEADER_L4>
+##### <HEADER_L5>subparagraph</HEADER_L5>
+###### <HEADER_L6>subsubparagraph</HEADER_L6>
 
 normal text
 *<ITALIC_TEXT>normal text</ITALIC_TEXT>*
@@ -14,18 +14,18 @@ __<WAVE_TEXT>normal text</WAVE_TEXT>__
 ___<STRIKE_TEXT>normal text</STRIKE_TEXT>___
 
 
-\function(arg, kw=arg):
+<SYM_FUNCTION>\function</SYM_FUNCTION>(arg, kw=arg):
 
-\function(arg, kw=arg) {
+<SYM_FUNCTION>\module</SYM_FUNCTION>.<SYM_FUNCTION>name</SYM_FUNCTION>(arg, kw=arg) {
     text
 }
 
-<function arg kw=arg/>
+<<SYM_CLASS>function</SYM_CLASS> arg <SYM_ARGUMENT>kw</SYM_ARGUMENT>=arg/>
 
-<function arg kw=arg>
+<<SYM_CLASS>function</SYM_CLASS> arg <SYM_ARGUMENT>kw</SYM_ARGUMENT>=arg>
     text
-</function>
+</<SYM_CLASS>function</SYM_CLASS>>
 
-```function(arg, kw=arg)
+```<SYM_FUNCTION>function</SYM_FUNCTION>(arg, <SYM_ARGUMENT>kw</SYM_ARGUMENT>=arg)
 
 ```

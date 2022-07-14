@@ -5,7 +5,7 @@ import com.intellij.openapi.editor.HighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.options.OptionsBundle
 import com.intellij.openapi.options.colors.AttributesDescriptor
-import com.intellij.openapi.util.NlsContexts
+import com.intellij.openapi.util.NlsContexts.AttributeDescriptor
 import notedge.idea.language.file.NotedownBundle
 import java.util.function.Supplier
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors as Default
@@ -13,16 +13,13 @@ import com.intellij.openapi.editor.XmlHighlighterColors as XML
 
 
 @Suppress("UnstableApiUsage")
-enum class NotedownColor(
-    humanName: Supplier<@NlsContexts.AttributeDescriptor String>,
-    default: TextAttributesKey? = null,
-) {
+enum class NotedownColor(humanName: Supplier<@AttributeDescriptor String>, default: TextAttributesKey? = null) {
     // 特殊关键词
     KEYWORD(OptionsBundle.messagePointer("options.language.defaults.keyword"), Default.KEYWORD),
-    SYM_VARIABLE(NotedownBundle.messagePointer("color.token.symbol.function"), Default.CONSTANT),
+    SYM_VARIABLE(NotedownBundle.messagePointer("color.token.symbol.variable"), Default.CONSTANT),
     SYM_FUNCTION(NotedownBundle.messagePointer("color.token.symbol.function"), Default.STATIC_METHOD),
     SYM_CLASS(NotedownBundle.messagePointer("color.token.symbol.class"), Default.CLASS_NAME),
-    SYM_ARGUMENT(NotedownBundle.messagePointer("color.token.symbol.function"), Default.PARAMETER),
+    SYM_ARGUMENT(NotedownBundle.messagePointer("color.token.symbol.argument"), Default.PARAMETER),
 
     // 字面量
     NULL(NotedownBundle.messagePointer("color.token.null"), Default.KEYWORD),
@@ -32,6 +29,7 @@ enum class NotedownColor(
     STRING(NotedownBundle.messagePointer("color.token.string"), Default.STRING),
     URL(NotedownBundle.messagePointer("color.token.url"), STRING.textAttributesKey),
     IDENTIFIER(OptionsBundle.messagePointer("options.language.defaults.identifier"), Default.IDENTIFIER),
+
     // 标题
     HEADER_MARK(NotedownBundle.messagePointer("color.token.header.mark"), XML.XML_ATTRIBUTE_NAME),
     HEADER_L1(NotedownBundle.messagePointer("color.token.header.level1"), HEADER_MARK.textAttributesKey),
@@ -40,6 +38,7 @@ enum class NotedownColor(
     HEADER_L4(NotedownBundle.messagePointer("color.token.header.level4"), HEADER_MARK.textAttributesKey),
     HEADER_L5(NotedownBundle.messagePointer("color.token.header.level5"), HEADER_MARK.textAttributesKey),
     HEADER_L6(NotedownBundle.messagePointer("color.token.header.level6"), HEADER_MARK.textAttributesKey),
+
     // 其他
     CODE_TEXT(NotedownBundle.messagePointer("color.token.code.text"), Default.STRING),
     CODE_MARK(NotedownBundle.messagePointer("color.token.code.mark"), STRING.textAttributesKey),
@@ -76,10 +75,7 @@ enum class NotedownColor(
     DOC_COMMENT(OptionsBundle.messagePointer("options.language.defaults.doc.markup"), Default.DOC_COMMENT),
 
     // 错误
-    BAD_CHARACTER(
-        OptionsBundle.messagePointer("options.java.attribute.descriptor.bad.character"),
-        HighlighterColors.BAD_CHARACTER
-    ),
+    BAD_CHARACTER(OptionsBundle.messagePointer("options.java.attribute.descriptor.bad.character"), HighlighterColors.BAD_CHARACTER),
 
     // 废弃
     EXTENSION(OptionsBundle.messagePointer("options.language.defaults.metadata"), Default.METADATA),

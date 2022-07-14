@@ -8,7 +8,7 @@ import com.intellij.psi.impl.cache.impl.todo.LexerBasedTodoIndexer
 import com.intellij.psi.search.UsageSearchContext
 import notedge.idea.language.psi.NParserDefinition
 
-class VomlTodoIndexer : LexerBasedTodoIndexer() {
+class TodoIndexer : LexerBasedTodoIndexer() {
     override fun createLexer(consumer: OccurrenceConsumer): Lexer {
         return object : BaseFilterLexer(NLexerAdapter(), consumer) {
             override fun advance() {

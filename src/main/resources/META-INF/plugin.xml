@@ -66,11 +66,11 @@
 			implementationClass="notedge.idea.ide.matcher.FoldingBuilder"
 		/>
 		<indexPatternBuilder
-			implementation="notedge.idea.ide.todo.VomlTodoIndexPatternBuilder"
+			implementation="notedge.idea.ide.todo.TodoIndexPatternBuilder"
 		/>
 		<todoIndexer
 			filetype="Notedown"
-			implementationClass="notedge.idea.ide.todo.VomlTodoIndexer"
+			implementationClass="notedge.idea.ide.todo.TodoIndexer"
 		/>
 		<completion.contributor
 			language="Notedown"
@@ -85,11 +85,11 @@
 
 	</extensions>
 	<actions>
-		<action id="NewJssFile"		        class="notedge.idea.ide.actions.JssCreateFile">
+		<action id="NewJssFile" class="notedge.idea.ide.actions.CreateNotedownFile">
 			<add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewHtmlFile"/>
 		</action>
 		<action id="jss.JssConvertJson"
-		        class="notedge.idea.ide.actions.JssConvertJson"/>
+		        class="notedge.idea.ide.actions.ConvertFromMarkdown"/>
 		<group id="jss.JssGenerator" popup="true" text="JssGenerator">
 			<reference ref="NewJssFile"/>
 			<reference ref="jss.JssConvertJson"/>

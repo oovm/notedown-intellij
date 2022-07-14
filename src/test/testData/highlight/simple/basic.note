@@ -1,3 +1,7 @@
+\title: note
+\author: me
+\data: dynamic
+
 # section
 ## subsection
 ### subsubsection
@@ -26,15 +30,12 @@ ___normal text___
 
 `code`
 
+```code ``still`` inline```
 
-`code\$\`\s\k`
-
-
-```code inline```
-
+`code (escaped) \$\`\s\k`
 
 ```
-code block
+code block(non escaped)
 \$\`\s\k
 ```
 
@@ -43,19 +44,6 @@ code block
 ## Function
 
 ### TeX
-
-\get
-
-\title: note
-
-\include: ./path
-
-\section
-\subsection
-\subsubsection
-\paragraph
-\subparagraph
-\subsubparagraph
 
 \module.name(arg, kw=arg): text
 

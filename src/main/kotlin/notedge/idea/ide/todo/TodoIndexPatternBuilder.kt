@@ -9,7 +9,7 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import notedge.idea.language.psi.NParserDefinition
 
-class VomlTodoIndexPatternBuilder : IndexPatternBuilder {
+class TodoIndexPatternBuilder : IndexPatternBuilder {
     override fun getIndexingLexer(file: PsiFile): Lexer? {
         return if (file is NotedownFile) NLexerAdapter() else null
     }
