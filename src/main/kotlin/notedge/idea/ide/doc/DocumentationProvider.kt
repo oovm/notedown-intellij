@@ -5,7 +5,6 @@
 
 package notedge.idea.ide.doc
 
-import com.intellij.codeInspection.actions.InspectionDescriptionDocumentationProvider
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiDocCommentBase
 import com.intellij.psi.PsiElement
@@ -15,19 +14,23 @@ import com.intellij.psi.util.elementType
 import notedge.idea.language.file.NotedownFile
 import notedge.idea.language.psi.NoteTypes
 
-class DocumentationProvider : InspectionDescriptionDocumentationProvider() {
+class DocumentationProvider : com.intellij.lang.documentation.DocumentationProvider {
     override fun generateDoc(element: PsiElement?, originalElement: PsiElement?): String? {
         return DocumentationRender(element).onGenerate()
     }
+
     override fun generateHoverDoc(element: PsiElement, originalElement: PsiElement?): String? {
         return DocumentationRender(element).onHover()
     }
+
     override fun generateRenderedDoc(comment: PsiDocCommentBase): String? {
         return "<h1>generateRenderedDoc</h1>"
     }
+
     override fun getQuickNavigateInfo(element: PsiElement?, originalElement: PsiElement?): String? {
         return DocumentationRender(element).onHover()
     }
+
     override fun getCustomDocumentationElement(editor: Editor, file: PsiFile, contextElement: PsiElement?, targetOffset: Int): PsiElement? {
         if (file !is NotedownFile) return null
         return when (contextElement.elementType) {

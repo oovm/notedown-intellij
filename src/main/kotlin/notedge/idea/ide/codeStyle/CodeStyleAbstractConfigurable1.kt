@@ -5,7 +5,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettings
 
 class CodeStyleAbstractConfigurable1(settings: CodeStyleSettings, modelSettings: CodeStyleSettings) :
     CodeStyleAbstractConfigurable(settings, modelSettings, "CodeStyleAbstractConfigurable1") {
-    override fun createPanel(settings: CodeStyleSettings?): NCodeStyleMainPanel? {
-        return settings?.let { NCodeStyleMainPanel(currentSettings, it) }
+    override fun createPanel(settings: CodeStyleSettings?): CodeStyleMainPanel? {
+        return settings?.let { CodeStyleMainPanel(currentSettings, it) }
     }
 }

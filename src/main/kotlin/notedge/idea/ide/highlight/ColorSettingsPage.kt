@@ -1,12 +1,10 @@
 package notedge.idea.ide.highlight
 
-import notedge.idea.language.file.NotedownBundle
 import notedge.idea.language.file.NotedownIcons
 import com.intellij.openapi.options.colors.ColorDescriptor
-import com.intellij.openapi.options.colors.ColorSettingsPage
 import notedge.idea.language.file.NotedownLanguage
 
-class NColorSettingsPage : ColorSettingsPage {
+class ColorSettingsPage : com.intellij.openapi.options.colors.ColorSettingsPage {
     private val annotatorTags = NotedownColor
         .values()
         .associateBy({ it.name }, { it.textAttributesKey })
@@ -23,7 +21,7 @@ class NColorSettingsPage : ColorSettingsPage {
 
     override fun getIcon() = NotedownIcons.FILE
 
-    override fun getHighlighter() = NTokenHighlighter()
+    override fun getHighlighter() = TokenHighlighter()
 
     override fun getAdditionalHighlightingTagToDescriptorMap() = annotatorTags
 

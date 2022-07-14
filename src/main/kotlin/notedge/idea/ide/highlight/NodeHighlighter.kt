@@ -6,13 +6,12 @@ import com.intellij.codeInsight.daemon.impl.HighlightVisitor
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.util.elementType
 import notedge.idea.language.ast.NRecursiveVisitor
 import notedge.idea.language.file.NotedownFile
 import notedge.idea.language.psi.*
 import notedge.idea.language.psi_node.NoteHeaderNode
 
-class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
+class NodeHighlighter : NRecursiveVisitor(), HighlightVisitor {
     private var infoHolder: HighlightInfoHolder? = null
 
     override fun visitHeader(o: NoteHeader) {
@@ -97,7 +96,7 @@ class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
         return true
     }
 
-    override fun clone(): HighlightVisitor = NASTHighlighter()
+    override fun clone(): HighlightVisitor = NodeHighlighter()
 
     override fun suitableForFile(file: PsiFile): Boolean = file is NotedownFile
 

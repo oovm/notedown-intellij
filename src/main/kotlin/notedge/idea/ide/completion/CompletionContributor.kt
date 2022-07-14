@@ -1,10 +1,11 @@
 package notedge.idea.ide.completion
 
 import notedge.idea.language.psi.NoteTypes
-import com.intellij.codeInsight.completion.*
+import com.intellij.codeInsight.completion.CompletionContributor
+import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.patterns.PlatformPatterns
 
-class NCompletionContributor : CompletionContributor() {
+class CompletionContributor : CompletionContributor() {
     init {
         extend(
             CompletionType.BASIC,

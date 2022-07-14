@@ -9,7 +9,7 @@ import notedge.idea.language.psi.NLexerAdapter
 import notedge.idea.language.psi.NoteTypes.*
 import notedge.idea.ide.highlight.NotedownColor as Color
 
-class NTokenHighlighter : SyntaxHighlighterBase() {
+class TokenHighlighter : SyntaxHighlighterBase() {
     override fun getHighlightingLexer(): Lexer {
         return NLexerAdapter()
     }

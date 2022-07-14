@@ -23,11 +23,11 @@
 		<!-- Highlight -->
 		<additionalTextAttributes scheme="Default" file="colors/JssDefault.xml"/>
 		<additionalTextAttributes scheme="Darcula" file="colors/JssDarcula.xml"/>
-		<colorSettingsPage implementation="notedge.idea.ide.highlight.NColorSettingsPage"/>
-		<highlightVisitor implementation="notedge.idea.ide.highlight.NASTHighlighter"/>
+		<colorSettingsPage implementation="notedge.idea.ide.highlight.ColorSettingsPage"/>
+		<highlightVisitor implementation="notedge.idea.ide.highlight.NodeHighlighter"/>
 		<lang.syntaxHighlighter
 			language="Notedown"
-			implementationClass="notedge.idea.ide.highlight.NTokenHighlighter"/>
+			implementationClass="notedge.idea.ide.highlight.TokenHighlighter"/>
 		<!-- View -->
 		<lang.psiStructureViewFactory
 			language="Notedown"
@@ -63,7 +63,7 @@
 		/>
 		<lang.foldingBuilder
 			language="Notedown"
-			implementationClass="notedge.idea.ide.matcher.NFoldingBuilder"
+			implementationClass="notedge.idea.ide.matcher.FoldingBuilder"
 		/>
 		<indexPatternBuilder
 			implementation="notedge.idea.ide.todo.VomlTodoIndexPatternBuilder"
@@ -74,13 +74,13 @@
 		/>
 		<completion.contributor
 			language="Notedown"
-			implementationClass="notedge.idea.ide.completion.NCompletionContributor"
+			implementationClass="notedge.idea.ide.completion.CompletionContributor"
 		/>
 
 		<annotator language="Notedown" implementationClass="notedge.idea.ide.annotator.EscapeAnnotator"/>
 
 		<langCodeStyleSettingsProvider
-			implementation="notedge.idea.ide.codeStyle.NLanguageCodeStyleSettingsProvider"
+			implementation="notedge.idea.ide.codeStyle.LanguageCodeStyleSettingsProvider"
 		/>
 
 	</extensions>

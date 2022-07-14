@@ -38,17 +38,13 @@ class DocumentationRender(val element: PsiElement?) {
     }
 
     private fun renderShort(element: NoteHeaderNode) {
-        append("function", NotedownColor.KEYWORD)
-        appendSpace(1)
-        append(element.headLevelName(), NotedownColor.SYM_FUNCTION)
-        appendNewline()
+        appendFunction(element.headLevelName())
         appendSpace(4)
         append("id", NotedownColor.SYM_ARGUMENT)
         append(":")
         appendSpace(1)
         append(element.headID(), NotedownColor.STRING)
     }
-
 
     private fun renderCode(element: PsiElement) {
         HtmlSyntaxInfoUtil.appendHighlightedByLexerAndEncodedAsHtmlCodeSnippet(
@@ -79,5 +75,12 @@ class DocumentationRender(val element: PsiElement?) {
         for (i in 0 until length) {
             s.append("&nbsp;")
         }
+    }
+
+    private fun appendFunction(name: String) {
+        append("function", NotedownColor.KEYWORD)
+        appendSpace(1)
+        append(name, NotedownColor.SYM_FUNCTION)
+        appendNewline()
     }
 }

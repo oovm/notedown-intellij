@@ -1,11 +1,14 @@
 package notedge.idea.ide.codeStyle
 
 import com.intellij.application.options.SmartIndentOptionsEditor
-import com.intellij.psi.codeStyle.*
+import com.intellij.psi.codeStyle.CodeStyleConfigurable
+import com.intellij.psi.codeStyle.CodeStyleSettings
+import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings.IndentOptions
 import notedge.idea.language.file.NotedownLanguage
 
-class NLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider() {
+class LanguageCodeStyleSettingsProvider : com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider() {
     override fun getLanguage() = NotedownLanguage
 
     override fun getIndentOptionsEditor() = SmartIndentOptionsEditor()

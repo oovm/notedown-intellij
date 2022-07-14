@@ -10,15 +10,10 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import notedge.idea.language.file.NotedownFile
 
-class NFoldingBuilder : CustomFoldingBuilder(), DumbAware {
-    override fun buildLanguageFoldRegions(
-        descriptors: MutableList<FoldingDescriptor>,
-        root: PsiElement,
-        document: Document,
-        quick: Boolean
-    ) {
+class FoldingBuilder : CustomFoldingBuilder(), DumbAware {
+    override fun buildLanguageFoldRegions(descriptors: MutableList<FoldingDescriptor>, root: PsiElement, document: Document, quick: Boolean) {
         if (root !is NotedownFile) return
-        val visitor = NFoldingVisitor(descriptors)
+        val visitor = FoldingVisitor(descriptors)
         PsiTreeUtil.processElements(root) {
             it.accept(visitor);
             true
