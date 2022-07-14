@@ -9,20 +9,32 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors.VALID_STRING
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.refactoring.suggested.startOffset
+import notedge.idea.language.ast.NotedownASTBase
 import notedge.idea.language.psi_node.NoteCodeNode
 
 class EscapeAnnotator : Annotator {
-    private fun validEscape(offset: Int, length: Int, holder: AnnotationHolder) {
-         holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(TextRange.from(offset, length)).textAttributes(VALID_STRING_ESCAPE).create()
+    fun validEscape(offset: Int, length: Int, holder: AnnotationHolder) {
+        holder
+            .newSilentAnnotation(HighlightSeverity.INFORMATION)
+            .range(TextRange.from(offset, length))
+            .textAttributes(VALID_STRING_ESCAPE)
+            .create()
     }
 
     /// Useless escaped character
-    private fun uselessEscape(offset: Int, length: Int, holder: AnnotationHolder) {
-        holder.newSilentAnnotation(HighlightSeverity.WARNING).range(TextRange.from(offset, length)).textAttributes(VALID_STRING_ESCAPE).create()
+    fun uselessEscape(offset: Int, length: Int, holder: AnnotationHolder) {
+        holder
+            .newAnnotation(HighlightSeverity.WARNING, "Useless escaped character")
+            .range(TextRange.from(offset, length))
+            .textAttributes(VALID_STRING_ESCAPE)
+            .create()
     }
 
-    private fun invalidEscape(offset: Int, length: Int, holder: AnnotationHolder) {
-        holder.newSilentAnnotation(HighlightSeverity.ERROR).range(TextRange.from(offset, length)).textAttributes(INVALID_STRING_ESCAPE).create()
+    fun invalidEscape(offset: Int, length: Int, holder: AnnotationHolder) {
+        holder.newSilentAnnotation(HighlightSeverity.ERROR)
+            .range(TextRange.from(offset, length))
+            .textAttributes(INVALID_STRING_ESCAPE)
+            .create()
     }
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
@@ -36,28 +48,32 @@ class EscapeAnnotator : Annotator {
         if (element.codeLevel != 1) {
             return
         }
-        val text = element.text
-        var offset = 0
-        val end = element.text.length
-        while (offset < end) {
-            when (text.getOrNull(offset)) {
-                '\\' -> {
-                    when (text.getOrNull(offset + 1)) {
-                        '$' -> {
-                            uselessEscape(element.startOffset + offset, 2, holder)
-                        }
-                        null -> {
-                            invalidEscape(element.startOffset + offset, 1, holder)
-                        }
-                        else -> {
-                            validEscape(element.startOffset + offset, 2, holder)
-                        }
+        checkBase(element, holder)
+    }
+}
+
+private fun EscapeAnnotator.checkBase(element: NotedownASTBase, holder: AnnotationHolder) {
+    val text = element.text
+    var offset = 0
+    val end = element.text.length
+    while (offset < end) {
+        when (text.getOrNull(offset)) {
+            '\\' -> {
+                when (text.getOrNull(offset + 1)) {
+                    '$', '"', '\'' -> {
+                        uselessEscape(element.startOffset + offset, 2, holder)
                     }
-                    offset += 2
+                    null -> {
+                        invalidEscape(element.startOffset + offset, 1, holder)
+                    }
+                    else -> {
+                        validEscape(element.startOffset + offset, 2, holder)
+                    }
                 }
-                null -> break
-                else -> offset += 1
+                offset += 2
             }
+            null -> break
+            else -> offset += 1
         }
     }
 }
