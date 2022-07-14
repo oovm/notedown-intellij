@@ -12,8 +12,8 @@ import javax.swing.Icon
 
 abstract class ViewNode(node: ASTNode) : NotedownASTBase(node),
     NavigatablePsiElement {
-    abstract override fun getIcon(flags: Int): Icon;
-    abstract override fun getNavigationElement(): PsiElement;
+    abstract override fun getIcon(flags: Int): Icon
+    abstract override fun getNavigationElement(): PsiElement
     override fun getName(): String = navigationElement.text
     override fun getUserDataString(): String = ""
     override fun getTextOffset(): Int = navigationElement.textRange.startOffset
@@ -23,6 +23,7 @@ abstract class ViewNode(node: ASTNode) : NotedownASTBase(node),
             else -> NItemPresentation(getIcon(0), name, userDataString)
         }
     }
+
     open fun getChildrenView(): Array<NStructureViewElement> = getChildOfType(ViewNode::class.java)
 
     fun getChildOfType(vararg classes: Class<out NavigatablePsiElement>): Array<NStructureViewElement> {
