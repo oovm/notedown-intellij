@@ -15,4 +15,5 @@ object NotedownIcons {
     val TEXT = IconLoader.getIcon("/icons/textArea.svg", NotedownIcons::class.java)
     val FUNCTION = AllIcons.Nodes.Function
     val CODE = AllIcons.Json.Object
+    val MATH = AllIcons.Actions.RegexSelected
 }

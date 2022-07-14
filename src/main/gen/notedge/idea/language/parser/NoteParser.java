@@ -48,13 +48,13 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<brace_block STRING_TEXT>>
+  // <<brace STRING_TEXT>>
   public static boolean args_block(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "args_block")) return false;
     if (!nextTokenIs(b, BRACE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = brace_block(b, l + 1, STRING_TEXT_parser_);
+    r = brace(b, l + 1, STRING_TEXT_parser_);
     exit_section_(b, m, ARGS_BLOCK, r);
     return r;
   }
@@ -154,76 +154,76 @@ public class NoteParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // BRACE_L <<item>>* BRACE_R
-  public static boolean brace_block(PsiBuilder b, int l, Parser _item) {
-    if (!recursion_guard_(b, l, "brace_block")) return false;
+  public static boolean brace(PsiBuilder b, int l, Parser _item) {
+    if (!recursion_guard_(b, l, "brace")) return false;
     if (!nextTokenIs(b, BRACE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, BRACE_L);
-    r = r && brace_block_1(b, l + 1, _item);
+    r = r && brace_1(b, l + 1, _item);
     r = r && consumeToken(b, BRACE_R);
-    exit_section_(b, m, BRACE_BLOCK, r);
+    exit_section_(b, m, BRACE, r);
     return r;
   }
 
   // <<item>>*
-  private static boolean brace_block_1(PsiBuilder b, int l, Parser _item) {
-    if (!recursion_guard_(b, l, "brace_block_1")) return false;
+  private static boolean brace_1(PsiBuilder b, int l, Parser _item) {
+    if (!recursion_guard_(b, l, "brace_1")) return false;
     while (true) {
       int c = current_position_(b);
       if (!_item.parse(b, l)) break;
-      if (!empty_element_parsed_guard_(b, "brace_block_1", c)) break;
+      if (!empty_element_parsed_guard_(b, "brace_1", c)) break;
     }
     return true;
   }
 
   /* ********************************************************** */
   // BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R
-  public static boolean bracket_block(PsiBuilder b, int l, Parser _item, Parser _sp) {
-    if (!recursion_guard_(b, l, "bracket_block")) return false;
+  public static boolean bracket(PsiBuilder b, int l, Parser _item, Parser _sp) {
+    if (!recursion_guard_(b, l, "bracket")) return false;
     if (!nextTokenIs(b, BRACKET_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, BRACKET_L);
-    r = r && bracket_block_1(b, l + 1, _item, _sp);
+    r = r && bracket_1(b, l + 1, _item, _sp);
     r = r && consumeToken(b, BRACKET_R);
-    exit_section_(b, m, BRACKET_BLOCK, r);
+    exit_section_(b, m, BRACKET, r);
     return r;
   }
 
   // [<<item>> (<<sp>> <<item>>)* [<<sp>>]]
-  private static boolean bracket_block_1(PsiBuilder b, int l, Parser _item, Parser _sp) {
-    if (!recursion_guard_(b, l, "bracket_block_1")) return false;
-    bracket_block_1_0(b, l + 1, _item, _sp);
+  private static boolean bracket_1(PsiBuilder b, int l, Parser _item, Parser _sp) {
+    if (!recursion_guard_(b, l, "bracket_1")) return false;
+    bracket_1_0(b, l + 1, _item, _sp);
     return true;
   }
 
   // <<item>> (<<sp>> <<item>>)* [<<sp>>]
-  private static boolean bracket_block_1_0(PsiBuilder b, int l, Parser _item, Parser _sp) {
-    if (!recursion_guard_(b, l, "bracket_block_1_0")) return false;
+  private static boolean bracket_1_0(PsiBuilder b, int l, Parser _item, Parser _sp) {
+    if (!recursion_guard_(b, l, "bracket_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = _item.parse(b, l);
-    r = r && bracket_block_1_0_1(b, l + 1, _sp, _item);
-    r = r && bracket_block_1_0_2(b, l + 1, _sp);
+    r = r && bracket_1_0_1(b, l + 1, _sp, _item);
+    r = r && bracket_1_0_2(b, l + 1, _sp);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // (<<sp>> <<item>>)*
-  private static boolean bracket_block_1_0_1(PsiBuilder b, int l, Parser _sp, Parser _item) {
-    if (!recursion_guard_(b, l, "bracket_block_1_0_1")) return false;
+  private static boolean bracket_1_0_1(PsiBuilder b, int l, Parser _sp, Parser _item) {
+    if (!recursion_guard_(b, l, "bracket_1_0_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!bracket_block_1_0_1_0(b, l + 1, _sp, _item)) break;
-      if (!empty_element_parsed_guard_(b, "bracket_block_1_0_1", c)) break;
+      if (!bracket_1_0_1_0(b, l + 1, _sp, _item)) break;
+      if (!empty_element_parsed_guard_(b, "bracket_1_0_1", c)) break;
     }
     return true;
   }
 
   // <<sp>> <<item>>
-  private static boolean bracket_block_1_0_1_0(PsiBuilder b, int l, Parser _sp, Parser _item) {
-    if (!recursion_guard_(b, l, "bracket_block_1_0_1_0")) return false;
+  private static boolean bracket_1_0_1_0(PsiBuilder b, int l, Parser _sp, Parser _item) {
+    if (!recursion_guard_(b, l, "bracket_1_0_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = _sp.parse(b, l);
@@ -233,9 +233,30 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   // [<<sp>>]
-  private static boolean bracket_block_1_0_2(PsiBuilder b, int l, Parser _sp) {
-    if (!recursion_guard_(b, l, "bracket_block_1_0_2")) return false;
+  private static boolean bracket_1_0_2(PsiBuilder b, int l, Parser _sp) {
+    if (!recursion_guard_(b, l, "bracket_1_0_2")) return false;
     _sp.parse(b, l);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // CODE_L string? CODE_R
+  public static boolean code(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "code")) return false;
+    if (!nextTokenIs(b, CODE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, CODE_L);
+    r = r && code_1(b, l + 1);
+    r = r && consumeToken(b, CODE_R);
+    exit_section_(b, m, CODE, r);
+    return r;
+  }
+
+  // string?
+  private static boolean code_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "code_1")) return false;
+    string(b, l + 1);
     return true;
   }
 
@@ -348,13 +369,13 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<bracket_block value COMMA>>
+  // <<bracket value COMMA>>
   public static boolean list(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "list")) return false;
     if (!nextTokenIs(b, BRACKET_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = bracket_block(b, l + 1, NoteParser::value, COMMA_parser_);
+    r = bracket(b, l + 1, NoteParser::value, COMMA_parser_);
     exit_section_(b, m, LIST, r);
     return r;
   }
@@ -478,27 +499,6 @@ public class NoteParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // CODE_L string? CODE_R
-  public static boolean snippet(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "snippet")) return false;
-    if (!nextTokenIs(b, CODE_L)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, CODE_L);
-    r = r && snippet_1(b, l + 1);
-    r = r && consumeToken(b, CODE_R);
-    exit_section_(b, m, SNIPPET, r);
-    return r;
-  }
-
-  // string?
-  private static boolean snippet_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "snippet_1")) return false;
-    string(b, l + 1);
-    return true;
-  }
-
-  /* ********************************************************** */
   // header
   //   | text_elements
   //   | BREAK_PART
@@ -601,7 +601,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
   //   | escaped | ESCAPE | NEW_LINE
   //   | italic | bold | strong
   //   | under | strike | wave
-  //   | snippet | math
+  //   | code | math
   static boolean text_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "text_item")) return false;
     boolean r;
@@ -618,7 +618,7 @@ public class NoteParser implements PsiParser, LightPsiParser {
     if (!r) r = under(b, l + 1);
     if (!r) r = strike(b, l + 1);
     if (!r) r = wave(b, l + 1);
-    if (!r) r = snippet(b, l + 1);
+    if (!r) r = code(b, l + 1);
     if (!r) r = math(b, l + 1);
     return r;
   }

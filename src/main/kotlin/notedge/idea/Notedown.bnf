@@ -48,7 +48,7 @@ private text_item ::= PLAIN_TEXT
   | escaped | ESCAPE | NEW_LINE
   | italic | bold | strong
   | under | strike | wave
-  | snippet | math
+  | code | math
 escaped ::= ESCAPED_CHARACTER
 // ---------------------------------------------------------------------------------------------------------------------
 italic ::= ITALIC_L [text_elements] ITALIC_R // *text*
@@ -59,10 +59,14 @@ under  ::= UNDER_L  [text_elements] UNDER_R  // _text_
 wave   ::= WAVE_L   [text_elements] WAVE_R   // __text__
 strike ::= STRIKE_L [text_elements] STRIKE_R // ___text___
 // ---------------------------------------------------------------------------------------------------------------------
-snippet ::= CODE_L string? CODE_R {
-    mixin = "notedge.idea.language.mixin.MixinSnippet"
+code ::= CODE_L string? CODE_R {
+    // `code`
+    mixin = "notedge.idea.language.mixin.MixinCode"
 }
-math    ::= MATH_L string? MATH_R // $math$
+math ::= MATH_L string? MATH_R {
+    // $math$
+    mixin = "notedge.idea.language.mixin.MixinMath"
+}
 // ---------------------------------------------------------------------------------------------------------------------
 string  ::= (STRING_TEXT | ESCAPE_TEXT)+;
 // ---------------------------------------------------------------------------------------------------------------------

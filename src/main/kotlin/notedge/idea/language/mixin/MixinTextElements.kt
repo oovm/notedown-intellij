@@ -8,8 +8,9 @@ import notedge.idea.ide.view.NStructureViewElement
 import notedge.idea.language.ast.ViewNode
 import notedge.idea.language.file.NotedownIcons
 import notedge.idea.language.psi.NoteTextElements
+import notedge.idea.language.psi_node.NoteCodeNode
 import notedge.idea.language.psi_node.NoteFunctionNode
-import notedge.idea.language.psi_node.NoteSnippetNode
+import notedge.idea.language.psi_node.NoteMathNode
 import javax.swing.Icon
 
 
@@ -28,7 +29,10 @@ abstract class MixinTextElements(node: ASTNode) : ViewNode(node), NoteTextElemen
             child is NoteFunctionNode -> {
                 child.presentation
             }
-            child is NoteSnippetNode && child.isCodeBlock() -> {
+            child is NoteMathNode && child.isDisplayBlock() -> {
+                child.presentation
+            }
+            child is NoteCodeNode && child.isCodeBlock() -> {
                 child.presentation
             }
             else -> {

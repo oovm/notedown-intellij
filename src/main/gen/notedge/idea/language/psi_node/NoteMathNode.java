@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static notedge.idea.language.psi.NoteTypes.*;
-import notedge.idea.language.ast.NotedownASTBase;
+import notedge.idea.language.mixin.MixinMath;
 import notedge.idea.language.psi.*;
 
-public class NoteMathNode extends NotedownASTBase implements NoteMath {
+public class NoteMathNode extends MixinMath implements NoteMath {
 
   public NoteMathNode(@NotNull ASTNode node) {
     super(node);

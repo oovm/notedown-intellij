@@ -35,6 +35,10 @@ public class NoteVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitCode(@NotNull NoteCode o) {
+    visitPsiElement(o);
+  }
+
   public void visitEscaped(@NotNull NoteEscaped o) {
     visitPsiElement(o);
   }
@@ -72,10 +76,6 @@ public class NoteVisitor extends PsiElementVisitor {
   }
 
   public void visitParenthesis(@NotNull NoteParenthesis o) {
-    visitPsiElement(o);
-  }
-
-  public void visitSnippet(@NotNull NoteSnippet o) {
     visitPsiElement(o);
   }
 

@@ -35,6 +35,12 @@ public class NoteTextElementsNode extends MixinTextElements implements NoteTextE
 
   @Override
   @NotNull
+  public List<NoteCode> getCodeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteCode.class);
+  }
+
+  @Override
+  @NotNull
   public List<NoteEscaped> getEscapedList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteEscaped.class);
   }
@@ -55,12 +61,6 @@ public class NoteTextElementsNode extends MixinTextElements implements NoteTextE
   @NotNull
   public List<NoteMath> getMathList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteMath.class);
-  }
-
-  @Override
-  @NotNull
-  public List<NoteSnippet> getSnippetList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, NoteSnippet.class);
   }
 
   @Override

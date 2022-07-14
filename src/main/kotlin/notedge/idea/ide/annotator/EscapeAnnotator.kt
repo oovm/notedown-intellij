@@ -10,47 +10,46 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.refactoring.suggested.endOffset
 import com.intellij.refactoring.suggested.startOffset
-import notedge.idea.language.psi_node.NoteSnippetNode
+import notedge.idea.language.psi_node.NoteCodeNode
 
-class SnippetAnnotator : Annotator {
+class EscapeAnnotator : Annotator {
     private fun validEscape(offset: Int, length: Int, holder: AnnotationHolder) {
-        holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(TextRange.from(offset, length)).textAttributes(VALID_STRING_ESCAPE)
+        holder.newAnnotation(HighlightSeverity.INFORMATION, "validEscape").range(TextRange.from(offset, length)).textAttributes(VALID_STRING_ESCAPE)
             .create()
     }
 
     private fun uselessEscape(offset: Int, length: Int, holder: AnnotationHolder) {
-        holder.newSilentAnnotation(HighlightSeverity.WEAK_WARNING).range(TextRange.from(offset, length)).textAttributes(VALID_STRING_ESCAPE)
+        holder.newAnnotation(HighlightSeverity.WEAK_WARNING, "uselessEscape").range(TextRange.from(offset, length)).textAttributes(VALID_STRING_ESCAPE)
             .create()
     }
 
     private fun invalidEscape(offset: Int, length: Int, holder: AnnotationHolder) {
-        holder.newSilentAnnotation(HighlightSeverity.ERROR).range(TextRange.from(offset, length)).textAttributes(INVALID_STRING_ESCAPE).create()
+        holder.newAnnotation(HighlightSeverity.ERROR, "invalidEscape").range(TextRange.from(offset, length)).textAttributes(INVALID_STRING_ESCAPE).create()
     }
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         when (element) {
-            is NoteSnippetNode -> check(element, holder)
+            is NoteCodeNode -> check(element, holder)
             else -> return
         }
     }
 
-    private fun check(element: NoteSnippetNode, holder: AnnotationHolder) {
+    private fun check(element: NoteCodeNode, holder: AnnotationHolder) {
+        if (element.codeLevel != 1) {
+            return
+        }
         val text = element.text
         var offset = element.startOffset
         val end = element.endOffset
         while (offset < end) {
-            when (text[offset]) {
+            when (text.getOrNull(offset)) {
                 '\\' -> {
-                    val next = text.getOrNull(offset + 1)
-                    when {
-                        next != '\\' -> {
+                    when (text.getOrNull(offset + 1)) {
+                        '\\', '$' -> {
                             uselessEscape(offset, 2, holder)
                         }
-                        next == '$' -> {
-                            invalidEscape(offset, 2, holder)
-                        }
-                        next == null -> {
-
+                        null -> {
+                            invalidEscape(offset, 1, holder)
                         }
                         else -> {
                             validEscape(offset, 2, holder)
@@ -58,9 +57,8 @@ class SnippetAnnotator : Annotator {
                     }
                     offset += 2
                 }
-                else -> {
-                    offset += 1
-                }
+                null -> break
+                else -> offset += 1
             }
         }
     }

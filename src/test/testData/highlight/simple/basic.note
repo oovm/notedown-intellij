@@ -23,9 +23,9 @@ ___normal text___
 
 # code
 
-`code\``
-
 `code`
+
+`code\\\`\s\k`
 
 ```code```
 
@@ -38,6 +38,8 @@ code
 ## Function
 
 ### TeX
+
+\get
 
 \title: note
 

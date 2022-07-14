@@ -8,17 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static notedge.idea.language.psi.NoteTypes.*;
-import notedge.idea.language.mixin.MixinSnippet;
+import notedge.idea.language.mixin.MixinCode;
 import notedge.idea.language.psi.*;
 
-public class NoteSnippetNode extends MixinSnippet implements NoteSnippet {
+public class NoteCodeNode extends MixinCode implements NoteCode {
 
-  public NoteSnippetNode(@NotNull ASTNode node) {
+  public NoteCodeNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull NoteVisitor visitor) {
-    visitor.visitSnippet(this);
+    visitor.visitCode(this);
   }
 
   @Override

@@ -27,7 +27,7 @@ class NASTHighlighter : NRecursiveVisitor(), HighlightVisitor {
         }
     }
 
-    override fun visitSnippet(o: NoteSnippet) {
+    override fun visitCode(o: NoteCode) {
         o.string?.let { highlight(it, NotedownColor.CODE_TEXT) }
     }
 

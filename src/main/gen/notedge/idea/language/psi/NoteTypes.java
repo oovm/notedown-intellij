@@ -15,6 +15,7 @@ public interface NoteTypes {
   IElementType BOLD = new NElementType("BOLD");
   IElementType BRACE = new NElementType("BRACE");
   IElementType BRACKET = new NElementType("BRACKET");
+  IElementType CODE = new NElementType("CODE");
   IElementType ESCAPED = new NElementType("ESCAPED");
   IElementType FUNCTION = new NElementType("FUNCTION");
   IElementType HEADER = new NElementType("HEADER");
@@ -25,7 +26,6 @@ public interface NoteTypes {
   IElementType MATH = new NElementType("MATH");
   IElementType NAMESPACE = new NElementType("NAMESPACE");
   IElementType PARENTHESIS = new NElementType("PARENTHESIS");
-  IElementType SNIPPET = new NElementType("SNIPPET");
   IElementType STRIKE = new NElementType("STRIKE");
   IElementType STRING = new NElementType("STRING");
   IElementType STRONG = new NElementType("STRONG");
@@ -107,6 +107,9 @@ public interface NoteTypes {
       else if (type == BRACKET) {
         return new NoteBracketNode(node);
       }
+      else if (type == CODE) {
+        return new NoteCodeNode(node);
+      }
       else if (type == ESCAPED) {
         return new NoteEscapedNode(node);
       }
@@ -136,9 +139,6 @@ public interface NoteTypes {
       }
       else if (type == PARENTHESIS) {
         return new NoteParenthesisNode(node);
-      }
-      else if (type == SNIPPET) {
-        return new NoteSnippetNode(node);
       }
       else if (type == STRIKE) {
         return new NoteStrikeNode(node);

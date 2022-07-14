@@ -11,6 +11,9 @@ public interface NoteTextElements extends PsiElement {
   List<NoteBold> getBoldList();
 
   @NotNull
+  List<NoteCode> getCodeList();
+
+  @NotNull
   List<NoteEscaped> getEscapedList();
 
   @NotNull
@@ -21,9 +24,6 @@ public interface NoteTextElements extends PsiElement {
 
   @NotNull
   List<NoteMath> getMathList();
-
-  @NotNull
-  List<NoteSnippet> getSnippetList();
 
   @NotNull
   List<NoteStrike> getStrikeList();
