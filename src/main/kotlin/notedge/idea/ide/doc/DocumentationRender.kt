@@ -1,51 +1,56 @@
 package notedge.idea.ide.doc
 
-import com.intellij.ide.favoritesTreeView.NoteNode
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.editor.richcopy.HtmlSyntaxInfoUtil
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.ui.ColorUtil
 import notedge.idea.ide.highlight.NotedownColor
 import notedge.idea.language.file.NotedownLanguage
+import notedge.idea.language.psi_node.NoteHeaderNode
+import notedge.idea.language.psi_node.NoteIdentifierNode
 
-class DocumentationRender() {
+class DocumentationRender(val element: PsiElement?) {
     private val s = StringBuilder()
-    fun onGenerate(element: PsiElement): String {
-        HtmlSyntaxInfoUtil.appendHighlightedByLexerAndEncodedAsHtmlCodeSnippet(
-            s,
-            element.project,
-            NotedownLanguage,
-            element.text,
-            1.0f,
-        )
-        return s.toString()
-    }
-
-    fun onHover(element: PsiElement): String {
+    fun onGenerate(): String? {
         when (element) {
+            null -> return null
+            is NoteHeaderNode -> {
+                renderDetail(element)
+            }
+            else -> {
 
+            }
         }
-
-
-        HtmlSyntaxInfoUtil.appendHighlightedByLexerAndEncodedAsHtmlCodeSnippet(
-            s,
-            element.project,
-            NotedownLanguage,
-            element.text,
-            1.0f,
-        )
         return s.toString()
     }
 
-    private renderShort(element: PsiElement) {
-        s.append("<span style=\"color: ")
-        s.append(ColorUtil.toHex(EditorColorsManager.getInstance().globalScheme.getColor(NotedownColor.SHORT_NAME)))
-        s.append(";\">")
-        s.append(element.text)
-        s.append("</span>")
+    fun onHover(): String? {
+        when (element) {
+            null -> return null
+            else -> {}
+        }
+        return s.toString()
     }
 
-    private renderCode(element: PsiElement) {
+    private fun renderDetail(element: NoteHeaderNode) {
+        renderShort(element)
+    }
+
+    private fun renderShort(element: NoteHeaderNode) {
+        append("function", NotedownColor.KEYWORD)
+        appendSpace(1)
+        append(element.headLevelName(), NotedownColor.SYM_FUNCTION)
+        appendNewline()
+        appendSpace(4)
+        append("id", NotedownColor.SYM_ARGUMENT)
+        append(":")
+        appendSpace(1)
+        append(element.headID(), NotedownColor.STRING)
+    }
+
+
+    private fun renderCode(element: PsiElement) {
         HtmlSyntaxInfoUtil.appendHighlightedByLexerAndEncodedAsHtmlCodeSnippet(
             s,
             element.project,

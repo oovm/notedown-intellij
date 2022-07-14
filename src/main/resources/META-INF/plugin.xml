@@ -50,7 +50,7 @@
 		<psi.referenceContributor implementation="notedge.idea.ide.doc.UrlReferenceContributor"/>
 		<lang.documentationProvider
 			language="Notedown"
-			implementationClass="notedge.idea.ide.doc.NDocumentationProvider"
+			implementationClass="notedge.idea.ide.doc.DocumentationProvider"
 		/>
 
 		<lang.braceMatcher

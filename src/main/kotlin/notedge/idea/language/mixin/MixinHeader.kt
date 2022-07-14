@@ -32,4 +32,29 @@ abstract class MixinHeader(node: ASTNode) : ViewNode(node), NoteHeader {
     val headLevel: Int = this.firstChild.text.takeWhile { it == '#' }.length
 
     override fun getChildrenView(): Array<NStructureViewElement> = arrayOf()
+
+    fun headLevelName(): String = when (headLevel) {
+        1 -> "section"
+        2 -> "subsection"
+        3 -> "subsubsection"
+        4 -> "paragraph"
+        5 -> "subparagraph"
+        else -> "subsubparagraph"
+    }
+
+    fun headID(): String {
+        val out = StringBuilder()
+        for (c in textElements.text) {
+            when {
+                c.isLetterOrDigit() -> {
+                    out.append(c.lowercaseChar())
+                }
+                else -> {
+                    out.append('-')
+                }
+            }
+        }
+        return out.toString()
+    }
+
 }
