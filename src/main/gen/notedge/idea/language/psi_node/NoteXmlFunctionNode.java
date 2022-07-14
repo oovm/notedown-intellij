@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static notedge.idea.language.psi.NoteTypes.*;
-import notedge.idea.language.ast.NotedownASTBase;
+import notedge.idea.language.mixin.MixinFunctionXML;
 import notedge.idea.language.psi.*;
 
-public class NoteXmlFunctionNode extends NotedownASTBase implements NoteXmlFunction {
+public class NoteXmlFunctionNode extends MixinFunctionXML implements NoteXmlFunction {
 
   public NoteXmlFunctionNode(@NotNull ASTNode node) {
     super(node);

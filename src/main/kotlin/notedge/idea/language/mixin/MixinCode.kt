@@ -16,7 +16,7 @@ abstract class MixinCode(node: ASTNode) : ViewNode(node), NoteSnippet {
         false -> NotedownIcons.CODE
     }
     override fun getNavigationElement(): PsiElement {
-        return this
+        return this.children.getOrElse(2) { this }
     }
 
     override fun getPresentation(): ItemPresentation {
@@ -27,6 +27,7 @@ abstract class MixinCode(node: ASTNode) : ViewNode(node), NoteSnippet {
 
     fun isCodeBlock(): Boolean = when {
         codeLevel < 3 -> false
+        this.text.lines().count() == 1 -> false
         this.parent.children.count() == 1 -> true
         else -> false
     }

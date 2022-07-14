@@ -48,6 +48,15 @@ code block
 
 \title: note
 
+\include: ./path
+
+\section
+\subsection
+\subsubsection
+\paragraph
+\subparagraph
+\subsubparagraph
+
 \module.name(arg, kw=arg): text
 
 \function(

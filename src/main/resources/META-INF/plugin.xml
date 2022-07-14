@@ -47,10 +47,10 @@
 		/>
 		<!-- Document -->
 		<!--documentationProvider implementation="notedge.idea.ide.doc.JssDocumentationExtender"-->
-		<psi.referenceContributor implementation="notedge.idea.ide.doc.JssUrlReferenceContributor"/>
+		<psi.referenceContributor implementation="notedge.idea.ide.doc.UrlReferenceContributor"/>
 		<lang.documentationProvider
 			language="Notedown"
-			implementationClass="notedge.idea.ide.doc.JssDocumentationProvider"
+			implementationClass="notedge.idea.ide.doc.NDocumentationProvider"
 		/>
 
 		<lang.braceMatcher
@@ -74,7 +74,7 @@
 		/>
 		<completion.contributor
 			language="Notedown"
-			implementationClass="notedge.idea.ide.completion.VomlOptionCompletionContributor"
+			implementationClass="notedge.idea.ide.completion.NCompletionContributor"
 		/>
 
 		<annotator language="Notedown" implementationClass="notedge.idea.ide.annotator.EscapeAnnotator"/>

@@ -23,7 +23,7 @@ abstract class ViewNode(node: ASTNode) : NotedownASTBase(node),
             else -> NItemPresentation(getIcon(0), name, userDataString)
         }
     }
-    open fun getChildrenView(): Array<NStructureViewElement> = arrayOf()
+    open fun getChildrenView(): Array<NStructureViewElement> = getChildOfType(ViewNode::class.java)
 
     fun getChildOfType(vararg classes: Class<out NavigatablePsiElement>): Array<NStructureViewElement> {
         return PsiTreeUtil.getChildrenOfAnyType(this, *classes)

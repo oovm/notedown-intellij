@@ -5,9 +5,8 @@ import com.intellij.psi.PsiReference
 import com.intellij.psi.PsiReferenceProvider
 import com.intellij.util.ProcessingContext
 
-class JssUrlReferenceProvider : PsiReferenceProvider() {
+class UrlReferenceProvider : PsiReferenceProvider() {
     override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
         TODO("Not yet implemented")
     }
-
 }

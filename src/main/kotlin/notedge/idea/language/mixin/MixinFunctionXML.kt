@@ -19,4 +19,8 @@ abstract class MixinFunctionXML(node: ASTNode) : ViewNode(node), NoteXmlFunction
     override fun getNavigationElement(): PsiElement {
         return this.xmlStart.namespace
     }
+
+    override fun getChildrenView(): Array<NStructureViewElement> {
+        return super.getChildrenView()
+    }
 }
